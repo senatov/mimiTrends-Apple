@@ -2,9 +2,9 @@ struct ScanResult: Codable, Equatable, Sendable {
     let symbol: String
     let price: Double
     let anomalyScore: Double
-    let priceAnomaly: Double
+    let priceAnomaly: Double?
     let volumeAnomaly: Double?
-    let rangeAnomaly: Double
+    let rangeAnomaly: Double?
     let relativeVolume: Double?
     let candleBodyRatio: Double
     let windowChangePercent: Double
@@ -38,9 +38,9 @@ struct ScanResult: Codable, Equatable, Sendable {
         symbol: String,
         price: Double,
         anomalyScore: Double,
-        priceAnomaly: Double,
+        priceAnomaly: Double?,
         volumeAnomaly: Double?,
-        rangeAnomaly: Double,
+        rangeAnomaly: Double?,
         relativeVolume: Double?,
         candleBodyRatio: Double,
         windowChangePercent: Double,

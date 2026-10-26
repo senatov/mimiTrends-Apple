@@ -5,7 +5,7 @@ struct FinnhubTradeStream: Sendable {
         apiKey: String,
         symbol: String,
         onSubscribed: @escaping @Sendable () async -> Void,
-        onTrade: @escaping @Sendable (TradeTick) async -> Void
+        onTrade: @escaping @Sendable (TradeTick) async throws -> Void
     ) async throws {
         let url = try Self.streamURL(apiKey: apiKey)
         let normalizedSymbol = symbol.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -33,12 +33,15 @@ struct FinnhubTradeStream: Sendable {
                     }
                     for trade in try FinnhubTradeDecoder.decode(data) {
                         try Task.checkCancellation()
-                        await onTrade(trade)
+                        try await onTrade(trade)
                     }
                 }
             } catch is CancellationError {
                 throw CancellationError()
             } catch let error as FinnhubStreamError {
+                if Task.isCancelled { throw CancellationError() }
+                throw error
+            } catch let error as MarketBarStoreError {
                 if Task.isCancelled { throw CancellationError() }
                 throw error
             } catch {

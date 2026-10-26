@@ -28,8 +28,12 @@ struct RadarView: View {
                 Section("Connection") {
                     LabeledContent("Status", value: session.isScanning ? (session.isSubscribed ? "Subscribed" : "Connecting") : "Stopped")
                     LabeledContent("Trades received", value: "\(session.tradeCount)")
+                    LabeledContent("Completed bars stored", value: "\(session.completedBarsStored)")
                     if let trade = session.lastTrade {
                         LabeledContent("Last trade", value: "\(trade.symbol) · \(trade.price.formatted())")
+                    }
+                    if let signal = session.lastSignal {
+                        LabeledContent("Rapid rise", value: "\(signal.windowChangePercent.formatted())%")
                     }
                     if let message = setupMessage ?? session.errorMessage {
                         Text(message).foregroundStyle(.red)
@@ -50,9 +54,19 @@ struct RadarView: View {
             let requestedSymbol = symbol
             session.start { [session] runID in
                 do {
+                    let pipeline = try FinnhubRadarPipeline()
                     try await FinnhubTradeStream().run(apiKey: key, symbol: requestedSymbol) {
                         await session.markSubscribed(runID: runID)
                     } onTrade: { trade in
+                        let update = try await pipeline.accept(
+                            trade, nowEpochSeconds: Int64(Date().timeIntervalSince1970)
+                        )
+                        if update.storedBar {
+                            await session.recordStoredBar(runID: runID)
+                        }
+                        if let signal = update.signal {
+                            await session.recordSignal(signal, runID: runID)
+                        }
                         await session.record(trade, runID: runID)
                     }
                 } catch is CancellationError {

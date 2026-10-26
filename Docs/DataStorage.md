@@ -14,6 +14,8 @@ The Kotlin desktop app currently stores its SQLite database and Java properties 
 
 The desktop database currently uses WAL mode and contains both reconstructible market data and durable user data such as broker trades. A live `mimitrends.db` file alone may omit recent transactions still in its WAL file. Migration should start from a consistent SQLite backup or `VACUUM INTO` snapshot made by the desktop app, check its integrity and `schema_migrations`, then import it into a new native-owned database. The existing database schema is currently at migration 21; that number must be checked again when migration code is implemented.
 
+The native app now creates `mimitrends-native.db` in its Application Support directory. Native migration 1 contains the desktop-compatible `minute_bars` columns and a separate `native_schema_migrations` table. It stores completed Finnhub minute bars in WAL mode and checks database integrity on open. This is a new database, not a direct copy of desktop schema 21. Other desktop tables and a safe snapshot importer have not been ported.
+
 ## Native storage locations
 
 - **Application Support:** user-created watchlists, imported trades, durable settings, and their database. Resolve the directory with Foundation's `FileManager` API inside the app container. These records should survive normal cache cleanup and backup.

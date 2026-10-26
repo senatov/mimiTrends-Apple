@@ -8,6 +8,8 @@ final class RadarSession {
     private(set) var isSubscribed = false
     private(set) var lastTrade: TradeTick?
     private(set) var tradeCount = 0
+    private(set) var completedBarsStored = 0
+    private(set) var lastSignal: ScanResult?
     private(set) var errorMessage: String?
     @ObservationIgnored private var scanTask: Task<Void, Never>?
     @ObservationIgnored private var runID: UUID?
@@ -17,14 +19,16 @@ final class RadarSession {
         stop()
         lastTrade = nil
         tradeCount = 0
+        completedBarsStored = 0
+        lastSignal = nil
         errorMessage = nil
         let id = UUID()
         runID = id
         isScanning = true
         isSubscribed = false
-        scanTask = Task { [weak self] in
+        scanTask = Task.detached { [weak self] in
             await scan(id)
-            self?.finish(id)
+            await self?.finish(id)
         }
         return id
     }
@@ -46,6 +50,16 @@ final class RadarSession {
         guard isScanning, runID == id else { return }
         lastTrade = trade
         tradeCount += 1
+    }
+
+    func recordStoredBar(runID id: UUID) {
+        guard isScanning, runID == id else { return }
+        completedBarsStored += 1
+    }
+
+    func recordSignal(_ signal: ScanResult, runID id: UUID) {
+        guard isScanning, runID == id else { return }
+        lastSignal = signal
     }
 
     func recordFailure(_ message: String, runID id: UUID) {
