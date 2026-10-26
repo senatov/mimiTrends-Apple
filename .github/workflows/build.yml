@@ -1,0 +1,21 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: xcode-27
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        run: xcodegen generate
+      - name: Build iOS simulator app
+        run: xcodebuild -project MiMiTrends.xcodeproj -scheme MiMiTrends -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+      - name: Run iOS simulator tests
+        run: xcodebuild -project MiMiTrends.xcodeproj -scheme MiMiTrends -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 18 Pro,OS=latest' CODE_SIGNING_ALLOWED=NO test
+      - name: Build macOS app
+        run: xcodebuild -project MiMiTrends.xcodeproj -scheme MiMiTrends -configuration Debug -destination 'generic/platform=macOS' CODE_SIGNING_ALLOWED=NO build
