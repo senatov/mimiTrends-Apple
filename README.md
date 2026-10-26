@@ -26,7 +26,7 @@ This builds, boots an iPhone 18 Pro simulator, installs the app, and launches it
 | `zsh Scripts/generate_project.zsh` | Regenerate `MiMiTrends.xcodeproj` from `project.yml` after changing project settings or files. |
 | `zsh Scripts/build_ios.zsh` | Build an unsigned Debug app for iOS Simulator without launching it. Pass `Release` for a Release configuration simulator build. |
 | `zsh Scripts/run_ios.zsh` | Build, boot, install, and launch on an iOS 27 simulator. |
-| `zsh Scripts/test_ios.zsh` | Boot an iOS 27 simulator and run the unit tests. |
+| `zsh Scripts/test_ios.zsh` | Boot an iOS 27 simulator and run the unit tests locally; CI lets Xcode select and start the simulator. |
 | `zsh Scripts/build_macos.zsh` | Build the optional unsigned macOS app. Pass `Release` for a Release configuration build. |
 | `zsh Scripts/run_macos.zsh` | Build, ad hoc sign with the Mac App Sandbox entitlements, and launch on macOS 27 or newer. |
 | `zsh Scripts/check_macos_sandbox.zsh` | Check the Mac target's sandbox entitlement file and Xcode build settings. |
