@@ -8,14 +8,14 @@ jobs:
   build:
     runs-on: xcode-27
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install XcodeGen
         run: brew install xcodegen
       - name: Generate Xcode project
-        run: xcodegen generate
+        run: zsh Scripts/generate_project.zsh
       - name: Build iOS simulator app
-        run: xcodebuild -project MiMiTrends.xcodeproj -scheme MiMiTrends -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+        run: zsh Scripts/build_ios.zsh
       - name: Run iOS simulator tests
-        run: xcodebuild -project MiMiTrends.xcodeproj -scheme MiMiTrends -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 18 Pro,OS=latest' CODE_SIGNING_ALLOWED=NO test
+        run: zsh Scripts/test_ios.zsh
       - name: Build macOS app
-        run: xcodebuild -project MiMiTrends.xcodeproj -scheme MiMiTrends -configuration Debug -destination 'generic/platform=macOS' CODE_SIGNING_ALLOWED=NO build
+        run: zsh Scripts/build_macos.zsh
