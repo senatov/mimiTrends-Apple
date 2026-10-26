@@ -7,6 +7,7 @@ This repository is the starting point for a native MiMiTrends application. iOS 2
 - A shared SwiftUI app target for iPhone, iPad, and Mac.
 - Empty Radar, Watchlist, and Settings screens.
 - A radar session lifecycle hook that stops scanning whenever the app leaves the foreground.
+- Shared market models for provider instruments, quotes, minute bars, and scan results.
 - An XcodeGen project specification and GitHub Actions build workflow.
 
 The app does **not** yet fetch market data, scan instruments, store a watchlist, import broker data, or show real signals. The Radar screen intentionally says so. No provider credentials or production data are included.
@@ -44,6 +45,8 @@ The current app is a development skeleton and is **not ready for App Review**: i
 - Before submission, complete the market features, review market-data rights and privacy disclosures, test on supported devices, and provide any account or demo access required for review.
 
 ## Next implementation stages
+
+Progress and completion gates are tracked in [the porting plan](Docs/PortingPlan.md).
 
 1. Define shared models for instruments, quotes, and signals, with tests against representative desktop outputs.
 2. Port one provider adapter and its decoding, with secure credential storage where applicable.

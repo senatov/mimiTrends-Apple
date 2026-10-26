@@ -10,9 +10,15 @@
 		13742120FBB0FC253D5A54CB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78487E37B2E1ADF9D66D4697 /* SettingsView.swift */; };
 		1CDC7CDD565E75F04A275F72 /* RadarSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706EA6825624D01B69CBAC12 /* RadarSession.swift */; };
 		288018E6119714254446030A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84B200146AC5ADCCBA5BE68D /* Assets.xcassets */; };
+		29C69C4656B86857C9274765 /* VolumeStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96636C35FC61D2A6DCC092 /* VolumeStatus.swift */; };
 		42D2520DF5D1EE58D39C722A /* MiMiTrendsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46938DABB8D9A088061EA007 /* MiMiTrendsApp.swift */; };
 		5BACE360225984E82AFECE4A /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BA47D8B812529E5B642634 /* WatchlistView.swift */; };
 		70DB298337BF98CC7AC59C12 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988AEA1BBEBC2C7A5E7D3678 /* ContentView.swift */; };
+		AA56024C74A44204A12E2D8C /* MarketModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B36718379F8FF8E0B926A /* MarketModelTests.swift */; };
+		AE614A3D06D5A77AEC34219A /* MinuteBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44612F039D44B8C79057CCBD /* MinuteBar.swift */; };
+		B42AFC672B6EDAF496F71645 /* ScanResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27370C9D0394D8A9A7E5668D /* ScanResult.swift */; };
+		B7EC02EFEF4B9C9572F8C5A3 /* ProviderQuoteSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D64AB70C7B9D27AA7208B1 /* ProviderQuoteSnapshot.swift */; };
+		D3707DE92E3023954A142D15 /* ProviderInstrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5EA967EDD797A2DB2018C6 /* ProviderInstrument.swift */; };
 		D40D018943CFE0A505ECF10B /* RadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F267A39F96A6A4925446A5FE /* RadarView.swift */; };
 		F3C0706908E2EA9426A2EF68 /* RadarSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC00B500EAFF35AD4EB1274 /* RadarSessionTests.swift */; };
 /* End PBXBuildFile section */
@@ -30,12 +36,18 @@
 /* Begin PBXFileReference section */
 		19F87530CB7E9576947669CC /* MiMiTrends.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MiMiTrends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22BA47D8B812529E5B642634 /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
+		27370C9D0394D8A9A7E5668D /* ScanResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanResult.swift; sourceTree = "<group>"; };
 		3AC00B500EAFF35AD4EB1274 /* RadarSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSessionTests.swift; sourceTree = "<group>"; };
+		3C5EA967EDD797A2DB2018C6 /* ProviderInstrument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderInstrument.swift; sourceTree = "<group>"; };
+		44612F039D44B8C79057CCBD /* MinuteBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinuteBar.swift; sourceTree = "<group>"; };
 		46938DABB8D9A088061EA007 /* MiMiTrendsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiMiTrendsApp.swift; sourceTree = "<group>"; };
+		46D64AB70C7B9D27AA7208B1 /* ProviderQuoteSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderQuoteSnapshot.swift; sourceTree = "<group>"; };
+		5A96636C35FC61D2A6DCC092 /* VolumeStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeStatus.swift; sourceTree = "<group>"; };
 		706EA6825624D01B69CBAC12 /* RadarSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSession.swift; sourceTree = "<group>"; };
 		78487E37B2E1ADF9D66D4697 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		84B200146AC5ADCCBA5BE68D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		988AEA1BBEBC2C7A5E7D3678 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DA7B36718379F8FF8E0B926A /* MarketModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketModelTests.swift; sourceTree = "<group>"; };
 		DC798B00ABF87DCFEBBFCBAB /* MiMiTrendsTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MiMiTrendsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F267A39F96A6A4925446A5FE /* RadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -54,6 +66,7 @@
 		48B262A57C6AE9A125AD27C0 /* MiMiTrendsTests */ = {
 			isa = PBXGroup;
 			children = (
+				DA7B36718379F8FF8E0B926A /* MarketModelTests.swift */,
 				3AC00B500EAFF35AD4EB1274 /* RadarSessionTests.swift */,
 			);
 			path = MiMiTrendsTests;
@@ -84,11 +97,24 @@
 			path = Watchlist;
 			sourceTree = "<group>";
 		};
+		BBE9D9B1B45B19439E6E446C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				44612F039D44B8C79057CCBD /* MinuteBar.swift */,
+				3C5EA967EDD797A2DB2018C6 /* ProviderInstrument.swift */,
+				46D64AB70C7B9D27AA7208B1 /* ProviderQuoteSnapshot.swift */,
+				27370C9D0394D8A9A7E5668D /* ScanResult.swift */,
+				5A96636C35FC61D2A6DCC092 /* VolumeStatus.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		BECAE252A017B6A4E9D88BFC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				C6661EDCA937B76667300AC6 /* App */,
 				FBA5529A671094BD7C9F666E /* Features */,
+				BBE9D9B1B45B19439E6E446C /* Models */,
 			);
 			name = Sources;
 			path = MiMiTrends/Sources;
@@ -222,9 +248,14 @@
 			files = (
 				70DB298337BF98CC7AC59C12 /* ContentView.swift in Sources */,
 				42D2520DF5D1EE58D39C722A /* MiMiTrendsApp.swift in Sources */,
+				AE614A3D06D5A77AEC34219A /* MinuteBar.swift in Sources */,
+				D3707DE92E3023954A142D15 /* ProviderInstrument.swift in Sources */,
+				B7EC02EFEF4B9C9572F8C5A3 /* ProviderQuoteSnapshot.swift in Sources */,
 				1CDC7CDD565E75F04A275F72 /* RadarSession.swift in Sources */,
 				D40D018943CFE0A505ECF10B /* RadarView.swift in Sources */,
+				B42AFC672B6EDAF496F71645 /* ScanResult.swift in Sources */,
 				13742120FBB0FC253D5A54CB /* SettingsView.swift in Sources */,
+				29C69C4656B86857C9274765 /* VolumeStatus.swift in Sources */,
 				5BACE360225984E82AFECE4A /* WatchlistView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -233,6 +264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA56024C74A44204A12E2D8C /* MarketModelTests.swift in Sources */,
 				F3C0706908E2EA9426A2EF68 /* RadarSessionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
