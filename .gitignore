@@ -1,0 +1,11 @@
+.DS_Store
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.build/
+*.ipa
+*.dSYM/
+*.xcarchive/
+*.xcresult/
+*.log
+local.xcconfig

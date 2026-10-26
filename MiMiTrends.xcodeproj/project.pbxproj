@@ -1,0 +1,501 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		13742120FBB0FC253D5A54CB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78487E37B2E1ADF9D66D4697 /* SettingsView.swift */; };
+		1CDC7CDD565E75F04A275F72 /* RadarSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706EA6825624D01B69CBAC12 /* RadarSession.swift */; };
+		288018E6119714254446030A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84B200146AC5ADCCBA5BE68D /* Assets.xcassets */; };
+		42D2520DF5D1EE58D39C722A /* MiMiTrendsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46938DABB8D9A088061EA007 /* MiMiTrendsApp.swift */; };
+		5BACE360225984E82AFECE4A /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BA47D8B812529E5B642634 /* WatchlistView.swift */; };
+		70DB298337BF98CC7AC59C12 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988AEA1BBEBC2C7A5E7D3678 /* ContentView.swift */; };
+		D40D018943CFE0A505ECF10B /* RadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F267A39F96A6A4925446A5FE /* RadarView.swift */; };
+		F3C0706908E2EA9426A2EF68 /* RadarSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC00B500EAFF35AD4EB1274 /* RadarSessionTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		18E1C16B9F114BE6DA8E7F13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B3C42D27413F7ACD147904D6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CB781D3E2648AED61BD9C992;
+			remoteInfo = MiMiTrends;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		19F87530CB7E9576947669CC /* MiMiTrends.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MiMiTrends.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22BA47D8B812529E5B642634 /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
+		3AC00B500EAFF35AD4EB1274 /* RadarSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSessionTests.swift; sourceTree = "<group>"; };
+		46938DABB8D9A088061EA007 /* MiMiTrendsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiMiTrendsApp.swift; sourceTree = "<group>"; };
+		706EA6825624D01B69CBAC12 /* RadarSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSession.swift; sourceTree = "<group>"; };
+		78487E37B2E1ADF9D66D4697 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		84B200146AC5ADCCBA5BE68D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		988AEA1BBEBC2C7A5E7D3678 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DC798B00ABF87DCFEBBFCBAB /* MiMiTrendsTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MiMiTrendsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F267A39F96A6A4925446A5FE /* RadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		21FA133EAA07BA58EC130E17 = {
+			isa = PBXGroup;
+			children = (
+				48B262A57C6AE9A125AD27C0 /* MiMiTrendsTests */,
+				D938C63B3E4DA62E9FBDFB94 /* Resources */,
+				BECAE252A017B6A4E9D88BFC /* Sources */,
+				E98FC3042CE770F5D5BD1AD2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		48B262A57C6AE9A125AD27C0 /* MiMiTrendsTests */ = {
+			isa = PBXGroup;
+			children = (
+				3AC00B500EAFF35AD4EB1274 /* RadarSessionTests.swift */,
+			);
+			path = MiMiTrendsTests;
+			sourceTree = "<group>";
+		};
+		4B285DB64AC5BA446B67A095 /* Radar */ = {
+			isa = PBXGroup;
+			children = (
+				706EA6825624D01B69CBAC12 /* RadarSession.swift */,
+				F267A39F96A6A4925446A5FE /* RadarView.swift */,
+			);
+			path = Radar;
+			sourceTree = "<group>";
+		};
+		9757EBCF8951FAAD9965F348 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				78487E37B2E1ADF9D66D4697 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		AC292868E7051711D514F96E /* Watchlist */ = {
+			isa = PBXGroup;
+			children = (
+				22BA47D8B812529E5B642634 /* WatchlistView.swift */,
+			);
+			path = Watchlist;
+			sourceTree = "<group>";
+		};
+		BECAE252A017B6A4E9D88BFC /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C6661EDCA937B76667300AC6 /* App */,
+				FBA5529A671094BD7C9F666E /* Features */,
+			);
+			name = Sources;
+			path = MiMiTrends/Sources;
+			sourceTree = "<group>";
+		};
+		C6661EDCA937B76667300AC6 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				988AEA1BBEBC2C7A5E7D3678 /* ContentView.swift */,
+				46938DABB8D9A088061EA007 /* MiMiTrendsApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		D938C63B3E4DA62E9FBDFB94 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				84B200146AC5ADCCBA5BE68D /* Assets.xcassets */,
+			);
+			name = Resources;
+			path = MiMiTrends/Resources;
+			sourceTree = "<group>";
+		};
+		E98FC3042CE770F5D5BD1AD2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				19F87530CB7E9576947669CC /* MiMiTrends.app */,
+				DC798B00ABF87DCFEBBFCBAB /* MiMiTrendsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FBA5529A671094BD7C9F666E /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				4B285DB64AC5BA446B67A095 /* Radar */,
+				9757EBCF8951FAAD9965F348 /* Settings */,
+				AC292868E7051711D514F96E /* Watchlist */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BA22254FA4C66EEFEAA9377E /* MiMiTrendsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAB1B5BFD3DDC1685DE0F0AD /* Build configuration list for PBXNativeTarget "MiMiTrendsTests" */;
+			buildPhases = (
+				E2112D2FEA0B3B469AFAAE1C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B13C9D7207ADB59BD529E9D8 /* PBXTargetDependency */,
+			);
+			name = MiMiTrendsTests;
+			packageProductDependencies = (
+			);
+			productName = MiMiTrendsTests;
+			productReference = DC798B00ABF87DCFEBBFCBAB /* MiMiTrendsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CB781D3E2648AED61BD9C992 /* MiMiTrends */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 78725FACD5ECC4EEEDF39FF4 /* Build configuration list for PBXNativeTarget "MiMiTrends" */;
+			buildPhases = (
+				B1A648FAE221706BA9204BFF /* Sources */,
+				8070055919AE54059A13DDC8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MiMiTrends;
+			packageProductDependencies = (
+			);
+			productName = MiMiTrends;
+			productReference = 19F87530CB7E9576947669CC /* MiMiTrends.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B3C42D27413F7ACD147904D6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					CB781D3E2648AED61BD9C992 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = E9E530F7F89C6BEB70951CEC /* Build configuration list for PBXProject "MiMiTrends" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 21FA133EAA07BA58EC130E17;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E98FC3042CE770F5D5BD1AD2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CB781D3E2648AED61BD9C992 /* MiMiTrends */,
+				BA22254FA4C66EEFEAA9377E /* MiMiTrendsTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8070055919AE54059A13DDC8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				288018E6119714254446030A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B1A648FAE221706BA9204BFF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70DB298337BF98CC7AC59C12 /* ContentView.swift in Sources */,
+				42D2520DF5D1EE58D39C722A /* MiMiTrendsApp.swift in Sources */,
+				1CDC7CDD565E75F04A275F72 /* RadarSession.swift in Sources */,
+				D40D018943CFE0A505ECF10B /* RadarView.swift in Sources */,
+				13742120FBB0FC253D5A54CB /* SettingsView.swift in Sources */,
+				5BACE360225984E82AFECE4A /* WatchlistView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E2112D2FEA0B3B469AFAAE1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3C0706908E2EA9426A2EF68 /* RadarSessionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B13C9D7207ADB59BD529E9D8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CB781D3E2648AED61BD9C992 /* MiMiTrends */;
+			targetProxy = 18E1C16B9F114BE6DA8E7F13 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		838A7AA44C6D709DECA474D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.senatov.mimitrends;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		841CFB918CA705A35A7EC207 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.senatov.mimitrends;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		88FB6E3CCA172406CEBC2B4A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_KEY_CFBundleDisplayName = MiMiTrends;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BC50C838FC1E10CB80BC4098 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_KEY_CFBundleDisplayName = MiMiTrends;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CE5D5CA843A680D1BF75F454 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.senatov.mimitrends.tests;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MiMiTrends.app/MiMiTrends";
+			};
+			name = Debug;
+		};
+		F377952727CAFE2E456B7240 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.senatov.mimitrends.tests;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MiMiTrends.app/MiMiTrends";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		78725FACD5ECC4EEEDF39FF4 /* Build configuration list for PBXNativeTarget "MiMiTrends" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC50C838FC1E10CB80BC4098 /* Debug */,
+				88FB6E3CCA172406CEBC2B4A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E9E530F7F89C6BEB70951CEC /* Build configuration list for PBXProject "MiMiTrends" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				841CFB918CA705A35A7EC207 /* Debug */,
+				838A7AA44C6D709DECA474D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FAB1B5BFD3DDC1685DE0F0AD /* Build configuration list for PBXNativeTarget "MiMiTrendsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE5D5CA843A680D1BF75F454 /* Debug */,
+				F377952727CAFE2E456B7240 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B3C42D27413F7ACD147904D6 /* Project object */;
+}
