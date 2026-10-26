@@ -20,6 +20,7 @@ xcodebuild -quiet \
     -configuration Debug \
     -destination "${destination}" \
     -derivedDataPath "${DERIVED_DATA}" \
-    CODE_SIGNING_ALLOWED=NO test
+    CODE_SIGNING_ALLOWED=YES \
+    CODE_SIGN_IDENTITY=- test
 
 echo "iOS Simulator tests passed."

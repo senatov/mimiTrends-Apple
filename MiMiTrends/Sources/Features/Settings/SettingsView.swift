@@ -1,20 +1,73 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(RadarSession.self) private var radarSession
+    @State private var apiKeyDraft = ""
+    @State private var hasStoredKey = false
+    @State private var credentialMessage: String?
+
     var body: some View {
         NavigationStack {
             Form {
-                Section("About") {
-                    LabeledContent("Version", value: "0.1.0")
-                    LabeledContent("Platforms", value: "iOS 27 · macOS 27")
+                Section("Finnhub") {
+                    SecureField("API key", text: $apiKeyDraft)
+                    HStack {
+                        Button("Save key") { saveKey() }
+                            .disabled(apiKeyDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        if hasStoredKey {
+                            Button("Remove key", role: .destructive) { removeKey() }
+                        }
+                    }
+                    Text(hasStoredKey ? "API key stored in Keychain on this device." : "No API key stored.")
+                        .foregroundStyle(.secondary)
+                    if let credentialMessage {
+                        Text(credentialMessage).foregroundStyle(.red)
+                    }
                 }
 
                 Section("Scanning") {
                     Text("Scanning stops whenever the app is no longer active.")
                         .foregroundStyle(.secondary)
                 }
+
+                Section("About") {
+                    LabeledContent("Version", value: "0.1.0")
+                    LabeledContent("Platforms", value: "iOS 27 · macOS 27")
+                }
             }
             .navigationTitle("Settings")
+            .onAppear { refreshKeyStatus() }
+            .onDisappear { apiKeyDraft = "" }
+        }
+    }
+
+    private func refreshKeyStatus() {
+        do {
+            hasStoredKey = try FinnhubCredentialStore.load() != nil
+            credentialMessage = nil
+        } catch {
+            credentialMessage = error.localizedDescription
+        }
+    }
+
+    private func saveKey() {
+        do {
+            try FinnhubCredentialStore.save(apiKeyDraft)
+            apiKeyDraft = ""
+            refreshKeyStatus()
+        } catch {
+            credentialMessage = error.localizedDescription
+        }
+    }
+
+    private func removeKey() {
+        do {
+            try FinnhubCredentialStore.delete()
+            radarSession.stop()
+            apiKeyDraft = ""
+            refreshKeyStatus()
+        } catch {
+            credentialMessage = error.localizedDescription
         }
     }
 }

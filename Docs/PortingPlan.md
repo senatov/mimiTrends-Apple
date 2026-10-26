@@ -5,7 +5,7 @@ The desktop Kotlin app remains the behavioral reference. Work through these stag
 | Stage | Kotlin source | Native destination | Completion gate | Status |
 | --- | --- | --- | --- | --- |
 | 1. Shared market contract | `core/model`, scanner `ScanResult` | `MiMiTrends/Sources/Models` | Model fields and defaults are mapped; representative desktop fixtures round-trip; minute-bar and volume rules match | Complete |
-| 2. First provider | One adapter in `market-data` or `finnhub-ws` | Provider-specific native adapter and Keychain credential storage | Recorded response fixtures decode, failures are handled, and a foreground scan can fetch data | Pending |
+| 2. First provider | `finnhub-ws/FinnhubWebSocketClient` | Native Finnhub WebSocket adapter and Keychain credential storage | Desktop test fixtures decode, failures are handled, and a foreground feed can fetch data | Implemented; live account test pending |
 | 3. Scanner and storage | `scanner`, `database` | Native scanner services and SQLite repositories | Deterministic signal fixtures agree with desktop; schema and migrations are tested; scans stop outside foreground | Pending |
 | 4. Product screens | `charts`, `app` | Adaptive SwiftUI Radar, charts, watchlists, broker import | Real signals are visible on iPhone and iPad; selected Mac workflows work inside App Sandbox | Pending |
 | 5. Distribution | Desktop data export and native app | Signed archives and App Store Connect metadata | Data rights, privacy, sandbox, device tests, archive validation, and review access are complete | Pending |
@@ -20,4 +20,11 @@ The desktop Kotlin app remains the behavioral reference. Work through these stag
 
 ## Next step
 
-Capture stable desktop provider response fixtures. Then choose one provider using its current licensing and credential requirements, and implement its decoding behind a focused adapter.
+Run the Finnhub feed on a device with a user-entered key, including connection failure, Stop, and background transitions. Verify the account's data coverage and display rights before distribution. Then proceed to stage 3: port scanner rules and SQLite persistence, using the trade feed as one input.
+
+## Stage 2 mapping
+
+- `FinnhubTradeDecoder` ports the desktop WebSocket client's `trade` envelope and `s`/`p`/`t`/`v` fields. The fixture is based on its Kotlin unit-test message and also covers multiple trades. Invalid records are skipped, while malformed or rejected messages produce a concise error.
+- `FinnhubTradeStream` connects to the same `wss://ws.finnhub.io` endpoint, sends a text subscription, and closes its socket on cancellation. Radar's existing scene lifecycle stops the session outside the foreground. A run identifier rejects late callbacks from an older feed after a new one starts.
+- `FinnhubCredentialStore` keeps the user-entered key in the device Keychain. The key is not bundled, placed in UserDefaults, logged, or copied from the desktop configuration.
+- The Radar screen displays connection state and received trades solely to verify this provider stage. Signal evaluation, persistence, and full product presentation belong to later stages.

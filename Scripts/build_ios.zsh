@@ -18,6 +18,7 @@ xcodebuild -quiet \
     -configuration "${configuration}" \
     -destination "${destination}" \
     -derivedDataPath "${DERIVED_DATA}" \
-    CODE_SIGNING_ALLOWED=NO build
+    CODE_SIGNING_ALLOWED=YES \
+    CODE_SIGN_IDENTITY=- build
 
 echo "iOS Simulator build succeeded: ${DERIVED_DATA}/Build/Products/${configuration}-iphonesimulator/MiMiTrends.app"
