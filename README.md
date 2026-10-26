@@ -28,15 +28,16 @@ This builds, boots an iPhone 18 Pro simulator, installs the app, and launches it
 | `zsh Scripts/run_ios.zsh` | Build, boot, install, and launch on an iOS 27 simulator. |
 | `zsh Scripts/test_ios.zsh` | Boot an iOS 27 simulator and run the unit tests. |
 | `zsh Scripts/build_macos.zsh` | Build the optional unsigned macOS app. Pass `Release` for a Release configuration build. |
-| `zsh Scripts/run_macos.zsh` | Build and launch the optional Mac app on macOS 27 or newer. |
+| `zsh Scripts/run_macos.zsh` | Build, ad hoc sign with the Mac App Sandbox entitlements, and launch on macOS 27 or newer. |
+| `zsh Scripts/check_macos_sandbox.zsh` | Check the Mac target's sandbox entitlement file and Xcode build settings. |
 
-All builds use this repository's ignored `DerivedData/` directory. They do not clear shared Xcode caches, modify other repositories, sign an App Store binary, or upload one. The generated Xcode project is committed so it can also be opened directly in Xcode.
+All builds use this repository's ignored `DerivedData/` directory. They do not clear shared Xcode caches, modify other repositories, sign an App Store distribution binary, or upload one. `run_macos.zsh` signs its local Debug app only to exercise the sandbox during development. The generated Xcode project is committed so it can also be opened directly in Xcode.
 
 ## App Store preparation
 
 The current app is a development skeleton and is **not ready for App Review**: its main screens intentionally have no market functionality. Apple's [App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) require a complete, useful app, and the Mac App Store also requires sandboxing and Xcode-based packaging.
 
-- The macOS target uses the [App Sandbox](https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox) entitlement. It currently requests no file, network, or other special access. Add only the capabilities needed as features are implemented.
+- The macOS target uses [App Sandbox](https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox) with outgoing network access and read-only access to user-selected import files. It requests no unrestricted folder or incoming network access. See [Storage and desktop data migration](Docs/DataStorage.md) for the planned container layout and migration rules.
 - The iOS and macOS apps use SwiftUI and system APIs; the former JVM/JavaFX runtime is not bundled.
 - The native app uses `org.senatov.mimitrends.apple` on both platforms so it can coexist with the existing macOS JVM app.
 - The scripts produce local simulator and Mac development builds. For App Store distribution, configure a development team, archive with Xcode, validate the archive, and submit through App Store Connect. An unsigned development build is not evidence of App Store approval. See Apple's [distribution guide](https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases).

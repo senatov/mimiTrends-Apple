@@ -13,4 +13,10 @@ if (( macos_major < 27 )); then
 fi
 
 zsh "${SCRIPT_DIR}/build_macos.zsh"
-open "${DERIVED_DATA}/Build/Products/Debug/MiMiTrends.app"
+app_path="${DERIVED_DATA}/Build/Products/Debug/MiMiTrends.app"
+codesign --force --sign - \
+    --entitlements "${PROJECT_DIR}/MiMiTrends/Configuration/MacAppStore.entitlements" \
+    "${app_path}"
+codesign --verify --strict "${app_path}"
+echo "Launching an ad hoc signed app with App Sandbox enabled."
+open "${app_path}"

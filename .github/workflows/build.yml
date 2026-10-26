@@ -19,3 +19,5 @@ jobs:
         run: zsh Scripts/test_ios.zsh
       - name: Build macOS app
         run: zsh Scripts/build_macos.zsh
+      - name: Check Mac App Sandbox configuration
+        run: zsh Scripts/check_macos_sandbox.zsh
