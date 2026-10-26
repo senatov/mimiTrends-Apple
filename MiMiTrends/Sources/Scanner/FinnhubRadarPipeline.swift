@@ -21,7 +21,9 @@ struct FinnhubRadarPipeline: Sendable {
         let recent = try await store.loadMinuteBars(
             symbol: trade.symbol, fromEpochSeconds: nowEpochSeconds - 1_800
         )
-        let signal = RapidRiseDetector.detect(
+        let signal = RapidCrashDetector.detect(
+            symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
+        ) ?? RapidRiseDetector.detect(
             symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
         )
         return Update(storedBar: stored, signal: signal)

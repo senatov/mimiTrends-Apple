@@ -6,7 +6,7 @@ The desktop Kotlin app remains the behavioral reference. Work through these stag
 | --- | --- | --- | --- | --- |
 | 1. Shared market contract | `core/model`, scanner `ScanResult` | `MiMiTrends/Sources/Models` | Model fields and defaults are mapped; representative desktop fixtures round-trip; minute-bar and volume rules match | Complete |
 | 2. First provider | `finnhub-ws/FinnhubWebSocketClient` | Native Finnhub WebSocket adapter and Keychain credential storage | Desktop test fixtures decode, failures are handled, and a foreground feed can fetch data | Implemented; live account test pending |
-| 3. Scanner and storage | `app/shortmove`, `database` | Native scanner services and SQLite repositories | Deterministic signal fixtures agree with desktop; schema and migrations are tested; scans stop outside foreground | In progress: rapid rise and minute bars |
+| 3. Scanner and storage | `app/shortmove`, `database` | Native scanner services and SQLite repositories | Deterministic signal fixtures agree with desktop; schema and migrations are tested; scans stop outside foreground | In progress: rapid rise/crash and minute bars |
 | 4. Product screens | `charts`, `app` | Adaptive SwiftUI Radar, charts, watchlists, broker import | Real signals are visible on iPhone and iPad; selected Mac workflows work inside App Sandbox | Pending |
 | 5. Distribution | Desktop data export and native app | Signed archives and App Store Connect metadata | Data rights, privacy, sandbox, device tests, archive validation, and review access are complete | Pending |
 
@@ -20,7 +20,7 @@ The desktop Kotlin app remains the behavioral reference. Work through these stag
 
 ## Next step
 
-Run the Finnhub feed on a device with a user-entered key, including connection failure, Stop, and background transitions. Verify the account's data coverage and display rights before distribution. Continue stage 3 by porting crash, sustained-move, and quote-quality rules, then signal persistence and a safe desktop snapshot importer.
+Run the Finnhub feed on a device with a user-entered key, including connection failure, Stop, and background transitions. Verify the account's data coverage and display rights before distribution. Continue stage 3 with sustained-move and quote-quality rules, then signal persistence and a safe desktop snapshot importer.
 
 ## Stage 2 mapping
 
@@ -33,5 +33,5 @@ Run the Finnhub feed on a device with a user-entered key, including connection f
 
 - `FinnhubMinuteAggregator` follows the desktop minute-boundary rule and publishes only a completed minute. The partial current minute is discarded when the feed stops.
 - `MarketBarStore` writes completed bars to a native SQLite database in Application Support. Native migration 1 is transactional and append-only; the `minute_bars` columns and update-if-changed rule match the relevant desktop table. The store rejects invalid bars, uses WAL, and checks integrity on open. Desktop schema 21 is not opened or imported directly.
-- `RapidRiseDetector` ports the close-confirmed rise threshold, freshness, reported-volume, gap, and turnover checks from `ShortMoveDetector`. Its `ScanResult` maps the desktop `MarketDataService.toScanResult` fields for rapid rises. Crash, sustained-move, corridor, quote-quality, and full ranking behavior remain unported.
-- The live feed writes a completed bar and evaluates the recent bounded bar window off the main actor. The Radar screen shows the latest rapid-rise result as a diagnostic view; signal history is not yet persisted.
+- `RapidRiseDetector` ports the close-confirmed rise threshold, freshness, reported-volume, gap, and turnover checks from `ShortMoveDetector`. `RapidCrashDetector` adds the rapid and accelerating-decline thresholds, preceding-low check, and the same activity gate. Their `ScanResult` fields follow the desktop `MarketDataService.toScanResult` mapping. Sustained-move, corridor, quote-quality, and full ranking behavior remain unported.
+- The live feed writes a completed bar and evaluates the recent bounded bar window off the main actor. Crash takes priority over rise as in the desktop detector. The Radar screen shows the latest move as a diagnostic view; signal history is not yet persisted.

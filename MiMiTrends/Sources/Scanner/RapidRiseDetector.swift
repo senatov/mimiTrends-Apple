@@ -38,24 +38,11 @@ enum RapidRiseDetector {
             strongest = (start, end, change, eventBars.count)
         }
         guard let move = strongest else { return nil }
-        let session = recent.filter { $0.minuteEpochSeconds >= nowEpochSeconds - 10_800 }
-        return ScanResult(
-            symbol: symbol, price: latest.close, anomalyScore: 100,
-            priceAnomaly: nil, volumeAnomaly: nil, rangeAnomaly: nil,
-            relativeVolume: nil, candleBodyRatio: 0,
-            windowChangePercent: move.change,
-            windowVolume: session.suffix(move.count).reduce(0) { $0 + $1.volume },
-            sessionVolume: session.reduce(0) { $0 + $1.volume },
-            sessionTurnover: session.reduce(0) { $0 + $1.close * $1.volume },
-            signalAgeMinutes: Int(max(0, nowEpochSeconds - move.end.minuteEpochSeconds) / 60),
-            signalSource: "Rapid rise",
-            updatedAtMillis: move.end.minuteEpochSeconds * 1_000,
-            dataStatus: "LIVE",
-            signalWindowLabel: "\(max(1, (move.end.minuteEpochSeconds - move.start.minuteEpochSeconds) / 60))m",
-            signalPrice: move.start.close,
-            signalEpochMillis: move.end.minuteEpochSeconds * 1_000,
-            analysisUpdatedAtMillis: move.end.minuteEpochSeconds * 1_000,
-            scanEvaluatedAtMillis: nowEpochSeconds * 1_000
+        return RapidMoveSignalFactory.make(
+            symbol: symbol, bars: recent, start: move.start, end: move.end,
+            eventBarCount: move.count, changePercent: move.change,
+            source: "Rapid rise", displayPrice: latest.close,
+            nowEpochSeconds: nowEpochSeconds
         )
     }
 

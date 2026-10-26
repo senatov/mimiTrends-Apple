@@ -10,7 +10,7 @@ This repository is the starting point for a native MiMiTrends application. iOS 2
 - Shared market models for provider instruments, quotes, minute bars, and scan results.
 - An XcodeGen project specification and GitHub Actions build workflow.
 
-The app can receive Finnhub trades while it is active, save completed minute bars, and detect one close-confirmed rapid-rise signal. It does **not** yet implement the full desktop scanner, store a watchlist, import broker data, or show charts. No provider credentials or production data are included.
+The app can receive Finnhub trades while it is active, save completed minute bars, and detect close-confirmed rapid rises and crashes. It does **not** yet implement the full desktop scanner, store a watchlist, import broker data, or show charts. No provider credentials or production data are included.
 
 To try the feed, enter your own Finnhub API key under Settings, then enter a symbol on Radar and tap **Start live feed**. The key stays in this device's Keychain and can be removed in Settings. Completed minute bars are stored in the app container; the current unfinished minute is discarded when the feed stops. The feed stops when the app leaves the foreground. Availability of symbols and trade updates depends on the Finnhub account, exchange coverage, and market hours.
 

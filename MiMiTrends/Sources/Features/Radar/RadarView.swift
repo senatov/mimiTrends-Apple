@@ -33,7 +33,7 @@ struct RadarView: View {
                         LabeledContent("Last trade", value: "\(trade.symbol) · \(trade.price.formatted())")
                     }
                     if let signal = session.lastSignal {
-                        LabeledContent("Rapid rise", value: "\(signal.windowChangePercent.formatted())%")
+                        LabeledContent(signal.signalSource, value: "\(signal.windowChangePercent.formatted())%")
                     }
                     if let message = setupMessage ?? session.errorMessage {
                         Text(message).foregroundStyle(.red)
