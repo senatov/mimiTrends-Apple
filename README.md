@@ -1,6 +1,8 @@
-# MiMiTrends for Apple platforms
+# mimiTrends-iOS
 
 This repository is the starting point for a native MiMiTrends application. iPadOS 27 is the primary development target; macOS 27 is an optional destination. The iOS app still supports iPhone. The existing Kotlin/JavaFX desktop application remains in the separate `mimiTrends` repository.
+
+The repository name is `mimiTrends-iOS`. The installed app continues to be named MiMiTrends and retains its existing bundle identifier so development installations, local data, and Keychain entries keep the same app identity.
 
 ## Current scope
 
