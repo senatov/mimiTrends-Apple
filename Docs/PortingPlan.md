@@ -7,7 +7,7 @@ The desktop Kotlin app remains the behavioral reference. Work through these stag
 | 1. Shared market contract | `core/model`, scanner `ScanResult` | `MiMiTrends/Sources/Models` | Model fields and defaults are mapped; representative desktop fixtures round-trip; minute-bar and volume rules match | Complete |
 | 2. First provider | `finnhub-ws/FinnhubWebSocketClient` | Native Finnhub WebSocket adapter and Keychain credential storage | Desktop test fixtures decode, failures are handled, and a foreground feed can fetch data | Implemented; live account test pending |
 | 3. Scanner and storage | `app/shortmove`, `database` | Native scanner services and SQLite repositories | Deterministic signal fixtures agree with desktop; schema and migrations are tested; scans stop outside foreground | In progress: move and corridor detection, quote gate, storage, bounded bar snapshot import |
-| 4. Product screens | `charts`, `app` | Adaptive SwiftUI Radar, charts, watchlists, broker import | Real signals are visible on iPhone and iPad; selected Mac workflows work inside App Sandbox | In progress: saved-bar chart, desktop bar import, local watchlist |
+| 4. Product screens | `charts`, `app` | Adaptive SwiftUI Radar, charts, watchlists, broker import | Real signals are visible on iPhone and iPad; selected Mac workflows work inside App Sandbox | In progress: adaptive Radar dashboard, saved-bar chart, desktop bar import, local watchlist |
 | 5. Distribution | Desktop data export and native app | Signed archives and App Store Connect metadata | Data rights, privacy, sandbox, device tests, archive validation, and review access are complete | Pending |
 
 ## Stage 1 mapping
@@ -23,6 +23,8 @@ The desktop Kotlin app remains the behavioral reference. Work through these stag
 Run the Finnhub feed on a device with a user-entered key, including connection failure, Stop, and background transitions. Verify the account's bid/ask endpoint access, data coverage, and display rights before distribution. Continue stage 3 with explicit watchlist and broker-data migration, then a licensed source for European quotes. The bounded desktop bar snapshot is only a first migration slice. Currency conversion for display needs its own explicit reference-rate label; execution-quality checks must not treat a daily reference rate as a live executable FX quote.
 
 The local watchlist now ports the desktop `user_watchlist` symbol, insertion-time order, duplicate-ignore, and delete behavior into a separate native SQLite database. Selecting a row stops any active feed and fills Radar's symbol field. It does not port desktop instrument search, automatic multi-symbol scanning, watchlist migration, or cross-device sync.
+
+The Radar dashboard now follows the layout hierarchy in the desktop `Doc/LiveRadar.png` reference: recent detections, source status, and a selected-symbol chart. Its list loads bounded native signal history; its source panel reports the actual Finnhub session; the chart uses up to 60 persisted OHLC minute bars with reported-volume bars and a price-domain scale based on those bars. It does not show disconnected desktop providers as active, synthesize alerts, or assert a live price when only saved history is available. On narrow layouts the panels stack vertically.
 
 ## Chart API decision
 

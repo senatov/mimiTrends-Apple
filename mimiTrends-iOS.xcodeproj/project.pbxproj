@@ -30,10 +30,13 @@
 		4B1A6D2BF95116348B8361D3 /* MarketSignalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF387A2BA9D47DD94D78888 /* MarketSignalStore.swift */; };
 		5A8F07D27D8707A29BA3ADB2 /* DesktopBarSnapshotImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B648E753D1C0367B983BB3 /* DesktopBarSnapshotImporter.swift */; };
 		5D450505D6D7625389567466 /* FinnhubTradeStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80B2E9DCDE37394950FD413 /* FinnhubTradeStream.swift */; };
+		66214CBD1C84ADDD412F699B /* TrendsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F4937B6B24F966C3B88898 /* TrendsPanel.swift */; };
 		6A580E7214EACB7224EF26EB /* MarketBarStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BA9EF663371153E075CCA3 /* MarketBarStore.swift */; };
+		6BE544D2D188AD9C45DD33D0 /* RadarSourcePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C56FC4FCD92253926B11F1 /* RadarSourcePanel.swift */; };
 		73A88781B5FBDCEE68CAB80D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1562AE82C112C8F46CFD3F /* SettingsView.swift */; };
 		7C0D33CE29B686B800574331 /* MinuteBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0F103FD5CC7F11981916F /* MinuteBar.swift */; };
 		7E52120B483E1AAF73A29A76 /* MarketSignalFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD98FD247F51083747D19146 /* MarketSignalFactory.swift */; };
+		8130F723170308441E0805E7 /* RadarSignalList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7546F11E9F21290A5D8DD5F /* RadarSignalList.swift */; };
 		886E88920162B6DA3199D90A /* FinnhubRadarPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE947CFF4E30D853A5BBFE0 /* FinnhubRadarPipeline.swift */; };
 		8A32C3D5EE9D0C6051E8A84E /* RapidCrashDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738D3015D67A0FEB94F7C80 /* RapidCrashDetector.swift */; };
 		8B11F8ECEDAD399B8430D820 /* FinnhubBidAskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22000D6D9AD7A005DFC6B6BC /* FinnhubBidAskTests.swift */; };
@@ -45,6 +48,7 @@
 		A9E0F6144582D0B1291D7057 /* FinnhubRadarPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4678F11490EA437FAD224DD /* FinnhubRadarPipelineTests.swift */; };
 		ABF6F9D3F9824D07C350BA3E /* SustainedMoveDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC0207E808D3B3D6DB152DB /* SustainedMoveDetectorTests.swift */; };
 		AD39BFB17C64FC27CE5EFFD4 /* MiMiTrendsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C749680DE8767BA8EF22DE /* MiMiTrendsApp.swift */; };
+		B9DEC7CD282978431B054494 /* RadarChartPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517EEB88A6A2636A58C09DFB /* RadarChartPreview.swift */; };
 		BBF88726F1EC08B77602F2E6 /* FinnhubCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9ED758354DE55D4CAFFCEE /* FinnhubCredentialStore.swift */; };
 		C94CD4C64B560EB9038ED75F /* TradableCorridorDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5E447F15502D8BB7E6BED /* TradableCorridorDetector.swift */; };
 		CD519C4250E3EC674E8F699A /* FinnhubTradeDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117997F6759266E018D18DC6 /* FinnhubTradeDecoder.swift */; };
@@ -53,6 +57,7 @@
 		E744FC8928986AAEA31EC37B /* FinnhubMinuteAggregatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B596289D26ECD4E1638A43BB /* FinnhubMinuteAggregatorTests.swift */; };
 		F0854341F488FE4B24A31807 /* RapidRiseDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C714C30356DD2266706DCE5 /* RapidRiseDetectorTests.swift */; };
 		F1846824C6A7B629009B5B58 /* MarketBarStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03FCFB623D8910CA5B6945B /* MarketBarStoreTests.swift */; };
+		F5CFA707D78337A1E1F43E3F /* RadarHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6552EA3319AF0CE227CE19C9 /* RadarHeader.swift */; };
 		F940CE41E5FA0912F05BE82A /* ProviderInstrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABD71D692C066C6F70FD7DA /* ProviderInstrument.swift */; };
 		FCE5F1EA038869178B36AD7D /* WatchlistStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C8249EED74773A7514750 /* WatchlistStoreTests.swift */; };
 		FEF8C8CD52FF04FF8EBDAAEC /* RapidRiseDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC05AF8E7074B665B4AFD42 /* RapidRiseDetector.swift */; };
@@ -83,7 +88,9 @@
 		40AA30E102A1E7015DDD6AC6 /* RadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarView.swift; sourceTree = "<group>"; };
 		44371ED1585DAE0AFED41514 /* MarketModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketModelTests.swift; sourceTree = "<group>"; };
 		4E881CEA825392F15D059019 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		517EEB88A6A2636A58C09DFB /* RadarChartPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarChartPreview.swift; sourceTree = "<group>"; };
 		5B8AA63026829A74E3A98AC7 /* WatchlistStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistStore.swift; sourceTree = "<group>"; };
+		6552EA3319AF0CE227CE19C9 /* RadarHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarHeader.swift; sourceTree = "<group>"; };
 		6ABD71D692C066C6F70FD7DA /* ProviderInstrument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderInstrument.swift; sourceTree = "<group>"; };
 		6B9ED758354DE55D4CAFFCEE /* FinnhubCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubCredentialStore.swift; sourceTree = "<group>"; };
 		71B648E753D1C0367B983BB3 /* DesktopBarSnapshotImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopBarSnapshotImporter.swift; sourceTree = "<group>"; };
@@ -109,8 +116,11 @@
 		CBE947CFF4E30D853A5BBFE0 /* FinnhubRadarPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubRadarPipeline.swift; sourceTree = "<group>"; };
 		D1D226CA94BA03BB4F8BB482 /* FinnhubCredentialStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubCredentialStoreTests.swift; sourceTree = "<group>"; };
 		D5BEDE07B7B34757E95DE94E /* FinnhubTradeDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubTradeDecoderTests.swift; sourceTree = "<group>"; };
+		D7546F11E9F21290A5D8DD5F /* RadarSignalList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSignalList.swift; sourceTree = "<group>"; };
 		DA34FE30071EAA96606E33C8 /* FinnhubBidAskSampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubBidAskSampler.swift; sourceTree = "<group>"; };
 		E0BCF3BE1761CED7DBCC5BAA /* TradableCorridorDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradableCorridorDetectorTests.swift; sourceTree = "<group>"; };
+		E2F4937B6B24F966C3B88898 /* TrendsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsPanel.swift; sourceTree = "<group>"; };
+		E9C56FC4FCD92253926B11F1 /* RadarSourcePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSourcePanel.swift; sourceTree = "<group>"; };
 		EEDAF6878E67315239B682D0 /* ShortMoveQuoteQualityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortMoveQuoteQualityTests.swift; sourceTree = "<group>"; };
 		EF1BDD388D1713ED47A40094 /* SustainedMoveDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SustainedMoveDetector.swift; sourceTree = "<group>"; };
 		EF3401A2ABC36F2EF150C888 /* VolumeStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeStatus.swift; sourceTree = "<group>"; };
@@ -177,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				91FE4781F402BBF9EB8C0DFB /* TrendsActionButton.swift */,
+				E2F4937B6B24F966C3B88898 /* TrendsPanel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -290,7 +301,11 @@
 		E612AEB71A0EF70B42A81033 /* Radar */ = {
 			isa = PBXGroup;
 			children = (
+				517EEB88A6A2636A58C09DFB /* RadarChartPreview.swift */,
+				6552EA3319AF0CE227CE19C9 /* RadarHeader.swift */,
 				9875C0F9708CB9BE887178A3 /* RadarSession.swift */,
+				D7546F11E9F21290A5D8DD5F /* RadarSignalList.swift */,
+				E9C56FC4FCD92253926B11F1 /* RadarSourcePanel.swift */,
 				40AA30E102A1E7015DDD6AC6 /* RadarView.swift */,
 			);
 			path = Radar;
@@ -438,7 +453,11 @@
 				7C0D33CE29B686B800574331 /* MinuteBar.swift in Sources */,
 				F940CE41E5FA0912F05BE82A /* ProviderInstrument.swift in Sources */,
 				9253B90868F0E82E007EA500 /* ProviderQuoteSnapshot.swift in Sources */,
+				B9DEC7CD282978431B054494 /* RadarChartPreview.swift in Sources */,
+				F5CFA707D78337A1E1F43E3F /* RadarHeader.swift in Sources */,
 				2E9FE5D99050C05D9AF62282 /* RadarSession.swift in Sources */,
+				8130F723170308441E0805E7 /* RadarSignalList.swift in Sources */,
+				6BE544D2D188AD9C45DD33D0 /* RadarSourcePanel.swift in Sources */,
 				25D4F99CCC0FD8FE533AA9E1 /* RadarView.swift in Sources */,
 				8A32C3D5EE9D0C6051E8A84E /* RapidCrashDetector.swift in Sources */,
 				FEF8C8CD52FF04FF8EBDAAEC /* RapidRiseDetector.swift in Sources */,
@@ -449,6 +468,7 @@
 				C94CD4C64B560EB9038ED75F /* TradableCorridorDetector.swift in Sources */,
 				29CC73F8A97B8BDCFCAC6DBD /* TradeTick.swift in Sources */,
 				310CE5B36281A62F7DD72E77 /* TrendsActionButton.swift in Sources */,
+				66214CBD1C84ADDD412F699B /* TrendsPanel.swift in Sources */,
 				01BF49AC6898BB89FA512BE2 /* VolumeStatus.swift in Sources */,
 				0CB10454D48027116BE62D30 /* WatchlistStore.swift in Sources */,
 				4671A231FD13F03F8FA3E100 /* WatchlistView.swift in Sources */,

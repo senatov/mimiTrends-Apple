@@ -7,7 +7,7 @@ The repository, Xcode project, run scheme, and native app are named `mimiTrends-
 ## Current scope
 
 - A shared SwiftUI app target for iPad, iPhone, and Mac, with a connected iPad selected by the local command-line scripts.
-- A Radar screen that can show a Finnhub WebSocket trade feed for one entered symbol, a native chart of saved minute bars, a locally saved watchlist, and a Keychain-backed API key setting.
+- An adaptive Radar dashboard with recent saved signals, actual Finnhub feed status, and a preview of up to 60 saved minute candlesticks with reported volume; a full Chart tab, a locally saved watchlist, and a Keychain-backed API key setting.
 - A radar session lifecycle hook that stops scanning whenever the app leaves the foreground.
 - Shared market models for provider instruments, quotes, minute bars, and scan results.
 - An XcodeGen project specification and GitHub Actions build workflow.
@@ -17,6 +17,8 @@ The app can receive Finnhub trades while it is active, save completed minute bar
 To try the feed, enter your own Finnhub API key under Settings, then enter a symbol on Radar and tap **Start live feed**. The key stays in this device's Keychain and can be removed in Settings. Completed minute bars are stored in the app container; the current unfinished minute is discarded when the feed stops. The feed stops when the app leaves the foreground. Availability of symbols and trade updates depends on the Finnhub account, exchange coverage, and market hours.
 
 To view collected bars, open Chart, enter the same symbol, select a rolling 1H, 3H, or 24H range, and tap **Load chart**. Empty periods remain empty. Reported trade volume is drawn only for bars whose volume status is `REPORTED`. The chart uses the source price unit; it does not claim a converted currency.
+
+Radar now follows the desktop prototype's main visual structure: a signal list beside source status where space permits, with a selected-symbol chart below. Its signal list reads native saved detections, the source panel reports only the connected Finnhub feed, and the candlestick preview draws at most 60 saved completed minutes. It does not claim the desktop's multi-provider coverage or continuous multi-symbol scanning.
 
 To save a symbol, open Watchlist, enter its ticker, and tap **Add**. Select a saved symbol to put it on Radar; a running feed stops before the selection changes. Use the row's trash button, or swipe the row on iPad, to delete it. These symbols stay in the app's local SQLite container and are not synchronized between devices or imported from the desktop watchlist yet.
 

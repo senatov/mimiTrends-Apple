@@ -2,49 +2,92 @@ import SwiftUI
 
 struct RadarView: View {
     @Environment(RadarSession.self) private var session
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Binding var symbol: String
     @State private var setupMessage: String?
+    @State private var recentSignals: [ScanResult] = []
+    @State private var selectedSignal: ScanResult?
+    @State private var historyError: String?
+    @State private var chartRefreshID = 0
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Finnhub live trades") {
-                    TextField("Symbol", text: $symbol)
-
-                    TrendsActionButton(
-                        title: session.isScanning ? "Stop live feed" : "Start live feed",
-                        systemImage: session.isScanning ? "stop.fill" : "play.fill",
-                        tint: session.isScanning ? .red : .green
-                    ) {
-                        if session.isScanning {
-                            session.stop()
-                        } else {
-                            startFeed()
+            GeometryReader { geometry in
+                ScrollView {
+                    VStack(spacing: 12) {
+                        RadarHeader(symbol: $symbol, session: session, setupMessage: setupMessage) {
+                            if session.isScanning { session.stop() } else { startFeed() }
                         }
+                        if geometry.size.width >= 850 && !dynamicTypeSize.isAccessibilitySize {
+                            HStack(alignment: .top, spacing: 12) {
+                                signalList(compact: geometry.size.width < 1_080)
+                                    .frame(maxWidth: .infinity)
+                                RadarSourcePanel(session: session)
+                                    .frame(width: max(250, geometry.size.width * 0.30))
+                            }
+                        } else {
+                            signalList(compact: true)
+                            RadarSourcePanel(session: session)
+                        }
+                        RadarChartPreview(
+                            symbol: selectedSignal?.symbol ?? symbol,
+                            signal: selectedSignal,
+                            refreshID: chartRefreshID
+                        )
                     }
-                    .disabled(!session.isScanning && symbol.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-
-                    Text("A Finnhub API key is required in Settings. The connection closes when the app leaves the foreground.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                    .padding(14)
+                    .frame(maxWidth: 1_400)
+                    .frame(maxWidth: .infinity)
                 }
-
-                Section("Connection") {
-                    LabeledContent("Status", value: session.isScanning ? (session.isSubscribed ? "Subscribed" : "Connecting") : "Stopped")
-                    LabeledContent("Trades received", value: "\(session.tradeCount)")
-                    LabeledContent("Completed bars stored", value: "\(session.completedBarsStored)")
-                    if let trade = session.lastTrade {
-                        LabeledContent("Last trade", value: "\(trade.symbol) · \(trade.price.formatted())")
-                    }
-                    if let signal = session.lastSignal {
-                        LabeledContent(signal.signalSource, value: "\(signal.windowChangePercent.formatted())%")
-                    }
-                    if let message = setupMessage ?? session.errorMessage {
-                        Text(message).foregroundStyle(.red)
-                    }
-                }
+                .background(Color.secondary.opacity(0.04))
             }
             .navigationTitle("Radar")
+            .task { await refreshSignals() }
+            .onChange(of: session.lastSignal) { _, latest in
+                if latest != nil { Task { await refreshSignals(selectNewest: true) } }
+            }
+            .onChange(of: session.completedBarsStored) { _, _ in
+                chartRefreshID += 1
+            }
+            .onChange(of: symbol) { _, newValue in
+                if selectedSignal?.symbol != newValue.trimmingCharacters(in: .whitespacesAndNewlines).uppercased() {
+                    selectedSignal = nil
+                }
+            }
+        }
+    }
+
+    private func signalList(compact: Bool) -> some View {
+        RadarSignalList(
+            signals: recentSignals,
+            selected: selectedSignal,
+            compact: compact,
+            errorMessage: historyError,
+            onSelect: { signal in
+                selectedSignal = signal
+                symbol = signal.symbol
+            },
+            onRefresh: { Task { await refreshSignals() } }
+        )
+    }
+
+    private func refreshSignals(selectNewest: Bool = false) async {
+        do {
+            let loaded = try await Task.detached(priority: .userInitiated) {
+                let store = try MarketSignalStore(url: MarketSignalStore.defaultURL())
+                return try await store.loadRecent(limit: 40)
+            }.value
+            recentSignals = loaded
+            historyError = nil
+            if selectNewest, let latest = loaded.first {
+                selectedSignal = latest
+                symbol = latest.symbol
+            } else if selectedSignal == nil {
+                let requestedSymbol = symbol.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+                selectedSignal = loaded.first { $0.symbol == requestedSymbol }
+            }
+        } catch {
+            historyError = error.localizedDescription
         }
     }
 
