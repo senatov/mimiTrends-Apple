@@ -101,6 +101,40 @@ actor MarketBarStore {
         }
     }
 
+    func loadRecentMinuteBars(
+        symbol: String, fromEpochSeconds: Int64, throughEpochSeconds: Int64, limit: Int = 360
+    ) throws -> [MinuteBar] {
+        let sql = """
+            SELECT minute_epoch, open, high, low, close, volume, volume_status FROM minute_bars
+            WHERE symbol=? AND minute_epoch>=? AND minute_epoch<=?
+            ORDER BY minute_epoch DESC LIMIT ?
+            """
+        let statement = try prepare(sql)
+        defer { sqlite3_finalize(statement) }
+        let normalized = symbol.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        try bind(normalized, to: 1, in: statement)
+        sqlite3_bind_int64(statement, 2, fromEpochSeconds)
+        sqlite3_bind_int64(statement, 3, throughEpochSeconds)
+        sqlite3_bind_int(statement, 4, Int32(min(max(limit, 1), 360)))
+        var bars: [MinuteBar] = []
+        while true {
+            let result = sqlite3_step(statement)
+            if result == SQLITE_DONE { return bars.reversed() }
+            guard result == SQLITE_ROW else { throw MarketBarStoreError.databaseUnavailable }
+            let statusName = String(cString: sqlite3_column_text(statement, 6))
+            bars.append(MinuteBar(
+                symbol: normalized,
+                minuteEpochSeconds: sqlite3_column_int64(statement, 0),
+                open: sqlite3_column_double(statement, 1),
+                high: sqlite3_column_double(statement, 2),
+                low: sqlite3_column_double(statement, 3),
+                close: sqlite3_column_double(statement, 4),
+                volume: sqlite3_column_double(statement, 5),
+                volumeStatus: VolumeStatus(rawValue: statusName) ?? .missing
+            ))
+        }
+    }
+
     private func prepare(_ sql: String) throws -> OpaquePointer {
         var statement: OpaquePointer?
         guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK,

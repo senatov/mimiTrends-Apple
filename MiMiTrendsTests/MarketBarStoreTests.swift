@@ -59,6 +59,24 @@ final class MarketBarStoreTests: XCTestCase {
         }
     }
 
+    func testRecentBarsAreBoundedAndChronological() async throws {
+        let url = temporaryDatabaseURL()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let store = try MarketBarStore(url: url)
+        for minute in 1...5 {
+            let bar = MinuteBar(
+                symbol: "AAPL", minuteEpochSeconds: Int64(minute * 60),
+                open: 100, high: 110, low: 99, close: Double(100 + minute), volume: 10
+            )
+            _ = try await store.upsert(bar)
+        }
+        let recent = try await store.loadRecentMinuteBars(
+            symbol: " aapl ", fromEpochSeconds: 120, throughEpochSeconds: 300, limit: 2
+        )
+        XCTAssertEqual(recent.map(\.minuteEpochSeconds), [240, 300])
+        XCTAssertEqual(recent.map(\.close), [104, 105])
+    }
+
     private func temporaryDatabaseURL() -> URL {
         FileManager.default.temporaryDirectory
             .appendingPathComponent("mimitrends-store-tests-\(UUID().uuidString)")

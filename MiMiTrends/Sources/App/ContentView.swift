@@ -11,6 +11,10 @@ struct ContentView: View {
                 WatchlistView()
             }
 
+            Tab("Chart", systemImage: "chart.xyaxis.line") {
+                MarketChartView()
+            }
+
             Tab("Settings", systemImage: "gearshape") {
                 SettingsView()
             }

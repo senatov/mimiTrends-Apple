@@ -5,14 +5,16 @@ This repository is the starting point for a native MiMiTrends application. iPadO
 ## Current scope
 
 - A shared SwiftUI app target for iPad, iPhone, and Mac, with a connected iPad selected by the local command-line scripts.
-- A Radar screen that can show a Finnhub WebSocket trade feed for one entered symbol, plus a Keychain-backed API key setting. Watchlist remains a placeholder.
+- A Radar screen that can show a Finnhub WebSocket trade feed for one entered symbol, a native chart of saved minute bars, and a Keychain-backed API key setting. Watchlist remains a placeholder.
 - A radar session lifecycle hook that stops scanning whenever the app leaves the foreground.
 - Shared market models for provider instruments, quotes, minute bars, and scan results.
 - An XcodeGen project specification and GitHub Actions build workflow.
 
-The app can receive Finnhub trades while it is active, save completed minute bars and detected signals, and detect close-confirmed rapid rises, crashes, liquid sustained moves, and stable intraday corridors. For simple US stock symbols, it also requests [Finnhub's separate last bid/ask endpoint](https://finnhub.io/docs/api/stock-bidask) at most once per minute and uses a fresh quote to reject poor execution prices. This endpoint may require additional account access; if the account cannot use it, trade scanning continues without bid/ask validation. European bid/ask and currency conversion remain unported; see [the porting plan](Docs/PortingPlan.md) for the source and licensing boundary. It does **not** yet implement the full desktop scanner, store a watchlist, import broker data, or show charts. No provider credentials or production data are included.
+The app can receive Finnhub trades while it is active, save completed minute bars and detected signals, and detect close-confirmed rapid rises, crashes, liquid sustained moves, and stable intraday corridors. The Chart tab uses [Swift Charts](https://developer.apple.com/documentation/charts/creating-a-chart-using-swift-charts) to display up to 360 saved minute closes and reported trade volumes for one symbol. It does not fetch historical prices, fill gaps, or convert currencies. For simple US stock symbols, Radar also requests [Finnhub's separate last bid/ask endpoint](https://finnhub.io/docs/api/stock-bidask) at most once per minute and uses a fresh quote to reject poor execution prices. This endpoint may require additional account access; if the account cannot use it, trade scanning continues without bid/ask validation. European bid/ask and currency conversion remain unported; see [the porting plan](Docs/PortingPlan.md) for the source and licensing boundary. It does **not** yet implement the full desktop scanner, store a watchlist, or import broker data. No provider credentials or production data are included.
 
 To try the feed, enter your own Finnhub API key under Settings, then enter a symbol on Radar and tap **Start live feed**. The key stays in this device's Keychain and can be removed in Settings. Completed minute bars are stored in the app container; the current unfinished minute is discarded when the feed stops. The feed stops when the app leaves the foreground. Availability of symbols and trade updates depends on the Finnhub account, exchange coverage, and market hours.
+
+To view collected bars, open Chart, enter the same symbol, select a rolling 1H, 3H, or 24H range, and tap **Load chart**. Empty periods remain empty. Reported trade volume is drawn only for bars whose volume status is `REPORTED`. The chart uses the source price unit; it does not claim a converted currency.
 
 ## Run from the command line
 
