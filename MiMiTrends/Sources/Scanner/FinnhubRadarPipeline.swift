@@ -21,6 +21,7 @@ struct FinnhubRadarPipeline: Sendable {
         quote: ProviderQuoteSnapshot? = nil,
         marketCurrency: String? = nil
     ) async throws -> Update {
+        try Task.checkCancellation()
         guard let bar = await aggregator.accept(trade) else {
             return Update(storedBar: false, signal: nil, storedSignal: false)
         }

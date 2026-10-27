@@ -55,11 +55,17 @@ struct RadarView: View {
             session.start { [session] runID in
                 do {
                     let pipeline = try FinnhubRadarPipeline()
+                    let bidAskSampler = FinnhubBidAskSampler()
                     try await FinnhubTradeStream().run(apiKey: key, symbol: requestedSymbol) {
                         await session.markSubscribed(runID: runID)
                     } onTrade: { trade in
+                        let nowEpochSeconds = Int64(Date().timeIntervalSince1970)
+                        let quote = await bidAskSampler.latest(
+                            symbol: trade.symbol, apiKey: key, nowMillis: nowEpochSeconds * 1_000
+                        )
                         let update = try await pipeline.accept(
-                            trade, nowEpochSeconds: Int64(Date().timeIntervalSince1970)
+                            trade, nowEpochSeconds: nowEpochSeconds,
+                            quote: quote, marketCurrency: "USD"
                         )
                         if update.storedBar {
                             await session.recordStoredBar(runID: runID)

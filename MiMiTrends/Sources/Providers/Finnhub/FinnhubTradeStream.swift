@@ -44,6 +44,9 @@ struct FinnhubTradeStream: Sendable {
             } catch let error as MarketBarStoreError {
                 if Task.isCancelled { throw CancellationError() }
                 throw error
+            } catch let error as MarketSignalStoreError {
+                if Task.isCancelled { throw CancellationError() }
+                throw error
             } catch {
                 if Task.isCancelled { throw CancellationError() }
                 throw FinnhubStreamError.connectionFailed
