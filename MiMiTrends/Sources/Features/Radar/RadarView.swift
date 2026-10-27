@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RadarView: View {
     @Environment(RadarSession.self) private var session
-    @State private var symbol = "AAPL"
+    @Binding var symbol: String
     @State private var setupMessage: String?
 
     var body: some View {
