@@ -18,14 +18,16 @@
 		307DFDEB7E6D0808EFEF5280 /* SustainedMoveDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836B62A82E63CFA57AA55108 /* SustainedMoveDetector.swift */; };
 		42D2520DF5D1EE58D39C722A /* MiMiTrendsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46938DABB8D9A088061EA007 /* MiMiTrendsApp.swift */; };
 		460ADBD5634D1FA108148CE7 /* FinnhubTradeDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C656A5FC3297497A2EF0C4 /* FinnhubTradeDecoderTests.swift */; };
+		5A6C7E30C3DF2E7BDA18C107 /* TradableCorridorDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56179E44A049C506D50EA88A /* TradableCorridorDetectorTests.swift */; };
 		5BACE360225984E82AFECE4A /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BA47D8B812529E5B642634 /* WatchlistView.swift */; };
 		5CA0C4191544D286537CADE2 /* TradeTick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 299D86D92FE714B88D8457D0 /* TradeTick.swift */; };
 		6015FDD1B4BE3FBA81ECBAFD /* RapidRiseDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E8DF893045D20686A37588 /* RapidRiseDetector.swift */; };
 		6732DE954F522E434E299A25 /* RapidRiseDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36497B79D9DF478B0A599DAC /* RapidRiseDetectorTests.swift */; };
-		6BA1B314E8441788F9136015 /* RapidMoveSignalFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD9FB160549217BFE2CEC8 /* RapidMoveSignalFactory.swift */; };
 		6CCCBF2E3FF1BC18F1A21CB7 /* MarketSignalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC566CF9B1F2B9BF51D8CC14 /* MarketSignalStore.swift */; };
 		70DB298337BF98CC7AC59C12 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988AEA1BBEBC2C7A5E7D3678 /* ContentView.swift */; };
 		742EED93C9A9965DEEF90301 /* FinnhubTradeDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76EE3A85FE15787A4698A71 /* FinnhubTradeDecoder.swift */; };
+		788DE3C4625BC76BBA54FAA8 /* TradableCorridorDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE852C3E9615CE4231D65A6 /* TradableCorridorDetector.swift */; };
+		7DA6F69EFBAEDBCB1D92A2C6 /* MarketSignalFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA344C7DA0E1C467E501242 /* MarketSignalFactory.swift */; };
 		8391C89BCBF1E797CF9BB1D4 /* FinnhubBidAskClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FA5758129E1D285EE52F66 /* FinnhubBidAskClient.swift */; };
 		8C2EE85B9C5E278D08F7A88F /* finnhub-trades.json in Resources */ = {isa = PBXBuildFile; fileRef = AF2DADCB2512B8235EB90E94 /* finnhub-trades.json */; };
 		8EC1D3C5FAE37818EF089805 /* FinnhubCredentialStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705C60A2139D78AFE97A3A26 /* FinnhubCredentialStoreTests.swift */; };
@@ -77,14 +79,17 @@
 		451C357A7FF87351E563B33A /* FinnhubRadarPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubRadarPipeline.swift; sourceTree = "<group>"; };
 		46938DABB8D9A088061EA007 /* MiMiTrendsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiMiTrendsApp.swift; sourceTree = "<group>"; };
 		46D64AB70C7B9D27AA7208B1 /* ProviderQuoteSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderQuoteSnapshot.swift; sourceTree = "<group>"; };
+		56179E44A049C506D50EA88A /* TradableCorridorDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradableCorridorDetectorTests.swift; sourceTree = "<group>"; };
 		5A96636C35FC61D2A6DCC092 /* VolumeStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeStatus.swift; sourceTree = "<group>"; };
 		65C656A5FC3297497A2EF0C4 /* FinnhubTradeDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubTradeDecoderTests.swift; sourceTree = "<group>"; };
 		705C60A2139D78AFE97A3A26 /* FinnhubCredentialStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubCredentialStoreTests.swift; sourceTree = "<group>"; };
 		706EA6825624D01B69CBAC12 /* RadarSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSession.swift; sourceTree = "<group>"; };
 		7532342244DE0AD754FD5ACF /* FinnhubMinuteAggregatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubMinuteAggregatorTests.swift; sourceTree = "<group>"; };
 		78487E37B2E1ADF9D66D4697 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		7EE852C3E9615CE4231D65A6 /* TradableCorridorDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradableCorridorDetector.swift; sourceTree = "<group>"; };
 		836B62A82E63CFA57AA55108 /* SustainedMoveDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SustainedMoveDetector.swift; sourceTree = "<group>"; };
 		84B200146AC5ADCCBA5BE68D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8BA344C7DA0E1C467E501242 /* MarketSignalFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketSignalFactory.swift; sourceTree = "<group>"; };
 		8E62EE3DA4210D6D6899DA85 /* FinnhubCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubCredentialStore.swift; sourceTree = "<group>"; };
 		9641788FF10A32C79AF1EA84 /* ShortMoveQuoteQualityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortMoveQuoteQualityTests.swift; sourceTree = "<group>"; };
 		967BEFAB6EA8B419434B07C1 /* FinnhubTradeStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubTradeStream.swift; sourceTree = "<group>"; };
@@ -102,7 +107,6 @@
 		E7C4CA966D8100C4E44B41EC /* MarketSignalStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketSignalStoreTests.swift; sourceTree = "<group>"; };
 		F267A39F96A6A4925446A5FE /* RadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarView.swift; sourceTree = "<group>"; };
 		F7FA5758129E1D285EE52F66 /* FinnhubBidAskClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubBidAskClient.swift; sourceTree = "<group>"; };
-		F9CD9FB160549217BFE2CEC8 /* RapidMoveSignalFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RapidMoveSignalFactory.swift; sourceTree = "<group>"; };
 		FC566CF9B1F2B9BF51D8CC14 /* MarketSignalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketSignalStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,11 +136,12 @@
 			isa = PBXGroup;
 			children = (
 				451C357A7FF87351E563B33A /* FinnhubRadarPipeline.swift */,
+				8BA344C7DA0E1C467E501242 /* MarketSignalFactory.swift */,
 				0AE18AEFF4A0155F92796BBF /* RapidCrashDetector.swift */,
-				F9CD9FB160549217BFE2CEC8 /* RapidMoveSignalFactory.swift */,
 				B4E8DF893045D20686A37588 /* RapidRiseDetector.swift */,
 				1413BC7CD4D61D072A85E6ED /* ShortMoveQuoteQuality.swift */,
 				836B62A82E63CFA57AA55108 /* SustainedMoveDetector.swift */,
+				7EE852C3E9615CE4231D65A6 /* TradableCorridorDetector.swift */,
 			);
 			path = Scanner;
 			sourceTree = "<group>";
@@ -167,6 +172,7 @@
 				36497B79D9DF478B0A599DAC /* RapidRiseDetectorTests.swift */,
 				9641788FF10A32C79AF1EA84 /* ShortMoveQuoteQualityTests.swift */,
 				997AFB52FBB7DAFD48B0CDC2 /* SustainedMoveDetectorTests.swift */,
+				56179E44A049C506D50EA88A /* TradableCorridorDetectorTests.swift */,
 				04CF4C00A5E2F277CE933272 /* Fixtures */,
 			);
 			path = MiMiTrendsTests;
@@ -390,6 +396,7 @@
 				742EED93C9A9965DEEF90301 /* FinnhubTradeDecoder.swift in Sources */,
 				DB681496DBE1583DC9ED82F3 /* FinnhubTradeStream.swift in Sources */,
 				DE9F813906FC4A5F8735340A /* MarketBarStore.swift in Sources */,
+				7DA6F69EFBAEDBCB1D92A2C6 /* MarketSignalFactory.swift in Sources */,
 				6CCCBF2E3FF1BC18F1A21CB7 /* MarketSignalStore.swift in Sources */,
 				42D2520DF5D1EE58D39C722A /* MiMiTrendsApp.swift in Sources */,
 				AE614A3D06D5A77AEC34219A /* MinuteBar.swift in Sources */,
@@ -398,12 +405,12 @@
 				1CDC7CDD565E75F04A275F72 /* RadarSession.swift in Sources */,
 				D40D018943CFE0A505ECF10B /* RadarView.swift in Sources */,
 				EB8988CE3885FAEE3C330A31 /* RapidCrashDetector.swift in Sources */,
-				6BA1B314E8441788F9136015 /* RapidMoveSignalFactory.swift in Sources */,
 				6015FDD1B4BE3FBA81ECBAFD /* RapidRiseDetector.swift in Sources */,
 				B42AFC672B6EDAF496F71645 /* ScanResult.swift in Sources */,
 				13742120FBB0FC253D5A54CB /* SettingsView.swift in Sources */,
 				E4C2FBBE94AECDC87EC36057 /* ShortMoveQuoteQuality.swift in Sources */,
 				307DFDEB7E6D0808EFEF5280 /* SustainedMoveDetector.swift in Sources */,
+				788DE3C4625BC76BBA54FAA8 /* TradableCorridorDetector.swift in Sources */,
 				5CA0C4191544D286537CADE2 /* TradeTick.swift in Sources */,
 				29C69C4656B86857C9274765 /* VolumeStatus.swift in Sources */,
 				5BACE360225984E82AFECE4A /* WatchlistView.swift in Sources */,
@@ -427,6 +434,7 @@
 				6732DE954F522E434E299A25 /* RapidRiseDetectorTests.swift in Sources */,
 				F8D51BD68D2CF34E8B3C5D39 /* ShortMoveQuoteQualityTests.swift in Sources */,
 				B05624E5593E449489CC6BF3 /* SustainedMoveDetectorTests.swift in Sources */,
+				5A6C7E30C3DF2E7BDA18C107 /* TradableCorridorDetectorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,4 +1,4 @@
-enum RapidMoveSignalFactory {
+enum MarketSignalFactory {
     static func make(
         symbol: String,
         bars: [MinuteBar],
@@ -8,13 +8,15 @@ enum RapidMoveSignalFactory {
         changePercent: Double,
         source: String,
         displayPrice: Double,
-        nowEpochSeconds: Int64
+        nowEpochSeconds: Int64,
+        anomalyScore: Double = 100,
+        windowLabel: String? = nil
     ) -> ScanResult {
         let session = bars.filter { $0.minuteEpochSeconds >= nowEpochSeconds - 10_800 }
         return ScanResult(
             symbol: symbol,
             price: displayPrice,
-            anomalyScore: 100,
+            anomalyScore: anomalyScore,
             priceAnomaly: nil,
             volumeAnomaly: nil,
             rangeAnomaly: nil,
@@ -28,7 +30,7 @@ enum RapidMoveSignalFactory {
             signalSource: source,
             updatedAtMillis: end.minuteEpochSeconds * 1_000,
             dataStatus: "LIVE",
-            signalWindowLabel: "\(max(1, (end.minuteEpochSeconds - start.minuteEpochSeconds) / 60))m",
+            signalWindowLabel: windowLabel ?? "\(max(1, (end.minuteEpochSeconds - start.minuteEpochSeconds) / 60))m",
             signalPrice: start.close,
             signalEpochMillis: end.minuteEpochSeconds * 1_000,
             analysisUpdatedAtMillis: end.minuteEpochSeconds * 1_000,

@@ -45,11 +45,12 @@ enum SustainedMoveDetector {
                   $0.1.minuteEpochSeconds - $0.0.minuteEpochSeconds > 300
               }) else { return nil }
 
-        return RapidMoveSignalFactory.make(
+        return MarketSignalFactory.make(
             symbol: symbol, bars: recent, start: start, end: end,
             eventBarCount: eventBars.count, changePercent: change,
             source: rising ? "Sustained rise" : "Sustained drop",
-            displayPrice: end.close, nowEpochSeconds: nowEpochSeconds
+            displayPrice: end.close, nowEpochSeconds: nowEpochSeconds,
+            anomalyScore: 90
         )
     }
 }

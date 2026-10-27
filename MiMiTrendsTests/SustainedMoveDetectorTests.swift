@@ -10,6 +10,7 @@ final class SustainedMoveDetectorTests: XCTestCase {
             symbol: "AAPL", bars: bars, nowEpochSeconds: now
         ))
         XCTAssertEqual(signal.signalSource, "Sustained rise")
+        XCTAssertEqual(signal.anomalyScore, 90)
         XCTAssertEqual(signal.windowChangePercent, 1.2, accuracy: 1e-9)
         XCTAssertEqual(signal.signalWindowLabel, "60m")
         XCTAssertEqual(signal.signalPrice, 100)

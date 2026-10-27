@@ -38,7 +38,7 @@ enum RapidRiseDetector {
             strongest = (start, end, change, eventBars.count)
         }
         guard let move = strongest else { return nil }
-        return RapidMoveSignalFactory.make(
+        return MarketSignalFactory.make(
             symbol: symbol, bars: recent, start: move.start, end: move.end,
             eventBarCount: move.count, changePercent: move.change,
             source: "Rapid rise", displayPrice: latest.close,

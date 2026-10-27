@@ -36,6 +36,8 @@ struct FinnhubRadarPipeline: Sendable {
             symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
         ) ?? SustainedMoveDetector.detect(
             symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
+        ) ?? TradableCorridorDetector.detect(
+            symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
         )
         var signal = candidate
         if let quote, let candidate,
