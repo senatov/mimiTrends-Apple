@@ -71,6 +71,24 @@ actor MarketBarStore {
         return sqlite3_changes(database) > 0
     }
 
+    func upsertBatch(_ bars: [MinuteBar]) throws -> Int {
+        guard bars.count <= 360, bars.allSatisfy(\.isValid) else {
+            throw MarketBarStoreError.invalidBar
+        }
+        try Self.execute("BEGIN IMMEDIATE", on: database)
+        do {
+            var changed = 0
+            for bar in bars {
+                if try upsert(bar) { changed += 1 }
+            }
+            try Self.execute("COMMIT", on: database)
+            return changed
+        } catch {
+            try? Self.execute("ROLLBACK", on: database)
+            throw error
+        }
+    }
+
     func loadMinuteBars(symbol: String, fromEpochSeconds: Int64, limit: Int = 10_000) throws -> [MinuteBar] {
         let sql = """
             SELECT minute_epoch, open, high, low, close, volume, volume_status FROM minute_bars

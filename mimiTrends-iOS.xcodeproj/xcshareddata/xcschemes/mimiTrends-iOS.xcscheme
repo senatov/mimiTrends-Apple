@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A4D89AF730D132FF4986B562"
-               BuildableName = "MiMiTrends.app"
-               BlueprintName = "MiMiTrends"
+               BlueprintIdentifier = "4272B0CA94A3C0C778AF8152"
+               BuildableName = "mimiTrends-iOS.app"
+               BlueprintName = "mimiTrends-iOS"
                ReferencedContainer = "container:mimiTrends-iOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,9 +29,9 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F979E384555845020048464D"
-               BuildableName = "MiMiTrendsTests.xctest"
-               BlueprintName = "MiMiTrendsTests"
+               BlueprintIdentifier = "79EA1A7C25DA67EF1E281A0E"
+               BuildableName = "mimiTrends-iOSTests.xctest"
+               BlueprintName = "mimiTrends-iOSTests"
                ReferencedContainer = "container:mimiTrends-iOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +46,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A4D89AF730D132FF4986B562"
-            BuildableName = "MiMiTrends.app"
-            BlueprintName = "MiMiTrends"
+            BlueprintIdentifier = "4272B0CA94A3C0C778AF8152"
+            BuildableName = "mimiTrends-iOS.app"
+            BlueprintName = "mimiTrends-iOS"
             ReferencedContainer = "container:mimiTrends-iOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -58,9 +58,9 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F979E384555845020048464D"
-               BuildableName = "MiMiTrendsTests.xctest"
-               BlueprintName = "MiMiTrendsTests"
+               BlueprintIdentifier = "79EA1A7C25DA67EF1E281A0E"
+               BuildableName = "mimiTrends-iOSTests.xctest"
+               BlueprintName = "mimiTrends-iOSTests"
                ReferencedContainer = "container:mimiTrends-iOS.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -82,9 +82,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A4D89AF730D132FF4986B562"
-            BuildableName = "MiMiTrends.app"
-            BlueprintName = "MiMiTrends"
+            BlueprintIdentifier = "4272B0CA94A3C0C778AF8152"
+            BuildableName = "mimiTrends-iOS.app"
+            BlueprintName = "mimiTrends-iOS"
             ReferencedContainer = "container:mimiTrends-iOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -99,9 +99,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A4D89AF730D132FF4986B562"
-            BuildableName = "MiMiTrends.app"
-            BlueprintName = "MiMiTrends"
+            BlueprintIdentifier = "4272B0CA94A3C0C778AF8152"
+            BuildableName = "mimiTrends-iOS.app"
+            BlueprintName = "mimiTrends-iOS"
             ReferencedContainer = "container:mimiTrends-iOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

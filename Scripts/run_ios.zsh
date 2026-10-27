@@ -11,8 +11,9 @@ if [[ -n "${SIMULATOR_UDID:-}" || "${CI:-}" == "true" ]]; then
     SIMULATOR_UDID="${simulator_udid}" zsh "${SCRIPT_DIR}/build_ios.zsh"
     boot_ios_simulator "${simulator_udid}"
 
-    app_path="${DERIVED_DATA}/Build/Products/Debug-iphonesimulator/MiMiTrends.app"
+    app_path="${DERIVED_DATA}/Build/Products/Debug-iphonesimulator/${APP_NAME}.app"
     xcrun simctl install "${simulator_udid}" "${app_path}"
+    echo "Launching ${APP_NAME} (${BUNDLE_ID}) on iPad Simulator ${simulator_udid}."
     if ! open -a Simulator --args -CurrentDeviceUDID "${simulator_udid}" 2>/dev/null; then
         echo "Simulator GUI is unavailable; launching in the booted simulator without a window."
     fi
@@ -20,7 +21,8 @@ if [[ -n "${SIMULATOR_UDID:-}" || "${CI:-}" == "true" ]]; then
 else
     ipad_udid="$(select_connected_ipad)"
     IPAD_UDID="${ipad_udid}" zsh "${SCRIPT_DIR}/build_ios.zsh"
-    app_path="${DERIVED_DATA}/Build/Products/Debug-iphoneos/MiMiTrends.app"
+    app_path="${DERIVED_DATA}/Build/Products/Debug-iphoneos/${APP_NAME}.app"
     xcrun devicectl device install app --device "${ipad_udid}" "${app_path}"
+    echo "Launching ${APP_NAME} (${BUNDLE_ID}) on iPad ${ipad_udid}."
     xcrun devicectl device process launch --device "${ipad_udid}" --terminate-existing "${BUNDLE_ID}"
 fi

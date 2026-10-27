@@ -20,7 +20,7 @@ if [[ "${CI:-}" == "true" || -n "${SIMULATOR_UDID:-}" ]]; then
         -derivedDataPath "${DERIVED_DATA}" \
         CODE_SIGNING_ALLOWED=YES \
         CODE_SIGN_IDENTITY=- build
-    echo "iPad Simulator build succeeded: ${DERIVED_DATA}/Build/Products/${configuration}-iphonesimulator/MiMiTrends.app"
+    echo "iPad Simulator build succeeded: ${DERIVED_DATA}/Build/Products/${configuration}-iphonesimulator/${APP_NAME}.app"
 else
     ipad_udid="$(select_connected_ipad)"
     xcodebuild -quiet \
@@ -30,5 +30,5 @@ else
         -destination "platform=iOS,id=${ipad_udid}" \
         -derivedDataPath "${DERIVED_DATA}" \
         -allowProvisioningUpdates build
-    echo "Connected iPad build succeeded: ${DERIVED_DATA}/Build/Products/${configuration}-iphoneos/MiMiTrends.app"
+    echo "Connected iPad build succeeded: ${DERIVED_DATA}/Build/Products/${configuration}-iphoneos/${APP_NAME}.app"
 fi

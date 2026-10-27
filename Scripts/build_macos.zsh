@@ -15,4 +15,4 @@ xcodebuild -quiet \
     -derivedDataPath "${DERIVED_DATA}" \
     CODE_SIGNING_ALLOWED=NO build
 
-echo "macOS build succeeded: ${DERIVED_DATA}/Build/Products/${configuration}/MiMiTrends.app"
+echo "macOS build succeeded: ${DERIVED_DATA}/Build/Products/${configuration}/${APP_NAME}.app"

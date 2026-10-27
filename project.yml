@@ -17,7 +17,7 @@ settings:
     MARKETING_VERSION: 0.1.0
     CURRENT_PROJECT_VERSION: 1
 targets:
-  MiMiTrends:
+  mimiTrends-iOS:
     type: application
     supportedDestinations: [iOS, macOS]
     sources:
@@ -25,7 +25,10 @@ targets:
       - path: MiMiTrends/Resources
     settings:
       base:
-        INFOPLIST_KEY_CFBundleDisplayName: MiMiTrends
+        PRODUCT_NAME: mimiTrends-iOS
+        PRODUCT_MODULE_NAME: MiMiTrends
+        INFOPLIST_KEY_CFBundleName: mimiTrends-iOS
+        INFOPLIST_KEY_CFBundleDisplayName: mimiTrends-iOS
         INFOPLIST_KEY_NSHumanReadableCopyright: Copyright © 2026 Iakov Senatov
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
@@ -34,13 +37,13 @@ targets:
         TARGETED_DEVICE_FAMILY: "1,2"
         CODE_SIGN_STYLE: Automatic
         "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": MiMiTrends/Configuration/MacAppStore.entitlements
-  MiMiTrendsTests:
+  mimiTrends-iOSTests:
     type: bundle.unit-test
     supportedDestinations: [iOS, macOS]
     sources:
       - path: MiMiTrendsTests
     dependencies:
-      - target: MiMiTrends
+      - target: mimiTrends-iOS
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
@@ -48,12 +51,14 @@ targets:
         CODE_SIGN_IDENTITY: Apple Development
         PROVISIONING_PROFILE_SPECIFIER: ""
         PRODUCT_BUNDLE_IDENTIFIER: org.senatov.mimitrends.apple.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/mimiTrends-iOS.app/mimiTrends-iOS"
+        "TEST_HOST[sdk=macosx*]": "$(BUILT_PRODUCTS_DIR)/mimiTrends-iOS.app/Contents/MacOS/mimiTrends-iOS"
 schemes:
   mimiTrends-iOS:
     build:
       targets:
-        MiMiTrends: all
-        MiMiTrendsTests: [test]
+        mimiTrends-iOS: all
+        mimiTrends-iOSTests: [test]
     test:
       targets:
-        - MiMiTrendsTests
+        - mimiTrends-iOSTests

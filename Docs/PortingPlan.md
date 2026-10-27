@@ -6,8 +6,8 @@ The desktop Kotlin app remains the behavioral reference. Work through these stag
 | --- | --- | --- | --- | --- |
 | 1. Shared market contract | `core/model`, scanner `ScanResult` | `MiMiTrends/Sources/Models` | Model fields and defaults are mapped; representative desktop fixtures round-trip; minute-bar and volume rules match | Complete |
 | 2. First provider | `finnhub-ws/FinnhubWebSocketClient` | Native Finnhub WebSocket adapter and Keychain credential storage | Desktop test fixtures decode, failures are handled, and a foreground feed can fetch data | Implemented; live account test pending |
-| 3. Scanner and storage | `app/shortmove`, `database` | Native scanner services and SQLite repositories | Deterministic signal fixtures agree with desktop; schema and migrations are tested; scans stop outside foreground | In progress: move and corridor detection, quote gate, bar and signal storage |
-| 4. Product screens | `charts`, `app` | Adaptive SwiftUI Radar, charts, watchlists, broker import | Real signals are visible on iPhone and iPad; selected Mac workflows work inside App Sandbox | In progress: saved-bar chart |
+| 3. Scanner and storage | `app/shortmove`, `database` | Native scanner services and SQLite repositories | Deterministic signal fixtures agree with desktop; schema and migrations are tested; scans stop outside foreground | In progress: move and corridor detection, quote gate, storage, bounded bar snapshot import |
+| 4. Product screens | `charts`, `app` | Adaptive SwiftUI Radar, charts, watchlists, broker import | Real signals are visible on iPhone and iPad; selected Mac workflows work inside App Sandbox | In progress: saved-bar chart with desktop bar import |
 | 5. Distribution | Desktop data export and native app | Signed archives and App Store Connect metadata | Data rights, privacy, sandbox, device tests, archive validation, and review access are complete | Pending |
 
 ## Stage 1 mapping
@@ -20,12 +20,12 @@ The desktop Kotlin app remains the behavioral reference. Work through these stag
 
 ## Next step
 
-Run the Finnhub feed on a device with a user-entered key, including connection failure, Stop, and background transitions. Verify the account's bid/ask endpoint access, data coverage, and display rights before distribution. Continue stage 3 with a safe desktop snapshot importer and a licensed source for European quotes. Currency conversion for display needs its own explicit reference-rate label; execution-quality checks must not treat a daily reference rate as a live executable FX quote.
+Run the Finnhub feed on a device with a user-entered key, including connection failure, Stop, and background transitions. Verify the account's bid/ask endpoint access, data coverage, and display rights before distribution. Continue stage 3 with explicit watchlist and broker-data migration, then a licensed source for European quotes. The bounded desktop bar snapshot is only a first migration slice. Currency conversion for display needs its own explicit reference-rate label; execution-quality checks must not treat a daily reference rate as a live executable FX quote.
 
 ## Chart API decision
 
 - Render native charts with [Swift Charts](https://developer.apple.com/documentation/charts/creating-a-chart-using-swift-charts). The first screen reads a bounded window from the native SQLite `minute_bars` table off the main actor, then displays completed close prices and bars with reported volume. It does not create candles from quotes or invent missing history.
-- The Kotlin `ChartDataLoader` combines local history, provider minute tails, currency conversion, and broker trades. These remain separate native tasks. The first chart has rolling 1H, 3H, and 24H ranges, a 360-bar cap, and no historical backfill.
+- The Kotlin `ChartDataLoader` combines local history, provider minute tails, currency conversion, and broker trades. These remain separate native tasks. The first chart has rolling 1H, 3H, and 24H ranges plus a bounded Latest view, a 360-bar cap, and no provider historical backfill. The desktop snapshot exporter copies at most 360 bars for one symbol; the native importer validates the format before committing them to native storage.
 - [Finnhub's official client](https://github.com/Finnhub-Stock-API/finnhub-go) exposes a Stock Candles API that may be evaluated for an authenticated history adapter. Account entitlement, symbol coverage, retention, and display rights must be checked before enabling it. Do not carry over the desktop's undocumented Yahoo chart endpoint into the App Store build.
 
 ## Stage 2 mapping

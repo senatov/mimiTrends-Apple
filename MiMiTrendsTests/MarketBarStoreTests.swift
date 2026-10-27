@@ -77,6 +77,27 @@ final class MarketBarStoreTests: XCTestCase {
         XCTAssertEqual(recent.map(\.close), [104, 105])
     }
 
+    func testBatchRejectsInvalidBarWithoutPartialWrites() async throws {
+        let url = temporaryDatabaseURL()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let store = try MarketBarStore(url: url)
+        let valid = MinuteBar(
+            symbol: "AAPL", minuteEpochSeconds: 60,
+            open: 100, high: 101, low: 99, close: 100, volume: 1_000
+        )
+        let invalid = MinuteBar(
+            symbol: "AAPL", minuteEpochSeconds: 120,
+            open: 100, high: 101, low: 99, close: 100, volume: 0
+        )
+        do {
+            _ = try await store.upsertBatch([valid, invalid])
+            XCTFail("Invalid batch was accepted")
+        } catch MarketBarStoreError.invalidBar {
+            let loaded = try await store.loadMinuteBars(symbol: "AAPL", fromEpochSeconds: 0)
+            XCTAssertTrue(loaded.isEmpty)
+        }
+    }
+
     private func temporaryDatabaseURL() -> URL {
         FileManager.default.temporaryDirectory
             .appendingPathComponent("mimitrends-store-tests-\(UUID().uuidString)")

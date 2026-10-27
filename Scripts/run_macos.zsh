@@ -13,10 +13,48 @@ if (( macos_major < 27 )); then
 fi
 
 zsh "${SCRIPT_DIR}/build_macos.zsh"
-app_path="${DERIVED_DATA}/Build/Products/Debug/MiMiTrends.app"
+app_path="${DERIVED_DATA}/Build/Products/Debug/${APP_NAME}.app"
 codesign --force --sign - \
     --entitlements "${PROJECT_DIR}/MiMiTrends/Configuration/MacAppStore.entitlements" \
     "${app_path}"
 codesign --verify --strict "${app_path}"
-echo "Launching an ad hoc signed app with App Sandbox enabled."
-open "${app_path}"
+/usr/bin/python3 - "${app_path}" "${BUNDLE_ID}" "${APP_NAME}" <<'PY'
+import plistlib
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+app_path = Path(sys.argv[1]).resolve(strict=True)
+expected_bundle_id, expected_name = sys.argv[2:]
+with (app_path / "Contents" / "Info.plist").open("rb") as info_file:
+    info = plistlib.load(info_file)
+if info.get("CFBundleIdentifier") != expected_bundle_id:
+    sys.exit("Built app has an unexpected bundle identifier.")
+if info.get("CFBundleDisplayName") != expected_name:
+    sys.exit("Built app has an unexpected display name.")
+executable = app_path / "Contents" / "MacOS" / info["CFBundleExecutable"]
+
+
+def matching_pids():
+    output = subprocess.check_output(["/bin/ps", "-axo", "pid=,command="], text=True)
+    result = set()
+    for line in output.splitlines():
+        pid, _, command = line.strip().partition(" ")
+        command = command.strip()
+        if command == str(executable) or command.startswith(str(executable) + " "):
+            result.add(int(pid))
+    return result
+
+
+previous = matching_pids()
+subprocess.run(["/usr/bin/open", "-n", str(app_path)], check=True)
+for _ in range(30):
+    launched = matching_pids() - previous
+    if launched:
+        print(f"Launched {app_path} with App Sandbox (PID {min(launched)}; {expected_bundle_id}).")
+        break
+    time.sleep(0.2)
+else:
+    sys.exit("The expected native app process did not start.")
+PY

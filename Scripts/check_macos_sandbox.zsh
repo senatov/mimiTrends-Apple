@@ -29,12 +29,14 @@ xcodebuild -project "${PROJECT_FILE}" \
 import json
 import sys
 
-settings = next(item["buildSettings"] for item in json.load(sys.stdin) if item["target"] == "MiMiTrends")
+settings = next(item["buildSettings"] for item in json.load(sys.stdin) if item["target"] == "mimiTrends-iOS")
 expected = "MiMiTrends/Configuration/MacAppStore.entitlements"
 if settings.get("CODE_SIGN_ENTITLEMENTS") != expected:
     sys.exit(f"Mac target must use {expected}")
 if settings.get("PRODUCT_BUNDLE_IDENTIFIER") != "org.senatov.mimitrends.apple":
     sys.exit("Unexpected native app bundle identifier")
+if settings.get("PRODUCT_NAME") != "mimiTrends-iOS":
+    sys.exit("Unexpected native app product name")
 '
 
 echo "Mac App Sandbox configuration is present. Signed runtime behavior still needs feature testing."

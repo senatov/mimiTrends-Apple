@@ -2,7 +2,7 @@
 
 This repository is the starting point for a native MiMiTrends application. iPadOS 27 is the primary development target; macOS 27 is an optional destination. The iOS app still supports iPhone. The existing Kotlin/JavaFX desktop application remains in the separate `mimiTrends` repository.
 
-The repository, Xcode project, and run scheme are named `mimiTrends-iOS`. The installed app continues to be named MiMiTrends and retains its existing bundle identifier so development installations, local data, and Keychain entries keep the same app identity.
+The repository, Xcode project, run scheme, and native app are named `mimiTrends-iOS`. The Kotlin/JavaFX desktop app is named MiMiTrends. The native app retains its existing bundle identifier so development installations, local data, and Keychain entries keep the same app identity.
 
 ## Current scope
 
@@ -12,11 +12,19 @@ The repository, Xcode project, and run scheme are named `mimiTrends-iOS`. The in
 - Shared market models for provider instruments, quotes, minute bars, and scan results.
 - An XcodeGen project specification and GitHub Actions build workflow.
 
-The app can receive Finnhub trades while it is active, save completed minute bars and detected signals, and detect close-confirmed rapid rises, crashes, liquid sustained moves, and stable intraday corridors. The Chart tab uses [Swift Charts](https://developer.apple.com/documentation/charts/creating-a-chart-using-swift-charts) to display up to 360 saved minute closes and reported trade volumes for one symbol. It does not fetch historical prices, fill gaps, or convert currencies. For simple US stock symbols, Radar also requests [Finnhub's separate last bid/ask endpoint](https://finnhub.io/docs/api/stock-bidask) at most once per minute and uses a fresh quote to reject poor execution prices. This endpoint may require additional account access; if the account cannot use it, trade scanning continues without bid/ask validation. European bid/ask and currency conversion remain unported; see [the porting plan](Docs/PortingPlan.md) for the source and licensing boundary. It does **not** yet implement the full desktop scanner, store a watchlist, or import broker data. No provider credentials or production data are included.
+The app can receive Finnhub trades while it is active, save completed minute bars and detected signals, and detect close-confirmed rapid rises, crashes, liquid sustained moves, and stable intraday corridors. The Chart tab uses [Swift Charts](https://developer.apple.com/documentation/charts/creating-a-chart-using-swift-charts) to display up to 360 saved minute closes and reported trade volumes for one symbol. It does not fetch historical prices, fill gaps, or convert currencies. A bounded snapshot of one symbol's desktop bars can be imported into the chart. For simple US stock symbols, Radar also requests [Finnhub's separate last bid/ask endpoint](https://finnhub.io/docs/api/stock-bidask) at most once per minute and uses a fresh quote to reject poor execution prices. This endpoint may require additional account access; if the account cannot use it, trade scanning continues without bid/ask validation. European bid/ask and currency conversion remain unported; see [the porting plan](Docs/PortingPlan.md) for the source and licensing boundary. It does **not** yet implement the full desktop scanner, store a watchlist, or import broker data. No provider credentials or production data are included.
 
 To try the feed, enter your own Finnhub API key under Settings, then enter a symbol on Radar and tap **Start live feed**. The key stays in this device's Keychain and can be removed in Settings. Completed minute bars are stored in the app container; the current unfinished minute is discarded when the feed stops. The feed stops when the app leaves the foreground. Availability of symbols and trade updates depends on the Finnhub account, exchange coverage, and market hours.
 
 To view collected bars, open Chart, enter the same symbol, select a rolling 1H, 3H, or 24H range, and tap **Load chart**. Empty periods remain empty. Reported trade volume is drawn only for bars whose volume status is `REPORTED`. The chart uses the source price unit; it does not claim a converted currency.
+
+To bring a small part of the desktop history to iPad or Mac, first create a snapshot on the desktop Mac:
+
+```zsh
+python3 Scripts/export_desktop_bars.py AAPL ~/Desktop/AAPL-bars.sqlite
+```
+
+The script opens `~/.mimi/trends/mimitrends.db` read-only, selects at most the latest 360 completed bars for one symbol in a consistent SQLite read transaction, and creates a new file without overwriting an existing one. Pass `--source /path/to/mimitrends.db` to choose another desktop database. Transfer the resulting `.sqlite` file to the device using Files or AirDrop, then choose **Import desktop snapshot** on Chart. The app verifies the snapshot and imports it transactionally; choose **Latest** to view saved bars even when they are older than 24 hours. Do not select the live desktop `mimitrends.db` in the app. Broker trades, settings, credentials, and other desktop tables are never included in this export.
 
 ## Run from the command line
 
@@ -35,14 +43,15 @@ This builds, installs, and launches the app on the single paired iPad running iP
 | `zsh Scripts/run_ios.zsh` | Build, install, and launch on the connected iPad. Set `SIMULATOR_UDID` to use an iPad simulator. |
 | `zsh Scripts/test_ios.zsh` | Run unit tests on the connected iPad. With `SIMULATOR_UDID` or `CI=true`, use an iPad simulator. |
 | `zsh Scripts/build_macos.zsh` | Build the optional unsigned macOS app. Pass `Release` for a Release configuration build. |
-| `zsh Scripts/run_macos.zsh` | Build, ad hoc sign with the Mac App Sandbox entitlements, and launch on macOS 27 or newer. |
+| `zsh Scripts/run_macos.zsh` | Build, ad hoc sign with the Mac App Sandbox entitlements, and launch a fresh `mimiTrends-iOS.app` instance on macOS 27 or newer; verify its path, bundle ID, display name, and PID. |
 | `zsh Scripts/check_macos_sandbox.zsh` | Check the Mac target's sandbox entitlement file and Xcode build settings. |
+| `python3 Scripts/export_desktop_bars.py SYMBOL OUTPUT` | Create a read-only, bounded minute-bar snapshot for one symbol from the desktop SQLite database. |
 
 All builds use this repository's ignored `DerivedData/` directory. They do not clear shared Xcode caches, modify other repositories, sign an App Store distribution binary, or upload one. Connected-iPad builds use the configured Apple Development team; simulator builds use local ad hoc signing so Keychain works during development. `run_macos.zsh` signs its local Debug app only to exercise the sandbox during development. The generated Xcode project is committed so it can also be opened directly in Xcode.
 
 ## App Store preparation
 
-The current app is a development skeleton and is **not ready for App Review**: its main screens intentionally have no market functionality. Apple's [App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) require a complete, useful app, and the Mac App Store also requires sandboxing and Xcode-based packaging.
+The current app is a development skeleton and is **not ready for App Review**: watchlists, broker imports, broader scanner behavior, and provider data rights remain incomplete. Apple's [App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) require a complete, useful app, and the Mac App Store also requires sandboxing and Xcode-based packaging.
 
 - The macOS target uses [App Sandbox](https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox) with outgoing network access and read-only access to user-selected import files. It requests no unrestricted folder or incoming network access. See [Storage and desktop data migration](Docs/DataStorage.md) for the planned container layout and migration rules.
 - The iOS and macOS apps use SwiftUI and system APIs; the former JVM/JavaFX runtime is not bundled.

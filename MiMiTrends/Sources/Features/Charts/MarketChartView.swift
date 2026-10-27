@@ -1,5 +1,6 @@
 import Charts
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MarketChartView: View {
     @State private var symbol = "AAPL"
@@ -7,6 +8,9 @@ struct MarketChartView: View {
     @State private var bars: [MinuteBar] = []
     @State private var loadedSymbol = ""
     @State private var isLoading = false
+    @State private var isImporting = false
+    @State private var showingImporter = false
+    @State private var importMessage: String?
     @State private var errorMessage: String?
 
     var body: some View {
@@ -24,6 +28,16 @@ struct MarketChartView: View {
                         Task { await loadChart() }
                     }
                     .disabled(isLoading || symbol.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    Button("Import desktop snapshot", systemImage: "square.and.arrow.down") {
+                        showingImporter = true
+                    }
+                    .disabled(isImporting)
+                    if isImporting {
+                        ProgressView("Importing minute bars")
+                    }
+                    if let importMessage {
+                        Text(importMessage).font(.footnote).foregroundStyle(.secondary)
+                    }
                 }
 
                 if isLoading {
@@ -34,7 +48,7 @@ struct MarketChartView: View {
                     ContentUnavailableView(
                         "No saved minute bars",
                         systemImage: "chart.xyaxis.line",
-                        description: Text("Start a live feed on Radar and return after completed minutes have been saved.")
+                        description: Text("Start a live feed on Radar or import a desktop snapshot, then load the chart.")
                     )
                 } else {
                     chartSections
@@ -42,6 +56,16 @@ struct MarketChartView: View {
             }
             .navigationTitle("Chart")
             .task { await loadChart() }
+            .fileImporter(
+                isPresented: $showingImporter,
+                allowedContentTypes: [UTType(filenameExtension: "sqlite") ?? .data]
+            ) { result in
+                if case .success(let url) = result {
+                    Task { await importSnapshot(at: url) }
+                } else if case .failure(let error) = result {
+                    importMessage = error.localizedDescription
+                }
+            }
         }
     }
 
@@ -117,7 +141,7 @@ struct MarketChartView: View {
                 let store = try MarketBarStore(url: MarketBarStore.defaultURL())
                 return try await store.loadRecentMinuteBars(
                     symbol: requestedSymbol,
-                    fromEpochSeconds: now - seconds,
+                    fromEpochSeconds: seconds.map { now - $0 } ?? 0,
                     throughEpochSeconds: now
                 )
             }.value
@@ -128,6 +152,23 @@ struct MarketChartView: View {
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+
+    private func importSnapshot(at url: URL) async {
+        isImporting = true
+        importMessage = nil
+        do {
+            let summary = try await DesktopBarSnapshotImporter.importSnapshot(
+                at: url, into: MarketBarStore.defaultURL()
+            )
+            symbol = summary.symbol
+            selectedRange = .latest
+            importMessage = "Imported \(summary.barCount) bars for \(summary.symbol); \(summary.changedCount) saved or updated."
+            await loadChart()
+        } catch {
+            importMessage = error.localizedDescription
+        }
+        isImporting = false
     }
 }
 
@@ -140,6 +181,7 @@ private enum ChartRange: String, CaseIterable, Identifiable {
     case oneHour
     case threeHours
     case twentyFourHours
+    case latest
 
     var id: Self { self }
 
@@ -148,14 +190,16 @@ private enum ChartRange: String, CaseIterable, Identifiable {
         case .oneHour: "1H"
         case .threeHours: "3H"
         case .twentyFourHours: "24H"
+        case .latest: "Latest"
         }
     }
 
-    var seconds: Int64 {
+    var seconds: Int64? {
         switch self {
         case .oneHour: 3_600
         case .threeHours: 10_800
         case .twentyFourHours: 86_400
+        case .latest: nil
         }
     }
 }
