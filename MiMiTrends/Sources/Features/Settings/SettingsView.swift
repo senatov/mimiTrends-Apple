@@ -12,10 +12,13 @@ struct SettingsView: View {
                 Section("Finnhub") {
                     SecureField("API key", text: $apiKeyDraft)
                     HStack {
-                        Button("Save key") { saveKey() }
+                        TrendsActionButton(title: "Save key", systemImage: "key.fill") { saveKey() }
                             .disabled(apiKeyDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         if hasStoredKey {
-                            Button("Remove key", role: .destructive) { removeKey() }
+                            TrendsActionButton(
+                                title: "Remove key", systemImage: "trash",
+                                tint: .red, role: .destructive
+                            ) { removeKey() }
                         }
                     }
                     Text(hasStoredKey ? "API key stored in Keychain on this device." : "No API key stored.")

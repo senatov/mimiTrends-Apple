@@ -24,11 +24,15 @@ struct MarketChartView: View {
                         }
                     }
                     .pickerStyle(.segmented)
-                    Button("Load chart", systemImage: "arrow.clockwise") {
+                    TrendsActionButton(title: "Load chart", systemImage: "arrow.clockwise") {
                         Task { await loadChart() }
                     }
                     .disabled(isLoading || symbol.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                    Button("Import desktop snapshot", systemImage: "square.and.arrow.down") {
+                    TrendsActionButton(
+                        title: "Import desktop snapshot",
+                        systemImage: "square.and.arrow.down",
+                        tint: .teal
+                    ) {
                         showingImporter = true
                     }
                     .disabled(isImporting)

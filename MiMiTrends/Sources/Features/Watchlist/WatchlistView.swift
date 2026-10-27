@@ -17,7 +17,9 @@ struct WatchlistView: View {
                         TextField("Ticker symbol", text: $newSymbol)
                             .autocorrectionDisabled()
                             .onSubmit { Task { await add() } }
-                        Button("Add") { Task { await add() } }
+                        TrendsActionButton(title: "Add", systemImage: "plus", tint: .green) {
+                            Task { await add() }
+                        }
                             .disabled(isWorking || newSymbol.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     }
                     Text("Symbols are saved on this device. A feed starts only when you tap Start on Radar.")
@@ -49,8 +51,9 @@ struct WatchlistView: View {
                                 Button(role: .destructive) {
                                     Task { await remove([entry.symbol]) }
                                 } label: {
-                                    Image(systemName: "trash")
+                                    Image(systemName: "trash").foregroundStyle(.red)
                                 }
+                                .buttonStyle(TrendsActionButtonStyle(tint: .red, compact: true))
                                 .disabled(isWorking)
                                 .accessibilityLabel("Remove \(entry.symbol)")
                             }

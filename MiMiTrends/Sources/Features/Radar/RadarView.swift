@@ -11,7 +11,11 @@ struct RadarView: View {
                 Section("Finnhub live trades") {
                     TextField("Symbol", text: $symbol)
 
-                    Button(session.isScanning ? "Stop live feed" : "Start live feed") {
+                    TrendsActionButton(
+                        title: session.isScanning ? "Stop live feed" : "Start live feed",
+                        systemImage: session.isScanning ? "stop.fill" : "play.fill",
+                        tint: session.isScanning ? .red : .green
+                    ) {
                         if session.isScanning {
                             session.stop()
                         } else {

@@ -22,6 +22,7 @@
 		2E076FB57D44F1C07A96CE29 /* ShortMoveQuoteQualityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDAF6878E67315239B682D0 /* ShortMoveQuoteQualityTests.swift */; };
 		2E9FE5D99050C05D9AF62282 /* RadarSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875C0F9708CB9BE887178A3 /* RadarSession.swift */; };
 		2F11EB1B03776F3B66344C0B /* RapidCrashDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFDC0F7AE544338A501ACAC7 /* RapidCrashDetectorTests.swift */; };
+		310CE5B36281A62F7DD72E77 /* TrendsActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FE4781F402BBF9EB8C0DFB /* TrendsActionButton.swift */; };
 		3302321E23FFEE3CD602AA51 /* TradableCorridorDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCF3BE1761CED7DBCC5BAA /* TradableCorridorDetectorTests.swift */; };
 		3936D9169F7B63A1C80846B1 /* FinnhubMinuteAggregator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999950D6664725733B79DD22 /* FinnhubMinuteAggregator.swift */; };
 		3F123A0039415D91512F590D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA765CB226C1925F760A165 /* ContentView.swift */; };
@@ -91,6 +92,7 @@
 		7AC0207E808D3B3D6DB152DB /* SustainedMoveDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SustainedMoveDetectorTests.swift; sourceTree = "<group>"; };
 		7EE5E447F15502D8BB7E6BED /* TradableCorridorDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradableCorridorDetector.swift; sourceTree = "<group>"; };
 		84EDAF5928C89ADE1C954B20 /* ProviderQuoteSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderQuoteSnapshot.swift; sourceTree = "<group>"; };
+		91FE4781F402BBF9EB8C0DFB /* TrendsActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsActionButton.swift; sourceTree = "<group>"; };
 		930FFF72DAC8261D47DAF60E /* finnhub-trades.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "finnhub-trades.json"; sourceTree = "<group>"; };
 		9875C0F9708CB9BE887178A3 /* RadarSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSession.swift; sourceTree = "<group>"; };
 		999950D6664725733B79DD22 /* FinnhubMinuteAggregator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubMinuteAggregator.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				9150DE9B8D5D31ED4987F053 /* Providers */,
 				CBBF3E3CC64C61C144C20FCD /* Scanner */,
 				C426EA777FF0597C7937DE4B /* Storage */,
+				7A8495080A51F8D88897C040 /* Views */,
 			);
 			name = Sources;
 			path = MiMiTrends/Sources;
@@ -168,6 +171,14 @@
 				F6C749680DE8767BA8EF22DE /* MiMiTrendsApp.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		7A8495080A51F8D88897C040 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				91FE4781F402BBF9EB8C0DFB /* TrendsActionButton.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		9150DE9B8D5D31ED4987F053 /* Providers */ = {
@@ -437,6 +448,7 @@
 				29AA77D9B1BC7B34F87646FD /* SustainedMoveDetector.swift in Sources */,
 				C94CD4C64B560EB9038ED75F /* TradableCorridorDetector.swift in Sources */,
 				29CC73F8A97B8BDCFCAC6DBD /* TradeTick.swift in Sources */,
+				310CE5B36281A62F7DD72E77 /* TrendsActionButton.swift in Sources */,
 				01BF49AC6898BB89FA512BE2 /* VolumeStatus.swift in Sources */,
 				0CB10454D48027116BE62D30 /* WatchlistStore.swift in Sources */,
 				4671A231FD13F03F8FA3E100 /* WatchlistView.swift in Sources */,
