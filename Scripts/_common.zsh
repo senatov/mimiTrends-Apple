@@ -3,7 +3,7 @@
 PROJECT_DIR="${SCRIPT_DIR:h}"
 PROJECT_FILE="${PROJECT_DIR}/mimiTrends-iOS.xcodeproj"
 DERIVED_DATA="${PROJECT_DIR}/DerivedData"
-SCHEME="MiMiTrends"
+SCHEME="mimiTrends-iOS"
 BUNDLE_ID="org.senatov.mimitrends.apple"
 
 require_xcode() {

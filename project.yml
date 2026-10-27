@@ -49,7 +49,7 @@ targets:
         PROVISIONING_PROFILE_SPECIFIER: ""
         PRODUCT_BUNDLE_IDENTIFIER: org.senatov.mimitrends.apple.tests
 schemes:
-  MiMiTrends:
+  mimiTrends-iOS:
     build:
       targets:
         MiMiTrends: all
