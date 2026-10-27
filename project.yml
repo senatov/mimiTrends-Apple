@@ -1,4 +1,4 @@
-name: MiMiTrends
+name: mimiTrends-iOS
 options:
   bundleIdPrefix: org.senatov
   deploymentTarget:

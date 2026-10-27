@@ -2,7 +2,7 @@
 
 This repository is the starting point for a native MiMiTrends application. iPadOS 27 is the primary development target; macOS 27 is an optional destination. The iOS app still supports iPhone. The existing Kotlin/JavaFX desktop application remains in the separate `mimiTrends` repository.
 
-The repository name is `mimiTrends-iOS`. The installed app continues to be named MiMiTrends and retains its existing bundle identifier so development installations, local data, and Keychain entries keep the same app identity.
+The repository and Xcode project are named `mimiTrends-iOS`. The installed app continues to be named MiMiTrends and retains its existing bundle identifier so development installations, local data, and Keychain entries keep the same app identity.
 
 ## Current scope
 
@@ -30,7 +30,7 @@ This builds, installs, and launches the app on the single paired iPad running iP
 
 | Script | Purpose |
 | --- | --- |
-| `zsh Scripts/generate_project.zsh` | Regenerate `MiMiTrends.xcodeproj` from `project.yml` after changing project settings or files. |
+| `zsh Scripts/generate_project.zsh` | Regenerate `mimiTrends-iOS.xcodeproj` from `project.yml` after changing project settings or files. |
 | `zsh Scripts/build_ios.zsh` | Build a development-signed app for the connected iPad. Pass `Release` for a Release configuration build. With `SIMULATOR_UDID` or `CI=true`, build an ad hoc signed simulator app instead. |
 | `zsh Scripts/run_ios.zsh` | Build, install, and launch on the connected iPad. Set `SIMULATOR_UDID` to use an iPad simulator. |
 | `zsh Scripts/test_ios.zsh` | Run unit tests on the connected iPad. With `SIMULATOR_UDID` or `CI=true`, use an iPad simulator. |
