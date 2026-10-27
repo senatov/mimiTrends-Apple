@@ -34,7 +34,10 @@ struct SettingsView: View {
                 }
 
                 Section("About") {
-                    LabeledContent("Version", value: "0.1.0")
+                    LabeledContent(
+                        "Version",
+                        value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
+                    )
                     LabeledContent("Platforms", value: "iOS 27 · macOS 27")
                 }
             }
