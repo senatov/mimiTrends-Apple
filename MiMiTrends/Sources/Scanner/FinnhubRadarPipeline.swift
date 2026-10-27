@@ -19,11 +19,13 @@ struct FinnhubRadarPipeline: Sendable {
         try Task.checkCancellation()
         let stored = try await store.upsert(bar)
         let recent = try await store.loadMinuteBars(
-            symbol: trade.symbol, fromEpochSeconds: nowEpochSeconds - 1_800
+            symbol: trade.symbol, fromEpochSeconds: nowEpochSeconds - 10_800
         )
         let signal = RapidCrashDetector.detect(
             symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
         ) ?? RapidRiseDetector.detect(
+            symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
+        ) ?? SustainedMoveDetector.detect(
             symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
         )
         return Update(storedBar: stored, signal: signal)
