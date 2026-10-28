@@ -68,7 +68,7 @@ struct RadarSignalList: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .trendsPanel(accent: .blue)
+        .trendsPanel()
     }
 
     private func isSelected(_ signal: ScanResult) -> Bool {

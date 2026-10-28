@@ -2,7 +2,6 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct MarketChartView: View {
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage("selected.symbol.v1") private var symbol = "ORCL"
     @AppStorage("chart.range.v1") private var rangeRaw = RadarChartRange.oneDay.rawValue
@@ -35,7 +34,7 @@ struct MarketChartView: View {
                 .frame(maxWidth: 1_400)
                 .frame(maxWidth: .infinity)
             }
-            .background(TrendsColors.canvas(colorScheme))
+            .background(TrendsColors.canvas)
             .navigationTitle(AppIdentity.windowTitle)
             .task { await loadChart() }
             .onChange(of: rangeRaw) { _, _ in Task { await loadChart() } }

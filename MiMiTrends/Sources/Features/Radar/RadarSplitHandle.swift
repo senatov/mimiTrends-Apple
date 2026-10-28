@@ -28,7 +28,7 @@ struct RadarSplitHandle: View {
                 .foregroundStyle(.blue)
                 .padding(5)
                 .background(
-                    TrendsColors.surface(colorScheme),
+                    TrendsColors.surface,
                     in: RoundedRectangle(cornerRadius: 6)
                 )
         }

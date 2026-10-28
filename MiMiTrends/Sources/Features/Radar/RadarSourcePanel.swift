@@ -44,7 +44,7 @@ struct RadarSourcePanel: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .trendsPanel(accent: .teal)
+        .trendsPanel()
     }
 
     private var statusText: String {

@@ -28,7 +28,7 @@ struct RadarHeader: View {
                 Text(message).font(.footnote).foregroundStyle(.red)
             }
         }
-        .trendsPanel(accent: .cyan)
+        .trendsPanel()
     }
 
     @ViewBuilder

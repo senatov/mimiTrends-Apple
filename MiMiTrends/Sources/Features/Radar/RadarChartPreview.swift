@@ -31,7 +31,7 @@ struct RadarChartPreview: View {
                 chartContent(availableHeight: geometry.size.height)
             }
         }
-        .trendsPanel(accent: .indigo)
+        .trendsPanel()
         .task(id: "\(symbol)|\(refreshID)") { await loadBars() }
     }
 

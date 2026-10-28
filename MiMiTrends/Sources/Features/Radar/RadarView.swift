@@ -2,7 +2,6 @@ import SwiftUI
 
 struct RadarView: View {
     @Environment(RadarSession.self) private var session
-    @Environment(\.colorScheme) private var colorScheme
     @AppStorage("radar.historyLimit.v1") private var maxResults = 30
     @AppStorage("radar.historyAgeHours.v1") private var maxAgeHours = 2
     @Binding var symbol: String
@@ -32,7 +31,7 @@ struct RadarView: View {
                 .frame(maxHeight: .infinity)
             }
             .padding(8)
-            .background(TrendsColors.canvas(colorScheme))
+            .background(TrendsColors.canvas)
             .navigationTitle(AppIdentity.windowTitle)
             .task(id: "\(maxResults)|\(maxAgeHours)") { await refreshSignals() }
             .onChange(of: session.lastSignal) { _, latest in
