@@ -70,7 +70,7 @@ struct WatchlistView: View {
             .listStyle(.inset)
             .scrollContentBackground(.hidden)
             .background(TrendsColors.canvas(colorScheme))
-            .navigationTitle("Watchlist")
+            .navigationTitle(AppIdentity.windowTitle)
             .task { await load() }
             .fileImporter(isPresented: $showingImporter, allowedContentTypes: [.json]) { result in
                 if case .success(let url) = result {

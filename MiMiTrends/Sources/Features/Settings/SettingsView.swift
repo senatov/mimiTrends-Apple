@@ -36,12 +36,12 @@ struct SettingsView: View {
                 Section("About") {
                     LabeledContent(
                         "Version",
-                        value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
+                        value: AppIdentity.version
                     )
                     LabeledContent("Platforms", value: "iOS 27 · macOS 27")
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle(AppIdentity.windowTitle)
             .onAppear { refreshKeyStatus() }
             .onDisappear { apiKeyDraft = "" }
         }

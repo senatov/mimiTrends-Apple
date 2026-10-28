@@ -27,6 +27,14 @@ struct ContentView: View {
                 SettingsView()
             }
         }
+        .toolbar {
+            #if os(macOS)
+            ToolbarItem(placement: .navigation) {
+                Text(AppIdentity.windowTitle)
+                    .font(.headline)
+            }
+            #endif
+        }
     }
 }
 

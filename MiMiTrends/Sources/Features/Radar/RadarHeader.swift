@@ -8,24 +8,20 @@ struct RadarHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {
-            HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text("MiMiTrends")
-                    .font(.title2.weight(.semibold))
-                Spacer(minLength: 8)
-                Label(statusText, systemImage: session.isSubscribed ? "checkmark.circle.fill" : "circle.fill")
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(session.isSubscribed ? .green : .secondary)
-                    .accessibilityLabel("Finnhub: \(statusText)")
-            }
             ViewThatFits(in: .horizontal) {
                 HStack(spacing: 10) {
                     feedControls
+                    statusLabel
                     Spacer(minLength: 8)
                     metricStrip
                 }
                 VStack(alignment: .leading, spacing: 7) {
                     HStack(spacing: 10) { feedControls }
-                    metricStrip
+                    HStack(spacing: 8) {
+                        statusLabel
+                        Spacer(minLength: 4)
+                        metricStrip
+                    }
                 }
             }
             if let message = setupMessage ?? session.errorMessage {
@@ -54,6 +50,13 @@ struct RadarHeader: View {
         if session.isSubscribed { return "Connected" }
         if session.isScanning { return "Connecting" }
         return "Stopped"
+    }
+
+    private var statusLabel: some View {
+        Label(statusText, systemImage: session.isSubscribed ? "checkmark.circle.fill" : "circle.fill")
+            .font(.caption.weight(.medium))
+            .foregroundStyle(session.isSubscribed ? .green : .secondary)
+            .accessibilityLabel("Finnhub: \(statusText)")
     }
 
     private var metricStrip: some View {

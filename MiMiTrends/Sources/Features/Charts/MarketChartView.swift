@@ -28,7 +28,7 @@ struct MarketChartView: View {
                 .frame(maxWidth: .infinity)
             }
             .background(TrendsColors.canvas(colorScheme))
-            .navigationTitle("Chart")
+            .navigationTitle(AppIdentity.windowTitle)
             .task { await loadChart() }
             .onChange(of: selectedRange) { _, _ in Task { await loadChart() } }
             .fileImporter(

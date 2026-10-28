@@ -31,7 +31,7 @@ struct RadarView: View {
             }
             .padding(8)
             .background(TrendsColors.canvas(colorScheme))
-            .navigationTitle("Radar")
+            .navigationTitle(AppIdentity.windowTitle)
             .task { await refreshSignals() }
             .onChange(of: session.lastSignal) { _, latest in
                 if latest != nil { Task { await refreshSignals(selectNewest: true) } }

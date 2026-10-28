@@ -6,7 +6,7 @@ struct MiMiTrendsApp: App {
     @State private var radarSession = RadarSession()
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(AppIdentity.windowTitle) {
             ContentView()
                 .environment(radarSession)
         }
