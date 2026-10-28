@@ -59,13 +59,13 @@ This builds, installs, and launches the app on the single paired iPad running iP
 | `zsh Scripts/run_ios.zsh` | Build, install, and launch on the connected iPad. Set `SIMULATOR_UDID` to use an iPad simulator. |
 | `zsh Scripts/test_ios.zsh` | Run unit tests on the connected iPad. With `SIMULATOR_UDID` or `CI=true`, use an iPad simulator. |
 | `zsh Scripts/build_macos.zsh` | Build the optional unsigned macOS app. Pass `Release` for a Release configuration build. |
-| `zsh Scripts/run_macos.zsh` | Build, ad hoc sign with the Mac App Sandbox entitlements, and launch a fresh `mimiTrends-iOS.app` instance on macOS 27 or newer; verify its path, bundle ID, display name, and PID. |
+| `zsh Scripts/run_macos.zsh` | Build, sign with this Mac's stable Developer ID Application identity and the Mac App Sandbox entitlements, then launch a fresh `mimiTrends-iOS.app` instance on macOS 27 or newer; verify its path, bundle ID, display name, and PID. Set `MIMITRENDS_MAC_SIGN_IDENTITY` to select another installed identity for the configured team. |
 | `zsh Scripts/check_macos_sandbox.zsh` | Check the Mac target's sandbox entitlement file and Xcode build settings. |
 | `Scripts/write_build_info.zsh` | Xcode build phase that records the local build date and compiling Mac's Computer Name in the app bundle for the window title. It runs automatically during each app build. |
 | `python3 Scripts/export_desktop_bars.py SYMBOL OUTPUT` | Create a read-only, bounded minute-bar snapshot for one symbol from the desktop SQLite database. |
 | `python3 Scripts/export_desktop_watchlist.py OUTPUT` | Export up to 500 desktop watchlist symbols to a new JSON file for native import. |
 
-All builds use this repository's ignored `DerivedData/` directory. They do not clear shared Xcode caches, modify other repositories, sign an App Store distribution binary, or upload one. Connected-iPad builds use the configured Apple Development team; simulator builds use local ad hoc signing so Keychain works during development. `run_macos.zsh` signs its local Debug app only to exercise the sandbox during development. The generated Xcode project is committed so it can also be opened directly in Xcode.
+All builds use this repository's ignored `DerivedData/` directory. They do not clear shared Xcode caches, modify other repositories, sign an App Store distribution binary, or upload one. Connected-iPad builds use the configured Apple Development team; simulator builds use local ad hoc signing so Keychain works during development. `run_macos.zsh` signs only its local Debug app with a stable certificate because ad hoc signatures change identity on rebuild and can trigger repeated Keychain authorization prompts. Existing credentials created under the former ad hoc signature may need one authorization for the newly signed app when first opened. The generated Xcode project is committed so it can also be opened directly in Xcode.
 
 ## App Store preparation
 

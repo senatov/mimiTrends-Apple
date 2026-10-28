@@ -14,10 +14,27 @@ fi
 
 zsh "${SCRIPT_DIR}/build_macos.zsh"
 app_path="${DERIVED_DATA}/Build/Products/Debug/${APP_NAME}.app"
-codesign --force --sign - \
+team_id="$(/usr/bin/sed -nE 's/^[[:space:]]*DEVELOPMENT_TEAM:[[:space:]]*([A-Z0-9]+).*/\1/p' "${PROJECT_DIR}/project.yml")"
+if [[ -z "${team_id}" ]]; then
+    echo "The development team is missing from project.yml." >&2
+    exit 1
+fi
+signing_identity="${MIMITRENDS_MAC_SIGN_IDENTITY:-$(security find-identity -v -p codesigning | /usr/bin/awk -v team="${team_id}" '
+    index($0, "Developer ID Application:") && index($0, "(" team ")") { print $2; exit }
+')}"
+if [[ -z "${signing_identity}" ]]; then
+    echo "A stable signing identity for team ${team_id} is required. Set MIMITRENDS_MAC_SIGN_IDENTITY." >&2
+    exit 1
+fi
+codesign --force --sign "${signing_identity}" \
     --entitlements "${PROJECT_DIR}/MiMiTrends/Configuration/MacAppStore.entitlements" \
     "${app_path}"
 codesign --verify --strict "${app_path}"
+signed_team="$(codesign -dv --verbose=4 "${app_path}" 2>&1 | /usr/bin/sed -n 's/^TeamIdentifier=//p')"
+if [[ "${signed_team}" != "${team_id}" ]]; then
+    echo "Signed app has unexpected team ${signed_team}; expected ${team_id}." >&2
+    exit 1
+fi
 /usr/bin/python3 - "${app_path}" "${BUNDLE_ID}" "${APP_NAME}" <<'PY'
 import plistlib
 from pathlib import Path
@@ -52,7 +69,7 @@ subprocess.run(["/usr/bin/open", "-n", str(app_path)], check=True)
 for _ in range(30):
     launched = matching_pids() - previous
     if launched:
-        print(f"Launched {app_path} with App Sandbox (PID {min(launched)}; {expected_bundle_id}).")
+        print(f"Launched signed {app_path} with App Sandbox (PID {min(launched)}; {expected_bundle_id}).")
         break
     time.sleep(0.2)
 else:

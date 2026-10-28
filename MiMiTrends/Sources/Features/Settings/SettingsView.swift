@@ -3,7 +3,6 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("appearance.theme.v1") private var theme = "light"
-    @State private var finnhubConfigured = false
 
     var body: some View {
         NavigationStack {
@@ -27,7 +26,6 @@ struct SettingsView: View {
             }
             .background(TrendsColors.canvas(colorScheme))
             .navigationTitle(AppIdentity.windowTitle)
-            .onAppear { finnhubConfigured = (try? FinnhubCredentialStore.load()) != nil }
         }
     }
 
@@ -41,7 +39,7 @@ struct SettingsView: View {
                 Label("Manage keys and tokens", systemImage: "key.horizontal")
             }
             .buttonStyle(TrendsActionButtonStyle())
-            Text(finnhubConfigured ? "Finnhub API key configured on this device." : "Finnhub API key not configured.")
+            Text("Finnhub is the active feed. Open the credential editor to manage its API key.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
