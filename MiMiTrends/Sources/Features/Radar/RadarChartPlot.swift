@@ -4,6 +4,8 @@ import SwiftUI
 struct RadarChartPlot: View {
     let data: RadarChartData
     let symbol: String
+    var priceHeight: CGFloat = 300
+    var volumeHeight: CGFloat = 90
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -45,7 +47,7 @@ struct RadarChartPlot: View {
                 }
             }
             .chartYScale(domain: priceDomain)
-            .frame(height: 300)
+            .frame(height: priceHeight)
             .accessibilityLabel("Saved minute candle chart with EMA 9 and EMA 21 for \(symbol)")
 
             HStack(spacing: 14) {
@@ -64,7 +66,7 @@ struct RadarChartPlot: View {
                     )
                     .foregroundStyle(bar.close >= bar.open ? .green.opacity(0.55) : .red.opacity(0.55))
                 }
-                .frame(height: 90)
+                .frame(height: volumeHeight)
                 .accessibilityLabel("Reported minute volume for \(symbol)")
             }
         }

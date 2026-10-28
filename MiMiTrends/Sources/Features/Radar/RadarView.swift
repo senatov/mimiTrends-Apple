@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RadarView: View {
     @Environment(RadarSession.self) private var session
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
     @Binding var symbol: String
     @State private var setupMessage: String?
     @State private var recentSignals: [ScanResult] = []
@@ -12,35 +12,25 @@ struct RadarView: View {
 
     var body: some View {
         NavigationStack {
-            GeometryReader { geometry in
-                ScrollView {
-                    VStack(spacing: 12) {
-                        RadarHeader(symbol: $symbol, session: session, setupMessage: setupMessage) {
-                            if session.isScanning { session.stop() } else { startFeed() }
-                        }
-                        if geometry.size.width >= 850 && !dynamicTypeSize.isAccessibilitySize {
-                            HStack(alignment: .top, spacing: 12) {
-                                signalList(compact: geometry.size.width < 1_080)
-                                    .frame(maxWidth: .infinity)
-                                RadarSourcePanel(session: session)
-                                    .frame(width: max(250, geometry.size.width * 0.30))
-                            }
-                        } else {
-                            signalList(compact: true)
-                            RadarSourcePanel(session: session)
-                        }
+            VStack(spacing: 6) {
+                RadarHeader(symbol: $symbol, session: session, setupMessage: setupMessage) {
+                    if session.isScanning { session.stop() } else { startFeed() }
+                }
+                RadarWorkspace(
+                    signals: { compact in signalList(compact: compact) },
+                    sources: { RadarSourcePanel(session: session) },
+                    plot: {
                         RadarChartPreview(
                             symbol: selectedSignal?.symbol ?? symbol,
                             signal: selectedSignal,
                             refreshID: chartRefreshID
                         )
                     }
-                    .padding(14)
-                    .frame(maxWidth: 1_400)
-                    .frame(maxWidth: .infinity)
-                }
-                .background(Color.secondary.opacity(0.04))
+                )
+                .frame(maxHeight: .infinity)
             }
+            .padding(8)
+            .background(TrendsColors.canvas(colorScheme))
             .navigationTitle("Radar")
             .task { await refreshSignals() }
             .onChange(of: session.lastSignal) { _, latest in

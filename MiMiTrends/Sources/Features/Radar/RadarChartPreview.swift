@@ -18,7 +18,17 @@ struct RadarChartPreview: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        GeometryReader { geometry in
+            ScrollView {
+                chartContent(availableHeight: geometry.size.height)
+            }
+        }
+        .trendsPanel(accent: .indigo)
+        .task(id: "\(symbol)|\(refreshID)") { await loadBars() }
+    }
+
+    private func chartContent(availableHeight: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Selected alert chart").font(.headline)
                 Spacer()
@@ -71,7 +81,11 @@ struct RadarChartPreview: View {
                 )
                 .frame(maxWidth: .infinity, minHeight: 180)
             } else {
-                RadarChartPlot(data: chartData, symbol: symbol)
+                RadarChartPlot(
+                    data: chartData, symbol: symbol,
+                    priceHeight: max(140, availableHeight - 240),
+                    volumeHeight: 60
+                )
                 if let last = chartData.bars.last {
                     Text("\(chartData.bars.count) saved bars · latest \(Date(timeIntervalSince1970: TimeInterval(last.minuteEpochSeconds)).formatted(.dateTime.month().day().hour().minute())) · source currency · gaps are not filled")
                         .font(.caption)
@@ -80,8 +94,6 @@ struct RadarChartPreview: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel()
-        .task(id: "\(symbol)|\(refreshID)") { await loadBars() }
     }
 
     private func loadBars() async {

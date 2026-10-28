@@ -4,6 +4,8 @@ import UniformTypeIdentifiers
 struct WatchlistView: View {
     let onSelect: (String) -> Void
 
+    @Environment(\.colorScheme) private var colorScheme
+
     @State private var store: WatchlistStore?
     @State private var entries: [WatchlistEntry] = []
     @State private var newSymbol = ""
@@ -67,7 +69,7 @@ struct WatchlistView: View {
             }
             .listStyle(.inset)
             .scrollContentBackground(.hidden)
-            .background(Color.secondary.opacity(0.04))
+            .background(TrendsColors.canvas(colorScheme))
             .navigationTitle("Watchlist")
             .task { await load() }
             .fileImporter(isPresented: $showingImporter, allowedContentTypes: [.json]) { result in

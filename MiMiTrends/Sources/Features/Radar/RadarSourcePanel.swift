@@ -4,7 +4,7 @@ struct RadarSourcePanel: View {
     let session: RadarSession
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 6) {
             Text("Sources").font(.headline)
             Divider()
             HStack(spacing: 8) {
@@ -38,18 +38,13 @@ struct RadarSourcePanel: View {
             if let trade = session.lastTrade {
                 LabeledContent("Last trade", value: "\(trade.symbol) · \(trade.price.formatted())")
                     .font(.subheadline)
-            } else {
-                Text("No trades received in this session.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
             }
-            Divider()
             Text("Only Finnhub trades are connected in this build. Other desktop sources are not yet available.")
-                .font(.footnote)
+                .font(.caption)
                 .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel()
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .trendsPanel(accent: .teal)
     }
 
     private var statusText: String {

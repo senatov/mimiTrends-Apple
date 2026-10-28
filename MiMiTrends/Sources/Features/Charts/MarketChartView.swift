@@ -2,6 +2,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct MarketChartView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var symbol = "AAPL"
     @State private var selectedRange: RadarChartRange = .threeHours
@@ -26,7 +27,7 @@ struct MarketChartView: View {
                 .frame(maxWidth: 1_400)
                 .frame(maxWidth: .infinity)
             }
-            .background(Color.secondary.opacity(0.04))
+            .background(TrendsColors.canvas(colorScheme))
             .navigationTitle("Chart")
             .task { await loadChart() }
             .onChange(of: selectedRange) { _, _ in Task { await loadChart() } }

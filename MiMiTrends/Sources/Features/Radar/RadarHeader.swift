@@ -7,7 +7,7 @@ struct RadarHeader: View {
     let onToggleFeed: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 7) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 Text("MiMiTrends")
                     .font(.title2.weight(.semibold))
@@ -18,20 +18,21 @@ struct RadarHeader: View {
                     .accessibilityLabel("Finnhub: \(statusText)")
             }
             ViewThatFits(in: .horizontal) {
-                HStack(spacing: 10) { feedControls }
-                VStack(alignment: .leading, spacing: 10) { feedControls }
+                HStack(spacing: 10) {
+                    feedControls
+                    Spacer(minLength: 8)
+                    metricStrip
+                }
+                VStack(alignment: .leading, spacing: 7) {
+                    HStack(spacing: 10) { feedControls }
+                    metricStrip
+                }
             }
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: 14) { sessionMetrics }
-                VStack(alignment: .leading, spacing: 5) { sessionMetrics }
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
             if let message = setupMessage ?? session.errorMessage {
                 Text(message).font(.footnote).foregroundStyle(.red)
             }
         }
-        .trendsPanel()
+        .trendsPanel(accent: .cyan)
     }
 
     @ViewBuilder
@@ -55,10 +56,14 @@ struct RadarHeader: View {
         return "Stopped"
     }
 
-    @ViewBuilder
-    private var sessionMetrics: some View {
-        Label("\(session.tradeCount) trades", systemImage: "chart.line.uptrend.xyaxis")
-        Label("\(session.completedBarsStored) bars saved", systemImage: "chart.bar")
-        Text("One-symbol foreground scan")
+    private var metricStrip: some View {
+        HStack(spacing: 10) {
+            Label("\(session.tradeCount) trades", systemImage: "chart.line.uptrend.xyaxis")
+            Label("\(session.completedBarsStored) bars", systemImage: "chart.bar")
+            Text("Foreground · 1 symbol")
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .lineLimit(1)
     }
 }
