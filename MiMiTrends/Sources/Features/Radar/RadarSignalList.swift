@@ -39,22 +39,22 @@ struct RadarSignalList: View {
                     HStack(spacing: 8) {
                         Text("Symbol").frame(width: 80, alignment: .leading)
                         Text("Event").frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Move").frame(width: 74, alignment: .trailing)
+                        Text("Movement").frame(width: 115, alignment: .trailing)
                         Text("Price").frame(width: 70, alignment: .trailing)
-                        Text("Saved").frame(width: 105, alignment: .trailing)
+                        Text("Age").frame(width: 95, alignment: .trailing)
                     }
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                 }
                 ForEach(signals.map(RadarSignalItem.init)) { item in
                     Button { onSelect(item.signal) } label: {
-                        RadarSignalRow(signal: item.signal, compact: compact)
+                        RadarSignalRow(
+                            signal: item.signal,
+                            compact: compact,
+                            isSelected: isSelected(item.signal)
+                        )
                     }
                     .buttonStyle(.plain)
-                    .background {
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(isSelected(item.signal) ? Color.accentColor.opacity(0.14) : Color.clear)
-                    }
                     .accessibilityAddTraits(isSelected(item.signal) ? [.isSelected] : [])
                 }
             }
@@ -73,57 +73,4 @@ struct RadarSignalList: View {
 private struct RadarSignalItem: Identifiable {
     let signal: ScanResult
     var id: String { "\(signal.symbol)|\(signal.signalSource)|\(signal.signalEpochMillis)" }
-}
-
-private struct RadarSignalRow: View {
-    let signal: ScanResult
-    let compact: Bool
-
-    var body: some View {
-        Group {
-            if compact {
-                VStack(alignment: .leading, spacing: 5) {
-                    HStack {
-                        Text(signal.symbol).fontWeight(.semibold)
-                        Spacer()
-                        Text(signal.price.formatted()).monospacedDigit()
-                    }
-                    HStack {
-                        Text(signal.signalSource.replacingOccurrences(of: "_", with: " "))
-                            .lineLimit(1)
-                        Spacer()
-                        Text(signal.windowChangePercent, format: .number.precision(.fractionLength(2)))
-                            .foregroundStyle(moveColor)
-                        Text("%")
-                            .foregroundStyle(moveColor)
-                    }
-                    .font(.caption)
-                    Text(savedAt.formatted(.dateTime.month().day().hour().minute()))
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-            } else {
-                HStack(spacing: 8) {
-                    Text(signal.symbol).fontWeight(.semibold).frame(width: 80, alignment: .leading)
-                    Text(signal.signalSource.replacingOccurrences(of: "_", with: " "))
-                        .lineLimit(1).frame(maxWidth: .infinity, alignment: .leading)
-                    Text("\(signal.windowChangePercent.formatted(.number.precision(.fractionLength(2))))%")
-                        .foregroundStyle(moveColor).frame(width: 74, alignment: .trailing)
-                    Text(signal.price.formatted()).frame(width: 70, alignment: .trailing)
-                    Text(savedAt, format: .dateTime.month().day().hour().minute())
-                        .frame(width: 105, alignment: .trailing)
-                }
-                .font(.subheadline)
-            }
-        }
-        .padding(.horizontal, 7)
-        .padding(.vertical, 8)
-        .contentShape(Rectangle())
-    }
-
-    private var moveColor: Color { signal.windowChangePercent < 0 ? .red : .green }
-
-    private var savedAt: Date {
-        Date(timeIntervalSince1970: TimeInterval(signal.signalEpochMillis) / 1_000)
-    }
 }
