@@ -9,6 +9,8 @@ final class RadarSession {
     private(set) var lastTrade: TradeTick?
     private(set) var tradeCount = 0
     private(set) var completedBarsStored = 0
+    private(set) var signalCount = 0
+    private(set) var errorCount = 0
     private(set) var lastSignal: ScanResult?
     private(set) var errorMessage: String?
     @ObservationIgnored private var scanTask: Task<Void, Never>?
@@ -20,6 +22,8 @@ final class RadarSession {
         lastTrade = nil
         tradeCount = 0
         completedBarsStored = 0
+        signalCount = 0
+        errorCount = 0
         lastSignal = nil
         errorMessage = nil
         let id = UUID()
@@ -60,11 +64,13 @@ final class RadarSession {
     func recordSignal(_ signal: ScanResult, runID id: UUID) {
         guard isScanning, runID == id else { return }
         lastSignal = signal
+        signalCount += 1
     }
 
     func recordFailure(_ message: String, runID id: UUID) {
         guard isScanning, runID == id else { return }
         errorMessage = message
+        errorCount += 1
     }
 
     private func finish(_ id: UUID) {

@@ -59,4 +59,31 @@ final class RadarSessionTests: XCTestCase {
         session.stop()
         XCTAssertFalse(session.isSubscribed)
     }
+
+    func testTelemetryCountsBelongToTheCurrentRun() {
+        let session = RadarSession()
+        let oldID = session.start { _ in
+            try? await Task.sleep(for: .seconds(60))
+        }
+        session.recordStoredBar(runID: oldID)
+        session.recordFailure("Connection failed", runID: oldID)
+        XCTAssertEqual(session.completedBarsStored, 1)
+        XCTAssertEqual(session.errorCount, 1)
+
+        let newID = session.start { _ in
+            try? await Task.sleep(for: .seconds(60))
+        }
+        session.recordStoredBar(runID: oldID)
+        session.recordFailure("Late failure", runID: oldID)
+        XCTAssertEqual(session.completedBarsStored, 0)
+        XCTAssertEqual(session.errorCount, 0)
+        XCTAssertNil(session.errorMessage)
+
+        session.recordStoredBar(runID: newID)
+        session.recordFailure("New failure", runID: newID)
+        XCTAssertEqual(session.completedBarsStored, 1)
+        XCTAssertEqual(session.errorCount, 1)
+        XCTAssertEqual(session.errorMessage, "New failure")
+        session.stop()
+    }
 }

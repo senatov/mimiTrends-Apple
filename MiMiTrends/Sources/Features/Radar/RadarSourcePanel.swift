@@ -4,52 +4,79 @@ struct RadarSourcePanel: View {
     let session: RadarSession
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Sources").font(.headline)
-            Divider()
-            HStack(spacing: 8) {
-                Text("Source").frame(maxWidth: .infinity, alignment: .leading)
-                Text("Last").frame(width: 75, alignment: .trailing)
-                Text("Trades").frame(width: 45, alignment: .trailing)
+        VStack(alignment: .leading, spacing: 9) {
+            HStack {
+                Text("Source telemetry").font(.headline)
+                Spacer(minLength: 8)
+                Text("Current session")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
-            .font(.caption.weight(.semibold))
-            .foregroundStyle(.secondary)
             Divider()
-            HStack(spacing: 8) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Finnhub").fontWeight(.medium)
-                    Text(statusText)
-                        .font(.caption)
-                        .foregroundStyle(session.isSubscribed ? .green : .secondary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                if let trade = session.lastTrade {
-                    Text(Date(timeIntervalSince1970: TimeInterval(trade.timestampMillis) / 1_000), style: .relative)
-                        .lineLimit(1)
-                        .frame(width: 75, alignment: .trailing)
-                } else {
-                    Text("—").frame(width: 75, alignment: .trailing)
-                }
-                Text(session.tradeCount.formatted())
-                    .monospacedDigit()
-                    .frame(width: 45, alignment: .trailing)
+            HStack(spacing: 7) {
+                Circle()
+                    .fill(statusColor)
+                    .frame(width: 8, height: 8)
+                    .accessibilityHidden(true)
+                Text("Finnhub").font(.subheadline.weight(.semibold))
+                Spacer(minLength: 4)
+                Text(statusText.uppercased())
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(statusColor)
             }
-            .font(.subheadline)
+            HStack(spacing: 0) {
+                metric("RECEIVED", value: session.tradeCount)
+                metric("BARS", value: session.completedBarsStored)
+                metric("SIGNALS", value: session.signalCount)
+                metric("ERRORS", value: session.errorCount)
+            }
             if let trade = session.lastTrade {
-                LabeledContent("Last trade", value: "\(trade.symbol) · \(trade.price.formatted())")
-                    .font(.subheadline)
+                Text("Last trade: \(trade.symbol) · \(trade.price.formatted()) · \(Date(timeIntervalSince1970: TimeInterval(trade.timestampMillis) / 1_000), style: .relative)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            } else if session.errorMessage == nil {
+                Text("No trades received in this session.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
-            Text("Only Finnhub trades are connected in this build. Other desktop sources are not yet available.")
-                .font(.caption)
+            if let error = session.errorMessage {
+                Text(error)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+                    .lineLimit(2)
+            }
+            Text("Other desktop sources are not connected in this build.")
+                .font(.caption2)
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .trendsPanel()
     }
 
+    private func metric(_ title: String, value: Int) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+                .font(.system(size: 9, weight: .semibold))
+                .foregroundStyle(.secondary)
+            Text(value.formatted())
+                .font(.subheadline.weight(.semibold))
+                .monospacedDigit()
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
+    }
+
     private var statusText: String {
-        if session.isSubscribed { return "Connected" }
+        if session.isSubscribed { return "Online" }
         if session.isScanning { return "Connecting" }
+        if session.errorMessage != nil { return "Attention" }
         return "Stopped"
+    }
+
+    private var statusColor: Color {
+        if session.isSubscribed { return .green }
+        if session.errorMessage != nil { return .orange }
+        return .secondary
     }
 }

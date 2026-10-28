@@ -25,7 +25,7 @@ struct HeaderResourceBadges: View {
     @State private var history = HeaderResourceHistory()
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 8) {
             metric(
                 title: "MEMORY",
                 value: history.footprintBytes == 0 ? "— MB" : "\(Int((history.footprintBytes + 524_288) / 1_048_576)) MB",
@@ -34,6 +34,11 @@ struct HeaderResourceBadges: View {
             )
             .help("App memory footprint; compressed \(Int((history.compressedBytes + 524_288) / 1_048_576)) MB")
             .accessibilityLabel("App memory footprint \(history.footprintBytes == 0 ? "unavailable" : "\(Int((history.footprintBytes + 524_288) / 1_048_576)) megabytes")")
+
+            Rectangle()
+                .fill(.primary.opacity(0.12))
+                .frame(width: 1, height: 22)
+                .accessibilityHidden(true)
 
             metric(
                 title: "THREADS",
@@ -44,6 +49,8 @@ struct HeaderResourceBadges: View {
             .help("Threads in this app process")
             .accessibilityLabel("Threads in this app process \(history.threadCount)")
         }
+        .padding(.horizontal, 10)
+        .headerBadgeSurface()
         .task(id: scenePhase) {
             guard scenePhase == .active else { return }
             while !Task.isCancelled {
@@ -70,13 +77,6 @@ struct HeaderResourceBadges: View {
             }
             HeaderResourceSparkline(values: values, color: color)
                 .frame(width: 44, height: 20)
-        }
-        .padding(.horizontal, 8)
-        .frame(height: 30)
-        .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 9))
-        .overlay {
-            RoundedRectangle(cornerRadius: 9)
-                .strokeBorder(.primary.opacity(0.14), lineWidth: 0.7)
         }
     }
 }

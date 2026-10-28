@@ -26,6 +26,8 @@ Radar now follows the desktop prototype's main visual structure: a signal list b
 
 Radar, Watchlist, and Chart use adaptive system content surfaces. Accent colors indicate controls or market signal meaning rather than tinting entire data panels.
 
+The Finnhub source panel reports current-session trade receipts, completed bars saved, accepted signals, and terminal feed errors. These counts reset when a new feed starts and do not imply that other desktop providers are connected.
+
 To save a symbol, open Watchlist, enter its ticker, and tap **Add**. Its native list shows saved symbols and their insertion dates in a card-style layout. Select a saved symbol to put it on Radar; a running feed stops before the selection changes. Use the row's trash button, or swipe the row on iPad, to delete it. These symbols stay in the app's local SQLite container and are not synchronized between devices.
 
 To transfer the desktop watchlist, create a small snapshot on the desktop Mac:
