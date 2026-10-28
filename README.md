@@ -30,6 +30,8 @@ The Finnhub source panel reports current-session trade receipts, completed bars 
 
 Radar offers **Selected** and **Selected + Watchlist** feed scopes. The second scope requests the selected ticker and up to four additional watchlist tickers matching the current Finnhub US-symbol format, in saved order. The limit bounds WebSocket subscriptions and processing; it is not the desktop's ranking-based dynamic pool. Changing scope takes effect on the next feed start. The feed still stops whenever the app leaves the foreground.
 
+The next dynamic-pool layer has a bounded candidate model, category interleaving, a 30-minute refresh cache with five-minute failure retry, and a versioned local snapshot store. It is not connected to a live ranking source or Radar yet. See [Dynamic scan pool](Docs/DynamicScanPool.md) for the data-rights and symbol-resolution requirements before that connection is made.
+
 To save a symbol, open Watchlist, enter its ticker, and tap **Add**. Its native list shows saved symbols and their insertion dates in a card-style layout. Select a saved symbol to put it on Radar; a running feed stops before the selection changes. Use the row's trash button, or swipe the row on iPad, to delete it. These symbols stay in the app's local SQLite container and are not synchronized between devices.
 
 To transfer the desktop watchlist, create a small snapshot on the desktop Mac:

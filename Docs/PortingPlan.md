@@ -7,7 +7,7 @@ The desktop Kotlin app remains the behavioral reference. Work through these stag
 | 1. Shared market contract | `core/model`, scanner `ScanResult` | `MiMiTrends/Sources/Models` | Model fields and defaults are mapped; representative desktop fixtures round-trip; minute-bar and volume rules match | Complete |
 | 2. First provider | `finnhub-ws/FinnhubWebSocketClient` | Native Finnhub WebSocket adapter and local credential storage | Desktop test fixtures decode, failures are handled, and a foreground feed can fetch data | Implemented; live account test pending |
 | 3. Scanner and storage | `app/shortmove`, `database` | Native scanner services and SQLite repositories | Deterministic signal fixtures agree with desktop; schema and migrations are tested; scans stop outside foreground | In progress: move and corridor detection, quote gate, storage, bounded bar snapshot import, limited Watchlist subscriptions |
-| 4. Product screens | `charts`, `app` | Adaptive SwiftUI Radar, charts, watchlists, broker import | Real signals are visible on iPhone and iPad; selected Mac workflows work inside App Sandbox | In progress: adaptive Radar dashboard, saved-bar chart, desktop bar import, local watchlist |
+| 4. Product screens | `charts`, `app` | Adaptive SwiftUI Radar, charts, watchlists, broker import | Real signals are visible on iPhone and iPad; selected Mac workflows work inside App Sandbox | In progress: adaptive Radar dashboard, saved-bar chart, desktop bar import, local watchlist, discovery model and cache |
 | 5. Distribution | Desktop data export and native app | Signed archives and App Store Connect metadata | Data rights, privacy, sandbox, device tests, archive validation, and review access are complete | Pending |
 
 ## Stage 1 mapping

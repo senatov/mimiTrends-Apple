@@ -1,0 +1,103 @@
+import Foundation
+
+protocol DiscoveryCandidateSource: Sendable {
+    var sourceID: String { get }
+    func loadCandidates() async throws -> [DiscoveryCandidate]
+}
+
+struct DiscoverySnapshot: Codable, Equatable, Sendable {
+    let schemaVersion: Int
+    let sourceID: String
+    let refreshedAtMillis: Int64
+    let candidates: [DiscoveryCandidate]
+
+    init(sourceID: String, refreshedAtMillis: Int64, candidates: [DiscoveryCandidate]) {
+        schemaVersion = 1
+        self.sourceID = sourceID
+        self.refreshedAtMillis = refreshedAtMillis
+        self.candidates = candidates
+    }
+
+    func validate() throws {
+        guard schemaVersion == 1, refreshedAtMillis > 0,
+              !candidates.isEmpty,
+              candidates.count <= DiscoveryCandidateSelector.maximumCandidates,
+              candidates.allSatisfy({ $0.sourceID == sourceID }),
+              Set(candidates.map(\.identity)).count == candidates.count else {
+            throw DiscoveryDataError.invalidSnapshot
+        }
+        for candidate in candidates { try candidate.validate() }
+    }
+}
+
+struct DiscoveryRefreshStatus: Sendable {
+    let snapshot: DiscoverySnapshot?
+    let lastAttemptSucceeded: Bool
+    let nextAttemptAtMillis: Int64
+
+    var isAvailable: Bool { snapshot != nil }
+}
+
+actor DiscoveryRefreshCache {
+    private let source: any DiscoveryCandidateSource
+    private let nowMillis: @Sendable () -> Int64
+    private var snapshot: DiscoverySnapshot?
+    private var lastAttemptSucceeded = false
+    private var nextAttemptAtMillis: Int64 = 0
+    private var inFlight: Task<Void, Never>?
+
+    init(source: any DiscoveryCandidateSource,
+         nowMillis: @escaping @Sendable () -> Int64 = {
+             Int64(Date().timeIntervalSince1970 * 1_000)
+         }) {
+        self.source = source
+        self.nowMillis = nowMillis
+    }
+
+    func restore(_ saved: DiscoverySnapshot) throws {
+        try saved.validate()
+        guard saved.sourceID == source.sourceID else { throw DiscoveryDataError.invalidSnapshot }
+        snapshot = saved
+        lastAttemptSucceeded = false
+        nextAttemptAtMillis = 0
+    }
+
+    func refreshIfNeeded() async -> DiscoveryRefreshStatus {
+        if let inFlight {
+            await inFlight.value
+            return status()
+        }
+        if nowMillis() >= nextAttemptAtMillis {
+            let task = Task { await performRefresh() }
+            inFlight = task
+            await task.value
+            inFlight = nil
+        }
+        return status()
+    }
+
+    private func performRefresh() async {
+        do {
+            let loaded = try await source.loadCandidates()
+            let selected = try DiscoveryCandidateSelector.select(loaded, sourceID: source.sourceID)
+            guard !selected.isEmpty else { throw DiscoveryDataError.invalidCandidate }
+            let refreshedAt = nowMillis()
+            snapshot = DiscoverySnapshot(
+                sourceID: source.sourceID, refreshedAtMillis: refreshedAt, candidates: selected
+            )
+            lastAttemptSucceeded = true
+            nextAttemptAtMillis = refreshedAt + 30 * 60_000
+        } catch {
+            lastAttemptSucceeded = false
+            nextAttemptAtMillis = nowMillis() + 5 * 60_000
+        }
+    }
+
+    private func status() -> DiscoveryRefreshStatus {
+        DiscoveryRefreshStatus(
+            snapshot: snapshot,
+            lastAttemptSucceeded: lastAttemptSucceeded,
+            nextAttemptAtMillis: nextAttemptAtMillis
+        )
+    }
+}

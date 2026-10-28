@@ -28,8 +28,10 @@
 		3302321E23FFEE3CD602AA51 /* TradableCorridorDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCF3BE1761CED7DBCC5BAA /* TradableCorridorDetectorTests.swift */; };
 		3701470AEB2EDB79BD033937 /* RadarSplitHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8488D42F93C6B865936B709 /* RadarSplitHandle.swift */; };
 		37D78CEF629DC78C86E7ECAD /* RadarWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0D16568F846C09610A2496 /* RadarWorkspace.swift */; };
+		385A74AA84EAF8AED62E7138 /* DiscoveryCandidateSelectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E5AF93F5D263904111D4BA /* DiscoveryCandidateSelectorTests.swift */; };
 		38BFB1924666A888EF226104 /* ProcessResourceSampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7671DCF33CA2B36A1FFA0C9 /* ProcessResourceSampler.swift */; };
 		3936D9169F7B63A1C80846B1 /* FinnhubMinuteAggregator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999950D6664725733B79DD22 /* FinnhubMinuteAggregator.swift */; };
+		3A47D2BB9C7BF309720F4537 /* DiscoveryCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB5743B3F01DFBD24A1F849F /* DiscoveryCandidate.swift */; };
 		3AAB2A7111F17D26D4E00DD3 /* ProcessResourceSamplerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE4AC5FC63FB6AA4A9692E /* ProcessResourceSamplerTests.swift */; };
 		3BF85A6F101A47723029D2D9 /* RadarPaneLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109A934A9372A7CAE8442260 /* RadarPaneLayoutTests.swift */; };
 		3C1706DD11B2555C344D4DD5 /* SettingsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECEA00E2B86C498D3BC29A2A /* SettingsLayout.swift */; };
@@ -52,6 +54,7 @@
 		8130F723170308441E0805E7 /* RadarSignalList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7546F11E9F21290A5D8DD5F /* RadarSignalList.swift */; };
 		8446D29D4211BEE41824BDD3 /* CredentialEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E50A443FA1C1379C2394D87 /* CredentialEditor.swift */; };
 		84A0091D780B3C0C0EBB13CF /* FinnhubWatchlistSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926E7B5100D9ECAD2EACFF6B /* FinnhubWatchlistSelectionTests.swift */; };
+		860B373FEC5304548C68B511 /* DiscoverySnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB1C9B19F9396B5ADD18797 /* DiscoverySnapshotStore.swift */; };
 		886E88920162B6DA3199D90A /* FinnhubRadarPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE947CFF4E30D853A5BBFE0 /* FinnhubRadarPipeline.swift */; };
 		8A32C3D5EE9D0C6051E8A84E /* RapidCrashDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738D3015D67A0FEB94F7C80 /* RapidCrashDetector.swift */; };
 		8B11F8ECEDAD399B8430D820 /* FinnhubBidAskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22000D6D9AD7A005DFC6B6BC /* FinnhubBidAskTests.swift */; };
@@ -61,6 +64,7 @@
 		97FB5AA7D4B03588544C4A3C /* finnhub-trades.json in Resources */ = {isa = PBXBuildFile; fileRef = 930FFF72DAC8261D47DAF60E /* finnhub-trades.json */; };
 		9B0462558BD80589645FE08B /* FinnhubBidAskClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2272071A7DAED0072B533A6B /* FinnhubBidAskClient.swift */; };
 		9B2E1789F379A2C23E6306B5 /* RadarChartPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9BC7FCE59C13DD7A536A1 /* RadarChartPlot.swift */; };
+		9E9C4B2539001E0C566B76D0 /* DiscoveryRefreshCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB748D1A71D77B911C33C02 /* DiscoveryRefreshCache.swift */; };
 		A01241ECCD6A0F41220B9167 /* RadarScanPreferencesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC678F283ABD4BE2D71528F /* RadarScanPreferencesTests.swift */; };
 		A930B3725DA2A8CAAC692122 /* SourceCredentialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6265626076A4B4A72F517FE1 /* SourceCredentialsView.swift */; };
 		A9E0F6144582D0B1291D7057 /* FinnhubRadarPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4678F11490EA437FAD224DD /* FinnhubRadarPipelineTests.swift */; };
@@ -70,6 +74,7 @@
 		AD6C456C4C15471D7D60FDE1 /* ScannerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27CE5296E45D2A7374F6FA2 /* ScannerSettingsView.swift */; };
 		AD8DE8D44857CF937DBD5B8E /* ProviderCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BCFEAFCBC097BFB379CCF0 /* ProviderCredentialStore.swift */; };
 		B45B22E48AFE43602936C12A /* DesktopWatchlistImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494EEEB736EEBC8F1ECDB1A3 /* DesktopWatchlistImporterTests.swift */; };
+		B7F662EC77C7340B60D527DD /* DiscoverySnapshotStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97CAA06109398412C37C4F3 /* DiscoverySnapshotStoreTests.swift */; };
 		B9DEC7CD282978431B054494 /* RadarChartPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517EEB88A6A2636A58C09DFB /* RadarChartPreview.swift */; };
 		BBF88726F1EC08B77602F2E6 /* FinnhubCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9ED758354DE55D4CAFFCEE /* FinnhubCredentialStore.swift */; };
 		C21BD48FA3A9BD875D3D0368 /* HeaderResourceBadges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D629ECCB3C023D89194F6 /* HeaderResourceBadges.swift */; };
@@ -84,8 +89,10 @@
 		E744FC8928986AAEA31EC37B /* FinnhubMinuteAggregatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B596289D26ECD4E1638A43BB /* FinnhubMinuteAggregatorTests.swift */; };
 		E970D171C8C5F6201CF5C495 /* ProviderCredentialStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A144B01BF91197934671E470 /* ProviderCredentialStoreTests.swift */; };
 		EA3B3403D3312F96C0C6A169 /* RadarScanSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E38BCFD81AAF82949FAA498 /* RadarScanSettingsView.swift */; };
+		EE964646B6EC82384A652E27 /* DiscoveryRefreshCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A446076C5E361B54FA3892D7 /* DiscoveryRefreshCacheTests.swift */; };
 		F0854341F488FE4B24A31807 /* RapidRiseDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C714C30356DD2266706DCE5 /* RapidRiseDetectorTests.swift */; };
 		F1846824C6A7B629009B5B58 /* MarketBarStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03FCFB623D8910CA5B6945B /* MarketBarStoreTests.swift */; };
+		F234466776FF711F5C5E256D /* DiscoveryCandidateSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31B280E8FA9DB0623EFBA3B /* DiscoveryCandidateSelector.swift */; };
 		F3A1A1BA90D3357E9E9E98BB /* HeaderBadgeSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C2E8B4DD20C94DB4457374 /* HeaderBadgeSurface.swift */; };
 		F5CFA707D78337A1E1F43E3F /* RadarHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6552EA3319AF0CE227CE19C9 /* RadarHeader.swift */; };
 		F940CE41E5FA0912F05BE82A /* ProviderInstrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABD71D692C066C6F70FD7DA /* ProviderInstrument.swift */; };
@@ -113,6 +120,7 @@
 		117997F6759266E018D18DC6 /* FinnhubTradeDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubTradeDecoder.swift; sourceTree = "<group>"; };
 		17BA9EF663371153E075CCA3 /* MarketBarStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketBarStore.swift; sourceTree = "<group>"; };
 		1A9D629ECCB3C023D89194F6 /* HeaderResourceBadges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderResourceBadges.swift; sourceTree = "<group>"; };
+		1AB1C9B19F9396B5ADD18797 /* DiscoverySnapshotStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverySnapshotStore.swift; sourceTree = "<group>"; };
 		1B6BAC811ECF367DA113C1F6 /* RadarScanPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarScanPreferences.swift; sourceTree = "<group>"; };
 		1EA765CB226C1925F760A165 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1F95B09A04A570DD48901B5C /* MarketSignalStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketSignalStoreTests.swift; sourceTree = "<group>"; };
@@ -124,6 +132,7 @@
 		35C2E8B4DD20C94DB4457374 /* HeaderBadgeSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBadgeSurface.swift; sourceTree = "<group>"; };
 		3777AAD0702BA7456930185D /* WatchlistEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistEntryRow.swift; sourceTree = "<group>"; };
 		38CF56457F881AAE5791EED8 /* mimiTrends-iOSTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "mimiTrends-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		39E5AF93F5D263904111D4BA /* DiscoveryCandidateSelectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryCandidateSelectorTests.swift; sourceTree = "<group>"; };
 		3FDE4AC5FC63FB6AA4A9692E /* ProcessResourceSamplerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessResourceSamplerTests.swift; sourceTree = "<group>"; };
 		40AA30E102A1E7015DDD6AC6 /* RadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarView.swift; sourceTree = "<group>"; };
 		44371ED1585DAE0AFED41514 /* MarketModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketModelTests.swift; sourceTree = "<group>"; };
@@ -138,6 +147,7 @@
 		6552EA3319AF0CE227CE19C9 /* RadarHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarHeader.swift; sourceTree = "<group>"; };
 		6ABD71D692C066C6F70FD7DA /* ProviderInstrument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderInstrument.swift; sourceTree = "<group>"; };
 		6B9ED758354DE55D4CAFFCEE /* FinnhubCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubCredentialStore.swift; sourceTree = "<group>"; };
+		6DB748D1A71D77B911C33C02 /* DiscoveryRefreshCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryRefreshCache.swift; sourceTree = "<group>"; };
 		70D236DEB2F4AC4BC8BE11A2 /* AppIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIdentity.swift; sourceTree = "<group>"; };
 		71B648E753D1C0367B983BB3 /* DesktopBarSnapshotImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopBarSnapshotImporter.swift; sourceTree = "<group>"; };
 		761E107AE9C658936FA63647 /* SecretEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretEntryField.swift; sourceTree = "<group>"; };
@@ -159,14 +169,17 @@
 		A144B01BF91197934671E470 /* ProviderCredentialStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderCredentialStoreTests.swift; sourceTree = "<group>"; };
 		A2258B49416B5E6F51BFC08C /* RadarPaneLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarPaneLayout.swift; sourceTree = "<group>"; };
 		A40276ADEA60EC008CF7CDB8 /* ScanResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanResult.swift; sourceTree = "<group>"; };
+		A446076C5E361B54FA3892D7 /* DiscoveryRefreshCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryRefreshCacheTests.swift; sourceTree = "<group>"; };
 		A48C8249EED74773A7514750 /* WatchlistStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistStoreTests.swift; sourceTree = "<group>"; };
 		A92DB69298375F8673537FA0 /* TradeTick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeTick.swift; sourceTree = "<group>"; };
 		B4678F11490EA437FAD224DD /* FinnhubRadarPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubRadarPipelineTests.swift; sourceTree = "<group>"; };
 		B596289D26ECD4E1638A43BB /* FinnhubMinuteAggregatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubMinuteAggregatorTests.swift; sourceTree = "<group>"; };
 		B8CB46A53EDCFB8BB3D62098 /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
+		B97CAA06109398412C37C4F3 /* DiscoverySnapshotStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverySnapshotStoreTests.swift; sourceTree = "<group>"; };
 		BBF387A2BA9D47DD94D78888 /* MarketSignalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketSignalStore.swift; sourceTree = "<group>"; };
 		C03FCFB623D8910CA5B6945B /* MarketBarStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketBarStoreTests.swift; sourceTree = "<group>"; };
 		C27CE5296E45D2A7374F6FA2 /* ScannerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerSettingsView.swift; sourceTree = "<group>"; };
+		C31B280E8FA9DB0623EFBA3B /* DiscoveryCandidateSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryCandidateSelector.swift; sourceTree = "<group>"; };
 		C4DE471111EF690DA4A1E8CE /* RadarSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSessionTests.swift; sourceTree = "<group>"; };
 		C843429B89E6E4F3610BF61D /* mimiTrends-iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "mimiTrends-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE947CFF4E30D853A5BBFE0 /* FinnhubRadarPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubRadarPipeline.swift; sourceTree = "<group>"; };
@@ -177,6 +190,7 @@
 		D7671DCF33CA2B36A1FFA0C9 /* ProcessResourceSampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessResourceSampler.swift; sourceTree = "<group>"; };
 		D7A8DAA84F3DA195B6936CD3 /* FinnhubWatchlistSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubWatchlistSelection.swift; sourceTree = "<group>"; };
 		DA34FE30071EAA96606E33C8 /* FinnhubBidAskSampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubBidAskSampler.swift; sourceTree = "<group>"; };
+		DB5743B3F01DFBD24A1F849F /* DiscoveryCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryCandidate.swift; sourceTree = "<group>"; };
 		E0BCF3BE1761CED7DBCC5BAA /* TradableCorridorDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradableCorridorDetectorTests.swift; sourceTree = "<group>"; };
 		E2F4937B6B24F966C3B88898 /* TrendsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsPanel.swift; sourceTree = "<group>"; };
 		E9C56FC4FCD92253926B11F1 /* RadarSourcePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSourcePanel.swift; sourceTree = "<group>"; };
@@ -199,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				755847FAE20A3E615FA9722B /* App */,
+				30E12728C39F05E4ADE87B41 /* Discovery */,
 				E3D5F05AE553410BDBE7E46C /* Features */,
 				EABBA066243D9EA78AC1C527 /* Models */,
 				9150DE9B8D5D31ED4987F053 /* Providers */,
@@ -218,6 +233,17 @@
 				0B7FAEB41F941A777EDC1EB2 /* Sources */,
 				CCC8C5762D2D4C2EDAC351D5 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		30E12728C39F05E4ADE87B41 /* Discovery */ = {
+			isa = PBXGroup;
+			children = (
+				DB5743B3F01DFBD24A1F849F /* DiscoveryCandidate.swift */,
+				C31B280E8FA9DB0623EFBA3B /* DiscoveryCandidateSelector.swift */,
+				6DB748D1A71D77B911C33C02 /* DiscoveryRefreshCache.swift */,
+				1AB1C9B19F9396B5ADD18797 /* DiscoverySnapshotStore.swift */,
+			);
+			path = Discovery;
 			sourceTree = "<group>";
 		};
 		33AA8A8DF88873BBF8B35D9D /* Fixtures */ = {
@@ -289,6 +315,9 @@
 			children = (
 				2CC4DCC031EFA8805E3945E6 /* DesktopBarSnapshotImporterTests.swift */,
 				494EEEB736EEBC8F1ECDB1A3 /* DesktopWatchlistImporterTests.swift */,
+				39E5AF93F5D263904111D4BA /* DiscoveryCandidateSelectorTests.swift */,
+				A446076C5E361B54FA3892D7 /* DiscoveryRefreshCacheTests.swift */,
+				B97CAA06109398412C37C4F3 /* DiscoverySnapshotStoreTests.swift */,
 				22000D6D9AD7A005DFC6B6BC /* FinnhubBidAskTests.swift */,
 				D1D226CA94BA03BB4F8BB482 /* FinnhubCredentialStoreTests.swift */,
 				B596289D26ECD4E1638A43BB /* FinnhubMinuteAggregatorTests.swift */,
@@ -560,6 +589,10 @@
 				8446D29D4211BEE41824BDD3 /* CredentialEditor.swift in Sources */,
 				5A8F07D27D8707A29BA3ADB2 /* DesktopBarSnapshotImporter.swift in Sources */,
 				D6A2A16FEB8C1F04C0D7CFE8 /* DesktopWatchlistImporter.swift in Sources */,
+				3A47D2BB9C7BF309720F4537 /* DiscoveryCandidate.swift in Sources */,
+				F234466776FF711F5C5E256D /* DiscoveryCandidateSelector.swift in Sources */,
+				9E9C4B2539001E0C566B76D0 /* DiscoveryRefreshCache.swift in Sources */,
+				860B373FEC5304548C68B511 /* DiscoverySnapshotStore.swift in Sources */,
 				9B0462558BD80589645FE08B /* FinnhubBidAskClient.swift in Sources */,
 				03B7F47BB4928EB52E853F1D /* FinnhubBidAskSampler.swift in Sources */,
 				BBF88726F1EC08B77602F2E6 /* FinnhubCredentialStore.swift in Sources */,
@@ -623,6 +656,9 @@
 			files = (
 				04281B4F531D627501117EF5 /* DesktopBarSnapshotImporterTests.swift in Sources */,
 				B45B22E48AFE43602936C12A /* DesktopWatchlistImporterTests.swift in Sources */,
+				385A74AA84EAF8AED62E7138 /* DiscoveryCandidateSelectorTests.swift in Sources */,
+				EE964646B6EC82384A652E27 /* DiscoveryRefreshCacheTests.swift in Sources */,
+				B7F662EC77C7340B60D527DD /* DiscoverySnapshotStoreTests.swift in Sources */,
 				8B11F8ECEDAD399B8430D820 /* FinnhubBidAskTests.swift in Sources */,
 				1C5C0587B818EA38CCFF8EC9 /* FinnhubCredentialStoreTests.swift in Sources */,
 				E744FC8928986AAEA31EC37B /* FinnhubMinuteAggregatorTests.swift in Sources */,
