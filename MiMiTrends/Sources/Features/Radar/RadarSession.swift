@@ -11,19 +11,21 @@ final class RadarSession {
     private(set) var completedBarsStored = 0
     private(set) var signalCount = 0
     private(set) var errorCount = 0
+    private(set) var targetSymbols: [String] = []
     private(set) var lastSignal: ScanResult?
     private(set) var errorMessage: String?
     @ObservationIgnored private var scanTask: Task<Void, Never>?
     @ObservationIgnored private var runID: UUID?
 
     @discardableResult
-    func start(scan: @escaping @Sendable (UUID) async -> Void) -> UUID {
+    func start(symbols: [String] = [], scan: @escaping @Sendable (UUID) async -> Void) -> UUID {
         stop()
         lastTrade = nil
         tradeCount = 0
         completedBarsStored = 0
         signalCount = 0
         errorCount = 0
+        targetSymbols = symbols
         lastSignal = nil
         errorMessage = nil
         let id = UUID()

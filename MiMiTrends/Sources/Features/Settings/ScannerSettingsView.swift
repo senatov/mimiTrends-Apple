@@ -3,6 +3,7 @@ import SwiftUI
 struct ScannerSettingsView: View {
     @AppStorage("radar.historyLimit.v1") private var maxResults = 30
     @AppStorage("radar.historyAgeHours.v1") private var maxAgeHours = 2
+    @AppStorage("radar.scanWatchlist.v1") private var scanWatchlist = false
 
     var body: some View {
         SettingsPage(title: "Scanner", subtitle: "Current radar scope and saved results") { width in
@@ -37,7 +38,7 @@ struct ScannerSettingsView: View {
     private var scopePanel: some View {
         SettingsGroup(title: "Current scan scope") {
             LabeledContent("Source", value: "Finnhub live trades")
-            LabeledContent("Symbols", value: "One selected symbol")
+            LabeledContent("Symbols", value: scanWatchlist ? "Selected + Watchlist, up to 5" : "Selected symbol")
             LabeledContent("Activity", value: "Foreground only")
             Text("Desktop market universes, statistical anomaly filters, scan intervals, and currency conversion require their native scanner and source adapters before they can be configured here.")
                 .font(.footnote)

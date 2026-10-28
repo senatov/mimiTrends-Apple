@@ -2,19 +2,26 @@ import SwiftUI
 
 struct RadarView: View {
     @Environment(RadarSession.self) private var session
+    @Environment(\.scenePhase) private var scenePhase
     @AppStorage("radar.historyLimit.v1") private var maxResults = 30
     @AppStorage("radar.historyAgeHours.v1") private var maxAgeHours = 2
+    @AppStorage("radar.scanWatchlist.v1") private var scanWatchlist = false
     @Binding var symbol: String
     @State private var setupMessage: String?
     @State private var recentSignals: [ScanResult] = []
     @State private var selectedSignal: ScanResult?
     @State private var historyError: String?
     @State private var chartRefreshID = 0
+    @State private var isPreparingFeed = false
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 6) {
-                RadarHeader(symbol: $symbol, session: session, setupMessage: setupMessage) {
+                RadarHeader(
+                    symbol: $symbol, scanWatchlist: $scanWatchlist,
+                    session: session, setupMessage: setupMessage,
+                    isPreparingFeed: isPreparingFeed
+                ) {
                     if session.isScanning { session.stop() } else { startFeed() }
                 }
                 RadarWorkspace(
@@ -93,19 +100,44 @@ struct RadarView: View {
     }
 
     private func startFeed() {
+        guard !isPreparingFeed else { return }
+        isPreparingFeed = true
+        Task { await prepareFeed() }
+    }
+
+    @MainActor
+    private func prepareFeed() async {
+        defer { isPreparingFeed = false }
         setupMessage = nil
         do {
-            let scanSettings = RadarScanPreferencesStore.load()
+            let selected = symbol
+            let includeWatchlist = scanWatchlist
+            let watchlist: [WatchlistEntry]
+            if includeWatchlist {
+                watchlist = try await Task.detached(priority: .userInitiated) {
+                    let store = try WatchlistStore(url: WatchlistStore.defaultURL())
+                    return try await store.load()
+                }.value
+            } else {
+                watchlist = []
+            }
+            guard scenePhase == .active else { return }
+            let selection = try FinnhubWatchlistSelection(
+                selectedSymbol: selected,
+                includeWatchlist: includeWatchlist,
+                watchlist: watchlist
+            )
             guard let key = try FinnhubCredentialStore.load() else {
                 setupMessage = FinnhubStreamError.missingKey.localizedDescription
                 return
             }
-            let requestedSymbol = symbol
-            session.start { [session, scanSettings] runID in
+            guard scenePhase == .active else { return }
+            let scanSettings = RadarScanPreferencesStore.load()
+            session.start(symbols: selection.symbols) { [session, scanSettings] runID in
                 do {
                     let pipeline = try FinnhubRadarPipeline(settings: scanSettings)
                     let bidAskSampler = FinnhubBidAskSampler()
-                    try await FinnhubTradeStream().run(apiKey: key, symbol: requestedSymbol) {
+                    try await FinnhubTradeStream().run(apiKey: key, symbols: selection.symbols) {
                         await session.markSubscribed(runID: runID)
                     } onTrade: { trade in
                         let nowEpochSeconds = Int64(Date().timeIntervalSince1970)
@@ -119,7 +151,7 @@ struct RadarView: View {
                         if update.storedBar {
                             await session.recordStoredBar(runID: runID)
                         }
-                        if let signal = update.signal {
+                        if update.storedSignal, let signal = update.signal {
                             await session.recordSignal(signal, runID: runID)
                         }
                         await session.record(trade, runID: runID)

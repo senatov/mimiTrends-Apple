@@ -1,6 +1,6 @@
 # Dynamic scan pool: desktop behavior and native port
 
-The desktop screenshot shows three different counts: the full candidate pool, the symbols eligible for the current market scan, and the number already analyzed in this cycle. They must remain separate in the native Radar. The current Apple app scans one manually selected Finnhub symbol; its saved watchlist is not a dynamic discovery pool.
+The desktop screenshot shows three different counts: the full candidate pool, the symbols eligible for the current market scan, and the number already analyzed in this cycle. They must remain separate in the native Radar. The current Apple app can request one manually selected Finnhub symbol or that symbol plus up to four saved watchlist symbols. Its watchlist is not a dynamic discovery pool, and requested subscriptions are not a count of analyzed symbols.
 
 ## Desktop reference
 
@@ -19,7 +19,7 @@ The old code paths are `market-data/.../WallstreetOnlineRanking.kt`, `Wallstreet
 4. Add a market-hours and provider-capability gate, then a foreground multi-symbol scan coordinator. Keep source coverage, pool size, eligible count, processed count, last successful refresh, and errors as separate telemetry. Stop all network work when the scene becomes inactive or enters the background.
 5. Port live source panels and selected-signal chart behavior. Show each source only when its adapter actually runs. Validate signal semantics against desktop fixtures and fresh device runs before calling the Radar equivalent to the prototype.
 
-The current one-symbol Finnhub WebSocket is insufficient for this pool: a public ranking page returns company names and website instrument paths, while a market feed needs exact provider symbols, exchange coverage, subscription capacity, and minute history. The Apple app must validate those mappings and account limits before subscribing. The desktop's Yahoo, Tradegate, and Euronext paths do not become available merely by saving their keys or URLs.
+The bounded Finnhub Watchlist feed is insufficient for this pool: a public ranking page returns company names and website instrument paths, while a market feed needs exact provider symbols, exchange coverage, subscription capacity, and minute history. The watchlist path assumes user-entered provider tickers and excludes names needing resolution; it does not prove that the account receives trades for every requested ticker. The Apple app must validate ranking mappings and account limits before subscribing to discovered symbols. The desktop's Yahoo, Tradegate, and Euronext paths do not become available merely by saving their keys or URLs.
 
 ## Distribution boundary
 

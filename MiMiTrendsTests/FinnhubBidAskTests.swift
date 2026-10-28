@@ -74,6 +74,25 @@ final class FinnhubBidAskTests: XCTestCase {
         let requests = await probe.count
         XCTAssertEqual(requests, 1)
     }
+
+    func testSamplerKeepsQuotesSeparateAcrossSubscribedSymbols() async {
+        let probe = QuoteProbe()
+        let sampler = FinnhubBidAskSampler { symbol, _ in
+            await probe.load(symbol: symbol)
+        }
+
+        let apple = await sampler.latest(symbol: "AAPL", apiKey: "fixture", nowMillis: 100_000)
+        let microsoftBeforeRequest = await sampler.latest(symbol: "MSFT", apiKey: "fixture", nowMillis: 120_000)
+        let microsoft = await sampler.latest(symbol: "MSFT", apiKey: "fixture", nowMillis: 160_000)
+        let appleAfterRequest = await sampler.latest(symbol: "AAPL", apiKey: "fixture", nowMillis: 170_000)
+
+        XCTAssertEqual(apple?.symbol, "AAPL")
+        XCTAssertNil(microsoftBeforeRequest)
+        XCTAssertEqual(microsoft?.symbol, "MSFT")
+        XCTAssertEqual(appleAfterRequest?.symbol, "AAPL")
+        let requests = await probe.count
+        XCTAssertEqual(requests, 2)
+    }
 }
 
 private actor QuoteProbe {

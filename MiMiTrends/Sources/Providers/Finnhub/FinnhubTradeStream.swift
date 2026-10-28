@@ -3,24 +3,23 @@ import Foundation
 struct FinnhubTradeStream: Sendable {
     func run(
         apiKey: String,
-        symbol: String,
+        symbols: [String],
         onSubscribed: @escaping @Sendable () async -> Void,
         onTrade: @escaping @Sendable (TradeTick) async throws -> Void
     ) async throws {
         let url = try Self.streamURL(apiKey: apiKey)
-        let normalizedSymbol = symbol.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        guard !normalizedSymbol.isEmpty else { throw FinnhubStreamError.invalidMessage }
+        let commands = try Self.subscriptionMessages(for: symbols)
+        let subscribedSymbols = Set(symbols)
 
         let socket = URLSession.shared.webSocketTask(with: url)
         try await withTaskCancellationHandler {
             socket.resume()
             defer { socket.cancel(with: .normalClosure, reason: nil) }
             do {
-                let command = try JSONEncoder().encode(Subscription(type: "subscribe", symbol: normalizedSymbol))
-                guard let commandText = String(data: command, encoding: .utf8) else {
-                    throw FinnhubStreamError.invalidMessage
+                for command in commands {
+                    try Task.checkCancellation()
+                    try await socket.send(.string(command))
                 }
-                try await socket.send(.string(commandText))
                 try Task.checkCancellation()
                 await onSubscribed()
                 while !Task.isCancelled {
@@ -33,7 +32,14 @@ struct FinnhubTradeStream: Sendable {
                     }
                     for trade in try FinnhubTradeDecoder.decode(data) {
                         try Task.checkCancellation()
-                        try await onTrade(trade)
+                        let normalizedSymbol = trade.symbol.uppercased()
+                        guard subscribedSymbols.contains(normalizedSymbol) else { continue }
+                        try await onTrade(TradeTick(
+                            symbol: normalizedSymbol,
+                            price: trade.price,
+                            timestampMillis: trade.timestampMillis,
+                            volume: trade.volume
+                        ))
                     }
                 }
             } catch is CancellationError {
@@ -65,6 +71,21 @@ struct FinnhubTradeStream: Sendable {
         components.queryItems = [URLQueryItem(name: "token", value: key)]
         guard let url = components.url else { throw FinnhubStreamError.missingKey }
         return url
+    }
+
+    static func subscriptionMessages(for symbols: [String]) throws -> [String] {
+        guard (1...FinnhubWatchlistSelection.maximumSymbols).contains(symbols.count),
+              Set(symbols).count == symbols.count,
+              symbols.allSatisfy({ (try? WatchlistStore.normalize($0)) == $0 }) else {
+            throw FinnhubStreamError.invalidSubscription
+        }
+        return try symbols.map { symbol in
+            let data = try JSONEncoder().encode(Subscription(type: "subscribe", symbol: symbol))
+            guard let text = String(data: data, encoding: .utf8) else {
+                throw FinnhubStreamError.invalidSubscription
+            }
+            return text
+        }
     }
 
     private struct Subscription: Encodable {

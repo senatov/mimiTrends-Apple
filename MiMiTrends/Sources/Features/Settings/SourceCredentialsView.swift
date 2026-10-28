@@ -50,7 +50,7 @@ struct SourceCredentialsView: View {
     private var finnhubKeyEditor: some View {
         CredentialEditor(
             title: "Finnhub API key",
-            detail: "Used by the active one-symbol trade feed and US bid/ask checks.",
+            detail: "Used by the active selected or Watchlist trade feed and US bid/ask checks.",
             load: { try FinnhubCredentialStore.load() },
             save: { try FinnhubCredentialStore.save($0) },
             remove: {

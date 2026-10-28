@@ -45,6 +45,7 @@ enum FinnhubStreamError: LocalizedError {
     case invalidMessage
     case providerRejected
     case connectionFailed
+    case invalidSubscription
 
     var errorDescription: String? {
         switch self {
@@ -52,6 +53,7 @@ enum FinnhubStreamError: LocalizedError {
         case .invalidMessage: "Finnhub sent an unreadable trade message."
         case .providerRejected: "Finnhub rejected the stream request. Check the API key and plan."
         case .connectionFailed: "Could not connect to Finnhub. Check the network and try again."
+        case .invalidSubscription: "Choose one to five valid symbols for the Finnhub feed."
         }
     }
 }

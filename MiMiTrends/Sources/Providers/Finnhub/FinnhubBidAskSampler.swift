@@ -4,7 +4,7 @@ actor FinnhubBidAskSampler {
     private let load: @Sendable (String, String) async throws -> ProviderQuoteSnapshot
     private var lastAttemptAtMillis: Int64 = 0
     private var accessUnavailable = false
-    private var cached: ProviderQuoteSnapshot?
+    private var cachedBySymbol: [String: ProviderQuoteSnapshot] = [:]
 
     init(load: @escaping @Sendable (String, String) async throws -> ProviderQuoteSnapshot = {
         try await FinnhubBidAskClient().load(symbol: $0, apiKey: $1)
@@ -19,15 +19,15 @@ actor FinnhubBidAskSampler {
             do {
                 let quote = try await load(symbol, apiKey)
                 try Task.checkCancellation()
-                cached = quote
+                cachedBySymbol[symbol] = quote
             } catch FinnhubBidAskError.accessUnavailable {
                 accessUnavailable = true
-                cached = nil
+                cachedBySymbol.removeAll()
             } catch {
-                cached = nil
+                cachedBySymbol.removeValue(forKey: symbol)
             }
         }
-        guard let cached,
+        guard let cached = cachedBySymbol[symbol],
               cached.observedAtMillis <= nowMillis,
               cached.observedAtMillis >= nowMillis - 120_000 else { return nil }
         return cached

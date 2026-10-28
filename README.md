@@ -28,6 +28,8 @@ Radar, Watchlist, and Chart use adaptive system content surfaces. Accent colors 
 
 The Finnhub source panel reports current-session trade receipts, completed bars saved, accepted signals, and terminal feed errors. These counts reset when a new feed starts and do not imply that other desktop providers are connected.
 
+Radar offers **Selected** and **Selected + Watchlist** feed scopes. The second scope requests the selected ticker and up to four additional watchlist tickers matching the current Finnhub US-symbol format, in saved order. The limit bounds WebSocket subscriptions and processing; it is not the desktop's ranking-based dynamic pool. Changing scope takes effect on the next feed start. The feed still stops whenever the app leaves the foreground.
+
 To save a symbol, open Watchlist, enter its ticker, and tap **Add**. Its native list shows saved symbols and their insertion dates in a card-style layout. Select a saved symbol to put it on Radar; a running feed stops before the selection changes. Use the row's trash button, or swipe the row on iPad, to delete it. These symbols stay in the app's local SQLite container and are not synchronized between devices.
 
 To transfer the desktop watchlist, create a small snapshot on the desktop Mac:
@@ -91,4 +93,4 @@ Progress and completion gates are tracked in [the porting plan](Docs/PortingPlan
 4. Build adaptive radar and chart views, then add watchlists and broker imports.
 5. Validate signed iOS and macOS archives, provider data rights, privacy disclosures, and sandbox behavior before App Store submission.
 
-Scanning is intended to run only while the app is active. `MiMiTrendsApp` stops the radar session when the scene becomes inactive or enters the background. Provider scanning can later be passed to `RadarSession.start(scan:)`; its task is cancelled by `stop()`.
+Scanning runs only while the app is active. `MiMiTrendsApp` stops the radar session when the scene becomes inactive or enters the background, cancelling the current Finnhub subscriptions and scan task.

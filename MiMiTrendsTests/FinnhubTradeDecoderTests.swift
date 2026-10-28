@@ -37,4 +37,19 @@ final class FinnhubTradeDecoderTests: XCTestCase {
         XCTAssertEqual(components.host, "ws.finnhub.io")
         XCTAssertEqual(components.queryItems?.first?.value, "abc+def")
     }
+
+    func testSubscriptionMessagesAreBoundedAndOrdered() throws {
+        let commands = try FinnhubTradeStream.subscriptionMessages(for: ["AAPL", "MSFT"])
+        XCTAssertEqual(commands.count, 2)
+        XCTAssertEqual(try JSONSerialization.jsonObject(with: Data(commands[0].utf8)) as? [String: String],
+                       ["type": "subscribe", "symbol": "AAPL"])
+        XCTAssertEqual(try JSONSerialization.jsonObject(with: Data(commands[1].utf8)) as? [String: String],
+                       ["type": "subscribe", "symbol": "MSFT"])
+        XCTAssertThrowsError(try FinnhubTradeStream.subscriptionMessages(for: []))
+        XCTAssertThrowsError(try FinnhubTradeStream.subscriptionMessages(for: ["AAPL", "AAPL"]))
+        XCTAssertThrowsError(try FinnhubTradeStream.subscriptionMessages(for: ["aapl"]))
+        XCTAssertThrowsError(try FinnhubTradeStream.subscriptionMessages(
+            for: ["A", "B", "C", "D", "E", "F"]
+        ))
+    }
 }

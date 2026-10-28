@@ -2,8 +2,10 @@ import SwiftUI
 
 struct RadarHeader: View {
     @Binding var symbol: String
+    @Binding var scanWatchlist: Bool
     let session: RadarSession
     let setupMessage: String?
+    let isPreparingFeed: Bool
     let onToggleFeed: () -> Void
 
     var body: some View {
@@ -24,6 +26,8 @@ struct RadarHeader: View {
                     }
                 }
             }
+            scopePicker
+                .frame(maxWidth: .infinity, alignment: .leading)
             if let message = setupMessage ?? session.errorMessage {
                 Text(message).font(.footnote).foregroundStyle(.red)
             }
@@ -39,11 +43,23 @@ struct RadarHeader: View {
             .frame(maxWidth: 240)
             .accessibilityLabel("Radar symbol")
         TrendsActionButton(
-            title: session.isScanning ? "Stop feed" : "Start feed",
+            title: session.isScanning ? "Stop feed" : isPreparingFeed ? "Preparing" : "Start feed",
             systemImage: session.isScanning ? "stop.fill" : "play.fill",
             tint: session.isScanning ? .red : .green
         ) { onToggleFeed() }
-        .disabled(!session.isScanning && symbol.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        .disabled(isPreparingFeed || (!session.isScanning && symbol.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty))
+    }
+
+    private var scopePicker: some View {
+        Picker("Scan scope", selection: $scanWatchlist) {
+            Text("Selected").tag(false)
+            Text("Selected + Watchlist").tag(true)
+        }
+        .pickerStyle(.segmented)
+        .labelsHidden()
+        .frame(maxWidth: 310)
+        .disabled(session.isScanning || isPreparingFeed)
+        .help("Selected + Watchlist requests at most five symbols per feed.")
     }
 
     private var statusText: String {
@@ -66,7 +82,7 @@ struct RadarHeader: View {
         HStack(spacing: 10) {
             Label("\(session.tradeCount) trades", systemImage: "chart.line.uptrend.xyaxis")
             Label("\(session.completedBarsStored) bars", systemImage: "chart.bar")
-            Text("1 symbol · foreground only")
+            Text("\(session.isScanning ? session.targetSymbols.count : 1) requested · foreground only")
         }
         .font(.caption)
         .foregroundStyle(.secondary)
