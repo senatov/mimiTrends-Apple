@@ -28,7 +28,7 @@ struct CredentialEditor: View {
                         removeStored()
                     }
                 }
-                Text(hasStoredValue ? "Saved in Keychain" : "Not configured")
+                Text(hasStoredValue ? storageStatus : "Not configured")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -74,10 +74,18 @@ struct CredentialEditor: View {
             try remove()
             draft = ""
             hasStoredValue = false
-            message = "Removed from Keychain."
+            message = "Removed from this device."
             onRemove()
         } catch {
             message = error.localizedDescription
         }
+    }
+
+    private var storageStatus: String {
+        #if os(macOS)
+        "Saved on this Mac"
+        #else
+        "Saved in Keychain"
+        #endif
     }
 }

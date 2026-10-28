@@ -2,7 +2,7 @@ import XCTest
 @testable import MiMiTrends
 
 final class ProviderCredentialStoreTests: XCTestCase {
-    func testKeychainAccountsCanBeSavedRevealedAndRemoved() throws {
+    func testAccountsCanBeSavedRevealedAndRemoved() throws {
         let service = "org.senatov.mimitrends.apple.provider-tests.\(UUID().uuidString)"
         defer { try? ProviderCredentialStore.delete("My feed", service: service) }
 

@@ -2,7 +2,7 @@ import XCTest
 @testable import MiMiTrends
 
 final class FinnhubCredentialStoreTests: XCTestCase {
-    func testKeychainSaveReplaceAndDelete() throws {
+    func testSaveReplaceAndDeleteAcrossLocalStore() throws {
         let service = "org.senatov.mimitrends.apple.tests.\(UUID().uuidString)"
         defer { try? FinnhubCredentialStore.delete(service: service) }
 

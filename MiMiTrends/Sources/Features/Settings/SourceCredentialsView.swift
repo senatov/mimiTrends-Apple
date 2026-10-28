@@ -115,7 +115,7 @@ struct SourceCredentialsView: View {
             newSource = ""
             newSecret = ""
             refreshAccounts()
-            message = "Credential saved in Keychain."
+            message = "Credential saved on this device."
         } catch {
             message = error.localizedDescription
         }

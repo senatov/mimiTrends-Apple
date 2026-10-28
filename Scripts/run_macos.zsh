@@ -12,8 +12,40 @@ if (( macos_major < 27 )); then
     exit 1
 fi
 
-zsh "${SCRIPT_DIR}/build_macos.zsh"
 app_path="${DERIVED_DATA}/Build/Products/Debug/${APP_NAME}.app"
+/usr/bin/python3 - "${app_path}" "${APP_NAME}" <<'PY'
+from pathlib import Path
+import os
+import signal
+import subprocess
+import sys
+import time
+
+executable = Path(sys.argv[1]).resolve() / "Contents" / "MacOS" / sys.argv[2]
+output = subprocess.check_output(["/bin/ps", "-axo", "pid=,command="], text=True)
+matching = []
+for line in output.splitlines():
+    pid, _, command = line.strip().partition(" ")
+    command = command.strip()
+    if command == str(executable) or command.startswith(str(executable) + " "):
+        matching.append(int(pid))
+for pid in matching:
+    os.kill(pid, signal.SIGTERM)
+for _ in range(50):
+    alive = []
+    for pid in matching:
+        try:
+            os.kill(pid, 0)
+            alive.append(pid)
+        except ProcessLookupError:
+            pass
+    if not alive:
+        break
+    time.sleep(0.1)
+else:
+    sys.exit("The existing native app did not quit; build was not started.")
+PY
+zsh "${SCRIPT_DIR}/build_macos.zsh"
 team_id="$(/usr/bin/sed -nE 's/^[[:space:]]*DEVELOPMENT_TEAM:[[:space:]]*([A-Z0-9]+).*/\1/p' "${PROJECT_DIR}/project.yml")"
 if [[ -z "${team_id}" ]]; then
     echo "The development team is missing from project.yml." >&2
@@ -65,7 +97,7 @@ def matching_pids():
 
 
 previous = matching_pids()
-subprocess.run(["/usr/bin/open", "-n", str(app_path)], check=True)
+subprocess.run(["/usr/bin/open", str(app_path)], check=True)
 for _ in range(30):
     launched = matching_pids() - previous
     if launched:
