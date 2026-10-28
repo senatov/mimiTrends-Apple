@@ -11,6 +11,13 @@ struct RadarScanSettingsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Rapid moves").font(.title2.weight(.semibold))
+                    Text("Thresholds for confirmed price changes")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 section("Rapid crashes", accent: .red) {
                     doubleRow("Short drop", value: $draft.crashPercent, range: 0.05...20, step: 0.05, unit: "%")
                     intRow("Short window", value: $draft.crashWindowMinutes, range: 4...15, unit: "min")

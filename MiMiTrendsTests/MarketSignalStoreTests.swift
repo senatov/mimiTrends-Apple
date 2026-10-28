@@ -42,10 +42,31 @@ final class MarketSignalStoreTests: XCTestCase {
         }
     }
 
-    private func bars() -> [MinuteBar] {
+    func testRecentSignalsRespectAgeAndResultLimit() async throws {
+        let url = temporaryDatabaseURL()
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let store = try MarketSignalStore(url: url)
+        let old = try XCTUnwrap(RapidRiseDetector.detect(
+            symbol: "OLD", bars: bars(symbol: "OLD", start: 12_000), nowEpochSeconds: 12_180
+        ))
+        let recent = try XCTUnwrap(RapidRiseDetector.detect(
+            symbol: "NEW", bars: bars(symbol: "NEW", start: 24_000), nowEpochSeconds: 24_180
+        ))
+        _ = try await store.record(old)
+        _ = try await store.record(recent)
+        let limited = try await store.loadRecent(limit: 1)
+        let ageFiltered = try await store.loadRecent(
+            limit: 10, sinceEpochMillis: old.signalEpochMillis + 1
+        )
+
+        XCTAssertEqual(limited, [recent])
+        XCTAssertEqual(ageFiltered, [recent])
+    }
+
+    private func bars(symbol: String = "RISE", start: Int64 = 12_000) -> [MinuteBar] {
         [100.0, 100.1, 101.8, 100.4].enumerated().map { index, close in
             MinuteBar(
-                symbol: "RISE", minuteEpochSeconds: 12_000 + Int64(index) * 60,
+                symbol: symbol, minuteEpochSeconds: start + Int64(index) * 60,
                 open: close, high: close, low: close, close: close,
                 volume: 1_000
             )

@@ -62,13 +62,15 @@ actor MarketSignalStore {
         return sqlite3_changes(database) > 0
     }
 
-    func loadRecent(limit: Int = 100) throws -> [ScanResult] {
+    func loadRecent(limit: Int = 100, sinceEpochMillis: Int64 = 0) throws -> [ScanResult] {
         let statement = try prepare("""
             SELECT payload FROM signals
+            WHERE signal_epoch >= ?
             ORDER BY signal_epoch DESC, symbol, source LIMIT ?
             """)
         defer { sqlite3_finalize(statement) }
-        sqlite3_bind_int(statement, 1, Int32(min(max(limit, 1), 500)))
+        sqlite3_bind_int64(statement, 1, max(sinceEpochMillis, 0))
+        sqlite3_bind_int(statement, 2, Int32(min(max(limit, 1), 500)))
         var signals: [ScanResult] = []
         while true {
             let result = sqlite3_step(statement)

@@ -13,6 +13,14 @@ struct SourceCredentialsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Market data providers").font(.title2.weight(.semibold))
+                    Text("Connected source and locally stored credentials")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                connectionPanel
                 CredentialEditor(
                     title: "Finnhub API key",
                     detail: "Used by the active one-symbol trade feed and US bid/ask checks.",
@@ -56,6 +64,20 @@ struct SourceCredentialsView: View {
             newSource = ""
             newSecret = ""
         }
+    }
+
+    private var connectionPanel: some View {
+        VStack(alignment: .leading, spacing: 9) {
+            Label("Finnhub", systemImage: "antenna.radiowaves.left.and.right")
+                .font(.headline)
+            LabeledContent("Live trades", value: "ws.finnhub.io")
+            LabeledContent("US bid/ask", value: "api.finnhub.io")
+            Text("These endpoints belong to the current adapter. Tradegate, Euronext, Yahoo Finance, Lang & Schwarz, and external chart URLs from the desktop app are not connected here yet.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trendsPanel(accent: .teal)
     }
 
     private var additionalSourcesPanel: some View {

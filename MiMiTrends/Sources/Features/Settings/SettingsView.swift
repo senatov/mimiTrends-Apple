@@ -1,91 +1,65 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(\.colorScheme) private var colorScheme
-    @AppStorage("appearance.theme.v1") private var theme = "light"
+    @AppStorage("settings.section.v1") private var selectedSection = SettingsSection.scanner.rawValue
+
+    private var sectionSelection: Binding<String?> {
+        Binding(
+            get: { selectedSection },
+            set: { if let section = $0 { selectedSection = section } }
+        )
+    }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text("Settings").font(.title2.weight(.semibold))
-                        Text("Sources, signal rules, and display preferences")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+        NavigationSplitView {
+            List(selection: sectionSelection) {
+                Section("Preferences") {
+                    ForEach(SettingsSection.allCases) { section in
+                        NavigationLink(value: section.rawValue) {
+                            Label(section.title, systemImage: section.symbol)
+                        }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    sourcesPanel
-                    detectionPanel
-                    appearancePanel
-                    aboutPanel
                 }
-                .frame(maxWidth: 820)
-                .frame(maxWidth: .infinity)
-                .padding(14)
             }
-            .background(TrendsColors.canvas(colorScheme))
             .navigationTitle(AppIdentity.windowTitle)
-        }
-    }
-
-    private var sourcesPanel: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label("Data sources", systemImage: "antenna.radiowaves.left.and.right")
-                .font(.headline)
-            NavigationLink {
-                SourceCredentialsView()
-            } label: {
-                Label("Manage keys and tokens", systemImage: "key.horizontal")
-            }
-            .buttonStyle(TrendsActionButtonStyle())
-            Text("Finnhub is the active feed. Open the credential editor to manage its API key.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel(accent: .teal)
-    }
-
-    private var detectionPanel: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Signal detection").font(.headline)
-            NavigationLink {
+            .listStyle(.sidebar)
+            .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 300)
+        } detail: {
+            switch SettingsSection(rawValue: selectedSection) ?? .scanner {
+            case .scanner:
+                ScannerSettingsView()
+            case .rapidMoves:
                 RadarScanSettingsView()
-            } label: {
-                Label("Rapid-move thresholds", systemImage: "slider.horizontal.3")
+            case .providers:
+                SourceCredentialsView()
+            case .appearance:
+                AppearanceSettingsView()
             }
-            .buttonStyle(TrendsActionButtonStyle())
-            Text("The current feed scans one symbol through Finnhub and stops outside the foreground. Desktop provider switches, market universes, anomaly settings, and polling intervals are not active here yet.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel(accent: .blue)
+        .navigationSplitViewStyle(.balanced)
+    }
+}
+
+private enum SettingsSection: String, CaseIterable, Identifiable {
+    case scanner, rapidMoves, providers, appearance
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .scanner: "Scanner"
+        case .rapidMoves: "Rapid moves"
+        case .providers: "Market data providers"
+        case .appearance: "Appearance"
+        }
     }
 
-    private var appearancePanel: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Appearance").font(.headline)
-            Picker("Theme", selection: $theme) {
-                Text("System").tag("system")
-                Text("Light").tag("light")
-                Text("Dark").tag("dark")
-            }
-            .pickerStyle(.segmented)
+    var symbol: String {
+        switch self {
+        case .scanner: "line.3.horizontal.decrease.circle"
+        case .rapidMoves: "waveform.path.ecg"
+        case .providers: "antenna.radiowaves.left.and.right"
+        case .appearance: "paintpalette"
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel(accent: .indigo)
     }
-
-    private var aboutPanel: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("About").font(.headline)
-            LabeledContent("Version", value: AppIdentity.version)
-            LabeledContent("Platforms", value: "iOS 27 · macOS 27")
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel(accent: .cyan)
-    }
-
 }

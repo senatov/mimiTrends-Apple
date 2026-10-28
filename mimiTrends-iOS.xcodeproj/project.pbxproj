@@ -34,6 +34,7 @@
 		43EF6E380CF958D857D0AB4D /* RadarScanPreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655A3A4106AE1F48C500EA6 /* RadarScanPreferencesStore.swift */; };
 		4671A231FD13F03F8FA3E100 /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CB46A53EDCFB8BB3D62098 /* WatchlistView.swift */; };
 		4B1A6D2BF95116348B8361D3 /* MarketSignalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF387A2BA9D47DD94D78888 /* MarketSignalStore.swift */; };
+		52ECF4E400CFE650649AD8BB /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43016F584E13231D8B6D972 /* AppearanceSettingsView.swift */; };
 		5A8F07D27D8707A29BA3ADB2 /* DesktopBarSnapshotImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B648E753D1C0367B983BB3 /* DesktopBarSnapshotImporter.swift */; };
 		5D450505D6D7625389567466 /* FinnhubTradeStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80B2E9DCDE37394950FD413 /* FinnhubTradeStream.swift */; };
 		66214CBD1C84ADDD412F699B /* TrendsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F4937B6B24F966C3B88898 /* TrendsPanel.swift */; };
@@ -61,6 +62,7 @@
 		ABC4CC792F9A771D681D2802 /* RadarChartData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923F1C69FB01B960C90E4AF7 /* RadarChartData.swift */; };
 		ABF6F9D3F9824D07C350BA3E /* SustainedMoveDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC0207E808D3B3D6DB152DB /* SustainedMoveDetectorTests.swift */; };
 		AD39BFB17C64FC27CE5EFFD4 /* MiMiTrendsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C749680DE8767BA8EF22DE /* MiMiTrendsApp.swift */; };
+		AD6C456C4C15471D7D60FDE1 /* ScannerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27CE5296E45D2A7374F6FA2 /* ScannerSettingsView.swift */; };
 		AD8DE8D44857CF937DBD5B8E /* ProviderCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BCFEAFCBC097BFB379CCF0 /* ProviderCredentialStore.swift */; };
 		B45B22E48AFE43602936C12A /* DesktopWatchlistImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494EEEB736EEBC8F1ECDB1A3 /* DesktopWatchlistImporterTests.swift */; };
 		B9DEC7CD282978431B054494 /* RadarChartPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517EEB88A6A2636A58C09DFB /* RadarChartPreview.swift */; };
@@ -151,10 +153,12 @@
 		B8CB46A53EDCFB8BB3D62098 /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
 		BBF387A2BA9D47DD94D78888 /* MarketSignalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketSignalStore.swift; sourceTree = "<group>"; };
 		C03FCFB623D8910CA5B6945B /* MarketBarStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketBarStoreTests.swift; sourceTree = "<group>"; };
+		C27CE5296E45D2A7374F6FA2 /* ScannerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerSettingsView.swift; sourceTree = "<group>"; };
 		C4DE471111EF690DA4A1E8CE /* RadarSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSessionTests.swift; sourceTree = "<group>"; };
 		C843429B89E6E4F3610BF61D /* mimiTrends-iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "mimiTrends-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE947CFF4E30D853A5BBFE0 /* FinnhubRadarPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubRadarPipeline.swift; sourceTree = "<group>"; };
 		D1D226CA94BA03BB4F8BB482 /* FinnhubCredentialStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubCredentialStoreTests.swift; sourceTree = "<group>"; };
+		D43016F584E13231D8B6D972 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		D5BEDE07B7B34757E95DE94E /* FinnhubTradeDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubTradeDecoderTests.swift; sourceTree = "<group>"; };
 		D7546F11E9F21290A5D8DD5F /* RadarSignalList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSignalList.swift; sourceTree = "<group>"; };
 		DA34FE30071EAA96606E33C8 /* FinnhubBidAskSampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubBidAskSampler.swift; sourceTree = "<group>"; };
@@ -211,8 +215,10 @@
 		512FFC5A94B06041BD09D503 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				D43016F584E13231D8B6D972 /* AppearanceSettingsView.swift */,
 				4E50A443FA1C1379C2394D87 /* CredentialEditor.swift */,
 				5E38BCFD81AAF82949FAA498 /* RadarScanSettingsView.swift */,
+				C27CE5296E45D2A7374F6FA2 /* ScannerSettingsView.swift */,
 				761E107AE9C658936FA63647 /* SecretEntryField.swift */,
 				7A1562AE82C112C8F46CFD3F /* SettingsView.swift */,
 				6265626076A4B4A72F517FE1 /* SourceCredentialsView.swift */,
@@ -525,6 +531,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E55CD1974C966F6CEC9BB616 /* AppIdentity.swift in Sources */,
+				52ECF4E400CFE650649AD8BB /* AppearanceSettingsView.swift in Sources */,
 				3F123A0039415D91512F590D /* ContentView.swift in Sources */,
 				8446D29D4211BEE41824BDD3 /* CredentialEditor.swift in Sources */,
 				5A8F07D27D8707A29BA3ADB2 /* DesktopBarSnapshotImporter.swift in Sources */,
@@ -563,6 +570,7 @@
 				8A32C3D5EE9D0C6051E8A84E /* RapidCrashDetector.swift in Sources */,
 				FEF8C8CD52FF04FF8EBDAAEC /* RapidRiseDetector.swift in Sources */,
 				E1F32C47FAE46C3BBEBA6C07 /* ScanResult.swift in Sources */,
+				AD6C456C4C15471D7D60FDE1 /* ScannerSettingsView.swift in Sources */,
 				7E233D8A837FC4D2A6227757 /* SecretEntryField.swift in Sources */,
 				73A88781B5FBDCEE68CAB80D /* SettingsView.swift in Sources */,
 				155DBFBEDEA2074BD560AB07 /* ShortMoveQuoteQuality.swift in Sources */,

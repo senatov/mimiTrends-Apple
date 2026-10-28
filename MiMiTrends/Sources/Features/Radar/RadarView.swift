@@ -3,6 +3,8 @@ import SwiftUI
 struct RadarView: View {
     @Environment(RadarSession.self) private var session
     @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("radar.historyLimit.v1") private var maxResults = 30
+    @AppStorage("radar.historyAgeHours.v1") private var maxAgeHours = 2
     @Binding var symbol: String
     @State private var setupMessage: String?
     @State private var recentSignals: [ScanResult] = []
@@ -32,7 +34,7 @@ struct RadarView: View {
             .padding(8)
             .background(TrendsColors.canvas(colorScheme))
             .navigationTitle(AppIdentity.windowTitle)
-            .task { await refreshSignals() }
+            .task(id: "\(maxResults)|\(maxAgeHours)") { await refreshSignals() }
             .onChange(of: session.lastSignal) { _, latest in
                 if latest != nil { Task { await refreshSignals(selectNewest: true) } }
             }
@@ -63,12 +65,22 @@ struct RadarView: View {
 
     private func refreshSignals(selectNewest: Bool = false) async {
         do {
+            let limit = min(max(maxResults, 5), 100)
+            let ageHours = min(max(maxAgeHours, 1), 72)
+            let cutoff = Int64(Date().timeIntervalSince1970 * 1_000) - Int64(ageHours) * 3_600_000
             let loaded = try await Task.detached(priority: .userInitiated) {
                 let store = try MarketSignalStore(url: MarketSignalStore.defaultURL())
-                return try await store.loadRecent(limit: 40)
+                return try await store.loadRecent(limit: limit, sinceEpochMillis: cutoff)
             }.value
             recentSignals = loaded
             historyError = nil
+            if let selectedSignal, !loaded.contains(where: {
+                $0.symbol == selectedSignal.symbol &&
+                $0.signalSource == selectedSignal.signalSource &&
+                $0.signalEpochMillis == selectedSignal.signalEpochMillis
+            }) {
+                self.selectedSignal = nil
+            }
             if selectNewest, let latest = loaded.first {
                 selectedSignal = latest
                 symbol = latest.symbol
