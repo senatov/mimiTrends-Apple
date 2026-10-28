@@ -378,6 +378,7 @@
 			buildPhases = (
 				A57147771864711269667DF8 /* Sources */,
 				FC91D9ABCD1FB97D2BCAE608 /* Resources */,
+				866E14004A384DFFFC942750 /* Record build date and workstation */,
 			);
 			buildRules = (
 			);
@@ -466,6 +467,30 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		866E14004A384DFFFC942750 /* Record build date and workstation */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Record build date and workstation";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/BuildInfo.plist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/zsh\nset -euo pipefail\n\n: \"${TARGET_BUILD_DIR:?Xcode must provide TARGET_BUILD_DIR}\"\n: \"${UNLOCALIZED_RESOURCES_FOLDER_PATH:?Xcode must provide UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\n\nbuild_date=\"$(/bin/date '+%Y-%m-%d')\"\nworkstation=\"$(/usr/sbin/scutil --get ComputerName 2>/dev/null || /bin/hostname -s)\"\noutput=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BuildInfo.plist\"\n\n/usr/bin/python3 - \"${output}\" \"${build_date}\" \"${workstation}\" <<'PY'\nimport plistlib\nfrom pathlib import Path\nimport sys\n\noutput = Path(sys.argv[1])\noutput.parent.mkdir(parents=True, exist_ok=True)\nwith output.open(\"wb\") as file:\n    plistlib.dump({\"BuildDate\": sys.argv[2], \"BuildWorkstation\": sys.argv[3]}, file)\nPY\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A57147771864711269667DF8 /* Sources */ = {

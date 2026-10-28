@@ -20,6 +20,13 @@ targets:
   mimiTrends-iOS:
     type: application
     supportedDestinations: [iOS, macOS]
+    postBuildScripts:
+      - path: Scripts/write_build_info.zsh
+        name: Record build date and workstation
+        outputFiles:
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/BuildInfo.plist
+        basedOnDependencyAnalysis: false
+        showEnvVars: false
     sources:
       - path: MiMiTrends/Sources
       - path: MiMiTrends/Resources

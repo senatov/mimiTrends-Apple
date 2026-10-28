@@ -4,6 +4,8 @@ This repository is the starting point for a native MiMiTrends application. iPadO
 
 The repository, Xcode project, run scheme, and native app are named `mimiTrends-iOS`. The Kotlin/JavaFX desktop app is named MiMiTrends. The native app retains its existing bundle identifier so development installations, local data, and Keychain entries keep the same app identity.
 
+The window title shows the app version, local build date, and compiling Mac's Computer Name. Xcode records the latter two in the app bundle during every build; the date and workstation are visible to anyone who receives that build.
+
 ## Current scope
 
 - A shared SwiftUI app target for iPad, iPhone, and Mac, with a connected iPad selected by the local command-line scripts.
@@ -57,6 +59,7 @@ This builds, installs, and launches the app on the single paired iPad running iP
 | `zsh Scripts/build_macos.zsh` | Build the optional unsigned macOS app. Pass `Release` for a Release configuration build. |
 | `zsh Scripts/run_macos.zsh` | Build, ad hoc sign with the Mac App Sandbox entitlements, and launch a fresh `mimiTrends-iOS.app` instance on macOS 27 or newer; verify its path, bundle ID, display name, and PID. |
 | `zsh Scripts/check_macos_sandbox.zsh` | Check the Mac target's sandbox entitlement file and Xcode build settings. |
+| `Scripts/write_build_info.zsh` | Xcode build phase that records the local build date and compiling Mac's Computer Name in the app bundle for the window title. It runs automatically during each app build. |
 | `python3 Scripts/export_desktop_bars.py SYMBOL OUTPUT` | Create a read-only, bounded minute-bar snapshot for one symbol from the desktop SQLite database. |
 | `python3 Scripts/export_desktop_watchlist.py OUTPUT` | Export up to 500 desktop watchlist symbols to a new JSON file for native import. |
 
