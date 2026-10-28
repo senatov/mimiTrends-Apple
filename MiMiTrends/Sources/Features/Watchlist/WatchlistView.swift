@@ -14,35 +14,35 @@ struct WatchlistView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Add symbol") {
-                    HStack {
-                        TextField("Ticker symbol", text: $newSymbol)
-                            .autocorrectionDisabled()
-                            .onSubmit { Task { await add() } }
-                        TrendsActionButton(title: "Add", systemImage: "plus", tint: .green) {
-                            Task { await add() }
+            List {
+                Section {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Watchlist").font(.title2.weight(.semibold))
+                        Text("\(entries.count) saved symbols on this device")
+                            .font(.caption).foregroundStyle(.secondary)
+                        ViewThatFits(in: .horizontal) {
+                            HStack(spacing: 10) { addControls }
+                            VStack(alignment: .leading, spacing: 10) { addControls }
                         }
-                            .disabled(isWorking || newSymbol.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        Text("Selecting a symbol opens Radar. The feed starts only when you tap Start there.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                        TrendsActionButton(
+                            title: "Import desktop watchlist",
+                            systemImage: "square.and.arrow.down",
+                            tint: .teal
+                        ) { showingImporter = true }
+                        .disabled(isWorking || store == nil)
+                        if let importMessage {
+                            Text(importMessage).font(.footnote).foregroundStyle(.secondary)
+                        }
+                        if let errorMessage {
+                            Text(errorMessage).font(.footnote).foregroundStyle(.red)
+                        }
                     }
-                    Text("Symbols are saved on this device. A feed starts only when you tap Start on Radar.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                    TrendsActionButton(
-                        title: "Import desktop watchlist",
-                        systemImage: "square.and.arrow.down",
-                        tint: .teal
-                    ) { showingImporter = true }
-                    .disabled(isWorking || store == nil)
-                    if let importMessage {
-                        Text(importMessage).font(.footnote).foregroundStyle(.secondary)
-                    }
-                }
-
-                if let errorMessage {
-                    Section {
-                        Text(errorMessage).foregroundStyle(.red)
-                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .trendsPanel()
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
                 }
 
                 Section("Saved symbols") {
@@ -52,22 +52,10 @@ struct WatchlistView: View {
                         ContentUnavailableView("Watchlist is empty", systemImage: "star")
                     } else {
                         ForEach(entries) { entry in
-                            HStack {
-                                Button {
-                                    onSelect(entry.symbol)
-                                } label: {
-                                    Label(entry.symbol, systemImage: "waveform.path.ecg")
-                                }
-                                .accessibilityHint("Show this symbol on Radar")
-                                Spacer()
-                                Button(role: .destructive) {
-                                    Task { await remove([entry.symbol]) }
-                                } label: {
-                                    Image(systemName: "trash").foregroundStyle(.red)
-                                }
-                                .buttonStyle(TrendsActionButtonStyle(tint: .red, compact: true))
-                                .disabled(isWorking)
-                                .accessibilityLabel("Remove \(entry.symbol)")
+                            WatchlistEntryRow(entry: entry, isWorking: isWorking) {
+                                onSelect(entry.symbol)
+                            } onRemove: {
+                                Task { await remove([entry.symbol]) }
                             }
                         }
                         .onDelete { offsets in
@@ -77,6 +65,9 @@ struct WatchlistView: View {
                     }
                 }
             }
+            .listStyle(.inset)
+            .scrollContentBackground(.hidden)
+            .background(Color.secondary.opacity(0.04))
             .navigationTitle("Watchlist")
             .task { await load() }
             .fileImporter(isPresented: $showingImporter, allowedContentTypes: [.json]) { result in
@@ -87,6 +78,19 @@ struct WatchlistView: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private var addControls: some View {
+        TextField("Ticker symbol", text: $newSymbol)
+            .textFieldStyle(.roundedBorder)
+            .autocorrectionDisabled()
+            .frame(maxWidth: 240)
+            .onSubmit { Task { await add() } }
+        TrendsActionButton(title: "Add", systemImage: "plus", tint: .green) {
+            Task { await add() }
+        }
+        .disabled(isWorking || newSymbol.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
     }
 
     private func load() async {

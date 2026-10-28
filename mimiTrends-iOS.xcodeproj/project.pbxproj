@@ -26,6 +26,7 @@
 		3302321E23FFEE3CD602AA51 /* TradableCorridorDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCF3BE1761CED7DBCC5BAA /* TradableCorridorDetectorTests.swift */; };
 		3936D9169F7B63A1C80846B1 /* FinnhubMinuteAggregator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999950D6664725733B79DD22 /* FinnhubMinuteAggregator.swift */; };
 		3F123A0039415D91512F590D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA765CB226C1925F760A165 /* ContentView.swift */; };
+		42FAEF59B9780D5828088243 /* WatchlistEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3777AAD0702BA7456930185D /* WatchlistEntryRow.swift */; };
 		4671A231FD13F03F8FA3E100 /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CB46A53EDCFB8BB3D62098 /* WatchlistView.swift */; };
 		4B1A6D2BF95116348B8361D3 /* MarketSignalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF387A2BA9D47DD94D78888 /* MarketSignalStore.swift */; };
 		5A8F07D27D8707A29BA3ADB2 /* DesktopBarSnapshotImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B648E753D1C0367B983BB3 /* DesktopBarSnapshotImporter.swift */; };
@@ -92,6 +93,7 @@
 		2CC4DCC031EFA8805E3945E6 /* DesktopBarSnapshotImporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopBarSnapshotImporterTests.swift; sourceTree = "<group>"; };
 		30711823AC7074BCF690C620 /* DesktopWatchlistImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopWatchlistImporter.swift; sourceTree = "<group>"; };
 		328B1273FBE94A7120573B78 /* ShortMoveQuoteQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortMoveQuoteQuality.swift; sourceTree = "<group>"; };
+		3777AAD0702BA7456930185D /* WatchlistEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistEntryRow.swift; sourceTree = "<group>"; };
 		38CF56457F881AAE5791EED8 /* mimiTrends-iOSTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "mimiTrends-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40AA30E102A1E7015DDD6AC6 /* RadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarView.swift; sourceTree = "<group>"; };
 		44371ED1585DAE0AFED41514 /* MarketModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketModelTests.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 		9312D5CEC7AA53B33577BF4D /* Watchlist */ = {
 			isa = PBXGroup;
 			children = (
+				3777AAD0702BA7456930185D /* WatchlistEntryRow.swift */,
 				B8CB46A53EDCFB8BB3D62098 /* WatchlistView.swift */,
 			);
 			path = Watchlist;
@@ -492,6 +495,7 @@
 				310CE5B36281A62F7DD72E77 /* TrendsActionButton.swift in Sources */,
 				66214CBD1C84ADDD412F699B /* TrendsPanel.swift in Sources */,
 				01BF49AC6898BB89FA512BE2 /* VolumeStatus.swift in Sources */,
+				42FAEF59B9780D5828088243 /* WatchlistEntryRow.swift in Sources */,
 				0CB10454D48027116BE62D30 /* WatchlistStore.swift in Sources */,
 				4671A231FD13F03F8FA3E100 /* WatchlistView.swift in Sources */,
 			);
