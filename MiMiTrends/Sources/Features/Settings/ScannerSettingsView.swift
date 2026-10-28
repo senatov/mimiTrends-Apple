@@ -1,35 +1,25 @@
 import SwiftUI
 
 struct ScannerSettingsView: View {
-    @Environment(\.colorScheme) private var colorScheme
     @AppStorage("radar.historyLimit.v1") private var maxResults = 30
     @AppStorage("radar.historyAgeHours.v1") private var maxAgeHours = 2
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Scanner").font(.title2.weight(.semibold))
-                    Text("Current radar scope and saved results")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+        SettingsPage(title: "Scanner", subtitle: "Current radar scope and saved results") { width in
+            if width >= 900 {
+                HStack(alignment: .top, spacing: 18) {
+                    resultPanel
+                    scopePanel
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
                 resultPanel
                 scopePanel
             }
-            .frame(maxWidth: 820)
-            .frame(maxWidth: .infinity)
-            .padding(14)
         }
-        .background(TrendsColors.canvas(colorScheme))
-        .navigationTitle(AppIdentity.windowTitle)
     }
 
     private var resultPanel: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label("Saved signal display", systemImage: "list.bullet.rectangle")
-                .font(.headline)
+        SettingsGroup(title: "Saved signal display") {
             Stepper(value: $maxResults, in: 5...100, step: 5) {
                 LabeledContent("Maximum results", value: maxResults.formatted())
             }
@@ -42,14 +32,10 @@ struct ScannerSettingsView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel(accent: .blue)
     }
 
     private var scopePanel: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            Label("Current scan scope", systemImage: "scope")
-                .font(.headline)
+        SettingsGroup(title: "Current scan scope") {
             LabeledContent("Source", value: "Finnhub live trades")
             LabeledContent("Symbols", value: "One selected symbol")
             LabeledContent("Activity", value: "Foreground only")
@@ -57,7 +43,5 @@ struct ScannerSettingsView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel(accent: .teal)
     }
 }

@@ -3,7 +3,6 @@ import SwiftUI
 struct CredentialEditor: View {
     let title: String
     let detail: String
-    let accent: Color
     let load: () throws -> String?
     let save: (String) throws -> Void
     let remove: () throws -> Void
@@ -18,7 +17,6 @@ struct CredentialEditor: View {
             Text(title).font(.headline)
             Text(detail).font(.footnote).foregroundStyle(.secondary)
             SecretEntryField(title: title, value: $draft)
-                .frame(maxWidth: 500)
             HStack(spacing: 8) {
                 TrendsActionButton(title: "Save", systemImage: "checkmark", tint: .green) {
                     saveDraft()
@@ -38,8 +36,13 @@ struct CredentialEditor: View {
                 Text(message).font(.footnote).foregroundStyle(.secondary)
             }
         }
+        .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel(accent: accent)
+        .background(SettingsColors.group, in: RoundedRectangle(cornerRadius: 12))
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(.primary.opacity(0.09), lineWidth: 1)
+        }
         .onAppear { reload() }
         .onDisappear { draft = "" }
     }

@@ -10,6 +10,9 @@ struct MiMiTrendsApp: App {
             ContentView()
                 .environment(radarSession)
         }
+        #if os(macOS)
+        .defaultSize(width: 1180, height: 780)
+        #endif
         .onChange(of: scenePhase) { _, phase in
             if phase != .active {
                 radarSession.stop()

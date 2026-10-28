@@ -6,7 +6,7 @@ The repository, Xcode project, run scheme, and native app are named `mimiTrends-
 
 The window title shows the app version, local build date, and compiling Mac's Computer Name. Xcode records the latter two in the app bundle during every build; the date and workstation are visible to anyone who receives that build.
 
-Settings follows the prototype's Scanner, Rapid moves, Market data providers, and Appearance sections. The native Scanner pane controls the saved Radar list's result count and maximum signal age; Rapid moves controls the active Finnhub detection thresholds. Provider credentials use Keychain-backed single-line editors with show/hide buttons. The selected symbol, chart range, tab, Settings section, appearance, and Radar panel sizes survive relaunches. See [Desktop preferences and native Settings](Docs/SettingsMigration.md) for adopted values and desktop features that are not yet active.
+Settings follows the prototype's Scanner, Rapid moves, Market data providers, and Appearance sections. The native Scanner pane controls the saved Radar list's result count and maximum signal age; Rapid moves controls the active Finnhub detection thresholds. On Mac, Settings uses system content colours and fills the detail width with two-column groups in wide windows; narrow windows stack the groups. Provider credentials use Keychain-backed single-line editors with show/hide buttons. The selected symbol, chart range, tab, Settings section, appearance, and Radar panel sizes survive relaunches. See [Desktop preferences and native Settings](Docs/SettingsMigration.md) for adopted values and desktop features that are not yet active.
 
 ## Current scope
 

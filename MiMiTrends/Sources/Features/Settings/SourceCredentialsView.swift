@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SourceCredentialsView: View {
     @Environment(RadarSession.self) private var radarSession
-    @Environment(\.colorScheme) private var colorScheme
     @State private var accounts: [String] = []
     @State private var newSource = ""
     @State private var newSecret = ""
@@ -11,54 +10,36 @@ struct SourceCredentialsView: View {
     private let webhookAccount = "Finnhub webhook secret"
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Market data providers").font(.title2.weight(.semibold))
-                    Text("Connected source and locally stored credentials")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+        SettingsPage(title: "Market data providers", subtitle: "Connected source and locally stored credentials") { width in
+            if width >= 900 {
+                HStack(alignment: .top, spacing: 18) {
+                    connectionPanel
+                    additionalSourcesPanel
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
                 connectionPanel
-                CredentialEditor(
-                    title: "Finnhub API key",
-                    detail: "Used by the active one-symbol trade feed and US bid/ask checks.",
-                    accent: .teal,
-                    load: { try FinnhubCredentialStore.load() },
-                    save: { try FinnhubCredentialStore.save($0) },
-                    remove: {
-                        try FinnhubCredentialStore.delete()
-                        radarSession.stop()
-                    }
-                )
-                CredentialEditor(
-                    title: webhookAccount,
-                    detail: "Stored for a future webhook integration. The current foreground feed does not use it.",
-                    accent: .indigo,
-                    load: { try ProviderCredentialStore.load(webhookAccount) },
-                    save: { try ProviderCredentialStore.save($0, for: webhookAccount) },
-                    remove: { try ProviderCredentialStore.delete(webhookAccount) }
-                )
                 additionalSourcesPanel
-                ForEach(accounts.filter { $0 != webhookAccount }, id: \.self) { account in
-                    CredentialEditor(
-                        title: account,
-                        detail: "Stored locally for a future provider adapter; not used by the current feed.",
-                        accent: .blue,
-                        load: { try ProviderCredentialStore.load(account) },
-                        save: { try ProviderCredentialStore.save($0, for: account) },
-                        remove: { try ProviderCredentialStore.delete(account) },
-                        onRemove: refreshAccounts
-                    )
-                }
             }
-            .frame(maxWidth: 820)
-            .frame(maxWidth: .infinity)
-            .padding(14)
+            if width >= 900 {
+                HStack(alignment: .top, spacing: 18) {
+                    finnhubKeyEditor
+                    webhookEditor
+                }
+            } else {
+                finnhubKeyEditor
+                webhookEditor
+            }
+            ForEach(accounts.filter { $0 != webhookAccount }, id: \.self) { account in
+                CredentialEditor(
+                    title: account,
+                    detail: "Stored locally for a future provider adapter; not used by the current feed.",
+                    load: { try ProviderCredentialStore.load(account) },
+                    save: { try ProviderCredentialStore.save($0, for: account) },
+                    remove: { try ProviderCredentialStore.delete(account) },
+                    onRemove: refreshAccounts
+                )
+            }
         }
-        .background(TrendsColors.canvas(colorScheme))
-        .navigationTitle(AppIdentity.windowTitle)
         .onAppear { refreshAccounts() }
         .onDisappear {
             newSource = ""
@@ -66,31 +47,47 @@ struct SourceCredentialsView: View {
         }
     }
 
+    private var finnhubKeyEditor: some View {
+        CredentialEditor(
+            title: "Finnhub API key",
+            detail: "Used by the active one-symbol trade feed and US bid/ask checks.",
+            load: { try FinnhubCredentialStore.load() },
+            save: { try FinnhubCredentialStore.save($0) },
+            remove: {
+                try FinnhubCredentialStore.delete()
+                radarSession.stop()
+            }
+        )
+    }
+
+    private var webhookEditor: some View {
+        CredentialEditor(
+            title: webhookAccount,
+            detail: "Stored for a future webhook integration. The current foreground feed does not use it.",
+            load: { try ProviderCredentialStore.load(webhookAccount) },
+            save: { try ProviderCredentialStore.save($0, for: webhookAccount) },
+            remove: { try ProviderCredentialStore.delete(webhookAccount) }
+        )
+    }
+
     private var connectionPanel: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            Label("Finnhub", systemImage: "antenna.radiowaves.left.and.right")
-                .font(.headline)
+        SettingsGroup(title: "Finnhub") {
             LabeledContent("Live trades", value: "ws.finnhub.io")
             LabeledContent("US bid/ask", value: "api.finnhub.io")
             Text("These endpoints belong to the current adapter. Tradegate, Euronext, Yahoo Finance, Lang & Schwarz, and external chart URLs from the desktop app are not connected here yet.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel(accent: .teal)
     }
 
     private var additionalSourcesPanel: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Additional source credential").font(.headline)
+        SettingsGroup(title: "Additional source credential") {
             Text("Keep an API key or token for a planned source. Saving it does not enable a provider or send it to a server.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             TextField("Source name", text: $newSource)
                 .textFieldStyle(.roundedBorder)
-                .frame(maxWidth: 500)
             SecretEntryField(title: "API key or token", value: $newSecret)
-                .frame(maxWidth: 500)
             TrendsActionButton(title: "Save source credential", systemImage: "key.fill") {
                 saveAdditional()
             }
@@ -100,8 +97,6 @@ struct SourceCredentialsView: View {
                 Text(message).font(.footnote).foregroundStyle(.secondary)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .trendsPanel(accent: .cyan)
     }
 
     private func saveAdditional() {
