@@ -32,8 +32,10 @@ struct ContentView: View {
         .toolbar {
             #if os(macOS)
             ToolbarItem(placement: .navigation) {
-                Text(AppIdentity.windowTitle)
-                    .font(.headline)
+                HeaderBuildBadge()
+            }
+            ToolbarItem(placement: .automatic) {
+                HeaderResourceBadges()
             }
             #endif
         }
