@@ -84,14 +84,15 @@ struct RadarView: View {
     private func startFeed() {
         setupMessage = nil
         do {
+            let scanSettings = RadarScanPreferencesStore.load()
             guard let key = try FinnhubCredentialStore.load() else {
                 setupMessage = FinnhubStreamError.missingKey.localizedDescription
                 return
             }
             let requestedSymbol = symbol
-            session.start { [session] runID in
+            session.start { [session, scanSettings] runID in
                 do {
-                    let pipeline = try FinnhubRadarPipeline()
+                    let pipeline = try FinnhubRadarPipeline(settings: scanSettings)
                     let bidAskSampler = FinnhubBidAskSampler()
                     try await FinnhubTradeStream().run(apiKey: key, symbol: requestedSymbol) {
                         await session.markSubscribed(runID: runID)

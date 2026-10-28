@@ -6,7 +6,7 @@ struct RadarChartPreview: View {
     let refreshID: Int
 
     @State private var allBars: [MinuteBar] = []
-    @State private var range: RadarChartRange = .latest
+    @AppStorage("chart.range.v1") private var rangeRaw = RadarChartRange.oneDay.rawValue
     @State private var errorMessage: String?
     @State private var isLoading = false
 
@@ -15,6 +15,14 @@ struct RadarChartPreview: View {
             allBars: allBars, range: range,
             nowEpochSeconds: Int64(Date().timeIntervalSince1970)
         )
+    }
+
+    private var range: RadarChartRange {
+        RadarChartRange(rawValue: rangeRaw) ?? .oneDay
+    }
+
+    private var rangeSelection: Binding<RadarChartRange> {
+        Binding(get: { range }, set: { rangeRaw = $0.rawValue })
     }
 
     var body: some View {
@@ -40,7 +48,7 @@ struct RadarChartPreview: View {
             }
             Divider()
             HStack {
-                Picker("Range", selection: $range) {
+                Picker("Range", selection: rangeSelection) {
                     ForEach(RadarChartRange.allCases) { option in
                         Text(option.title).tag(option)
                     }

@@ -4,9 +4,9 @@ import UniformTypeIdentifiers
 struct MarketChartView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @State private var symbol = "AAPL"
-    @State private var selectedRange: RadarChartRange = .threeHours
-    @State private var loadedRange: RadarChartRange = .threeHours
+    @AppStorage("selected.symbol.v1") private var symbol = "ORCL"
+    @AppStorage("chart.range.v1") private var rangeRaw = RadarChartRange.oneDay.rawValue
+    @State private var loadedRange: RadarChartRange = .oneDay
     @State private var bars: [MinuteBar] = []
     @State private var loadedSymbol = ""
     @State private var isLoading = false
@@ -15,6 +15,14 @@ struct MarketChartView: View {
     @State private var importMessage: String?
     @State private var errorMessage: String?
     @State private var loadRequestID = 0
+
+    private var selectedRange: RadarChartRange {
+        RadarChartRange(rawValue: rangeRaw) ?? .oneDay
+    }
+
+    private var rangeSelection: Binding<RadarChartRange> {
+        Binding(get: { selectedRange }, set: { rangeRaw = $0.rawValue })
+    }
 
     var body: some View {
         NavigationStack {
@@ -30,7 +38,7 @@ struct MarketChartView: View {
             .background(TrendsColors.canvas(colorScheme))
             .navigationTitle(AppIdentity.windowTitle)
             .task { await loadChart() }
-            .onChange(of: selectedRange) { _, _ in Task { await loadChart() } }
+            .onChange(of: rangeRaw) { _, _ in Task { await loadChart() } }
             .fileImporter(
                 isPresented: $showingImporter,
                 allowedContentTypes: [UTType(filenameExtension: "sqlite") ?? .data]
@@ -55,7 +63,7 @@ struct MarketChartView: View {
                     VStack(alignment: .leading, spacing: 10) { actionControls }
                 }
             }
-            Picker("Range", selection: $selectedRange) {
+            Picker("Range", selection: rangeSelection) {
                 ForEach(RadarChartRange.allCases) { range in
                     Text(range.title).tag(range)
                 }
@@ -181,7 +189,7 @@ struct MarketChartView: View {
                 at: url, into: MarketBarStore.defaultURL()
             )
             symbol = summary.symbol
-            selectedRange = .latest
+            rangeRaw = RadarChartRange.latest.rawValue
             importMessage = "Imported \(summary.barCount) bars for \(summary.symbol); \(summary.changedCount) saved or updated."
             await loadChart()
         } catch {

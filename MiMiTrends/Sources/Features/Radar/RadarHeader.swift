@@ -53,9 +53,12 @@ struct RadarHeader: View {
     }
 
     private var statusLabel: some View {
-        Label(statusText, systemImage: session.isSubscribed ? "checkmark.circle.fill" : "circle.fill")
+        Label("Finnhub · \(statusText)", systemImage: session.isSubscribed ? "checkmark.circle.fill" : "circle.fill")
             .font(.caption.weight(.medium))
             .foregroundStyle(session.isSubscribed ? .green : .secondary)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 6)
+            .background(.thinMaterial, in: Capsule())
             .accessibilityLabel("Finnhub: \(statusText)")
     }
 
@@ -63,10 +66,11 @@ struct RadarHeader: View {
         HStack(spacing: 10) {
             Label("\(session.tradeCount) trades", systemImage: "chart.line.uptrend.xyaxis")
             Label("\(session.completedBarsStored) bars", systemImage: "chart.bar")
-            Text("Foreground · 1 symbol")
+            Text("1 symbol · foreground only")
         }
         .font(.caption)
         .foregroundStyle(.secondary)
+        .monospacedDigit()
         .lineLimit(1)
     }
 }

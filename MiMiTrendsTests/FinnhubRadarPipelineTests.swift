@@ -3,6 +3,27 @@ import XCTest
 @testable import MiMiTrends
 
 final class FinnhubRadarPipelineTests: XCTestCase {
+    func testConfiguredRiseThresholdChangesPublishedSignals() async throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("mimitrends-threshold-tests-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: directory) }
+        var settings = RadarScanPreferences()
+        settings.risePercent = 2.0
+        let pipeline = try FinnhubRadarPipeline(
+            databaseURL: directory.appendingPathComponent("market.db"), settings: settings
+        )
+        var last: FinnhubRadarPipeline.Update?
+        for (second, price) in [(12_000, 100.0), (12_060, 100.1),
+                                (12_120, 101.8), (12_180, 100.4)] {
+            last = try await pipeline.accept(
+                TradeTick(symbol: "RISE", price: price,
+                          timestampMillis: Int64(second) * 1_000 + 1, volume: 1_000),
+                nowEpochSeconds: Int64(second)
+            )
+        }
+        XCTAssertNil(last?.signal)
+    }
+
     func testTradesBecomeStoredBarsAndRapidRiseSignal() async throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("mimitrends-pipeline-tests-\(UUID().uuidString)")

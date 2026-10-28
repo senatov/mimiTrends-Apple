@@ -4,15 +4,17 @@ struct FinnhubRadarPipeline: Sendable {
     private let aggregator = FinnhubMinuteAggregator()
     private let store: MarketBarStore
     private let signalStore: MarketSignalStore
+    private let settings: RadarScanPreferences
 
-    init(databaseURL: URL) throws {
+    init(databaseURL: URL, settings: RadarScanPreferences = RadarScanPreferences()) throws {
+        self.settings = settings.validated
         store = try MarketBarStore(url: databaseURL)
         signalStore = try MarketSignalStore(url: databaseURL.deletingLastPathComponent()
             .appendingPathComponent("mimitrends-signals.db"))
     }
 
-    init() throws {
-        try self.init(databaseURL: MarketBarStore.defaultURL())
+    init(settings: RadarScanPreferences = RadarScanPreferences()) throws {
+        try self.init(databaseURL: MarketBarStore.defaultURL(), settings: settings)
     }
 
     func accept(
@@ -28,14 +30,18 @@ struct FinnhubRadarPipeline: Sendable {
         try Task.checkCancellation()
         let stored = try await store.upsert(bar)
         let recent = try await store.loadMinuteBars(
-            symbol: trade.symbol, fromEpochSeconds: nowEpochSeconds - 10_800
+            symbol: trade.symbol,
+            fromEpochSeconds: nowEpochSeconds - Int64(max(180, settings.sustainedMoveWindowMinutes)) * 60
         )
         let candidate = RapidCrashDetector.detect(
-            symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
+            symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds,
+            settings: settings.rapidCrash
         ) ?? RapidRiseDetector.detect(
-            symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
+            symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds,
+            settings: settings.rapidRise
         ) ?? SustainedMoveDetector.detect(
-            symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
+            symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds,
+            settings: settings.sustainedMove
         ) ?? TradableCorridorDetector.detect(
             symbol: trade.symbol, bars: recent, nowEpochSeconds: nowEpochSeconds
         )

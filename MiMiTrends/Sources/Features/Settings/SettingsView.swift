@@ -1,79 +1,93 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(RadarSession.self) private var radarSession
-    @State private var apiKeyDraft = ""
-    @State private var hasStoredKey = false
-    @State private var credentialMessage: String?
+    @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("appearance.theme.v1") private var theme = "light"
+    @State private var finnhubConfigured = false
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Finnhub") {
-                    SecureField("API key", text: $apiKeyDraft)
-                    HStack {
-                        TrendsActionButton(title: "Save key", systemImage: "key.fill") { saveKey() }
-                            .disabled(apiKeyDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                        if hasStoredKey {
-                            TrendsActionButton(
-                                title: "Remove key", systemImage: "trash",
-                                tint: .red, role: .destructive
-                            ) { removeKey() }
-                        }
+            ScrollView {
+                VStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("Settings").font(.title2.weight(.semibold))
+                        Text("Sources, signal rules, and display preferences")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                     }
-                    Text(hasStoredKey ? "API key stored in Keychain on this device." : "No API key stored.")
-                        .foregroundStyle(.secondary)
-                    if let credentialMessage {
-                        Text(credentialMessage).foregroundStyle(.red)
-                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    sourcesPanel
+                    detectionPanel
+                    appearancePanel
+                    aboutPanel
                 }
-
-                Section("Scanning") {
-                    Text("Scanning stops whenever the app is no longer active.")
-                        .foregroundStyle(.secondary)
-                }
-
-                Section("About") {
-                    LabeledContent(
-                        "Version",
-                        value: AppIdentity.version
-                    )
-                    LabeledContent("Platforms", value: "iOS 27 · macOS 27")
-                }
+                .frame(maxWidth: 820)
+                .frame(maxWidth: .infinity)
+                .padding(14)
             }
+            .background(TrendsColors.canvas(colorScheme))
             .navigationTitle(AppIdentity.windowTitle)
-            .onAppear { refreshKeyStatus() }
-            .onDisappear { apiKeyDraft = "" }
+            .onAppear { finnhubConfigured = (try? FinnhubCredentialStore.load()) != nil }
         }
     }
 
-    private func refreshKeyStatus() {
-        do {
-            hasStoredKey = try FinnhubCredentialStore.load() != nil
-            credentialMessage = nil
-        } catch {
-            credentialMessage = error.localizedDescription
+    private var sourcesPanel: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("Data sources", systemImage: "antenna.radiowaves.left.and.right")
+                .font(.headline)
+            NavigationLink {
+                SourceCredentialsView()
+            } label: {
+                Label("Manage keys and tokens", systemImage: "key.horizontal")
+            }
+            .buttonStyle(TrendsActionButtonStyle())
+            Text(finnhubConfigured ? "Finnhub API key configured on this device." : "Finnhub API key not configured.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trendsPanel(accent: .teal)
     }
 
-    private func saveKey() {
-        do {
-            try FinnhubCredentialStore.save(apiKeyDraft)
-            apiKeyDraft = ""
-            refreshKeyStatus()
-        } catch {
-            credentialMessage = error.localizedDescription
+    private var detectionPanel: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Signal detection").font(.headline)
+            NavigationLink {
+                RadarScanSettingsView()
+            } label: {
+                Label("Rapid-move thresholds", systemImage: "slider.horizontal.3")
+            }
+            .buttonStyle(TrendsActionButtonStyle())
+            Text("The current feed scans one symbol through Finnhub and stops outside the foreground. Desktop provider switches, market universes, anomaly settings, and polling intervals are not active here yet.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trendsPanel(accent: .blue)
     }
 
-    private func removeKey() {
-        do {
-            try FinnhubCredentialStore.delete()
-            radarSession.stop()
-            apiKeyDraft = ""
-            refreshKeyStatus()
-        } catch {
-            credentialMessage = error.localizedDescription
+    private var appearancePanel: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Appearance").font(.headline)
+            Picker("Theme", selection: $theme) {
+                Text("System").tag("system")
+                Text("Light").tag("light")
+                Text("Dark").tag("dark")
+            }
+            .pickerStyle(.segmented)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trendsPanel(accent: .indigo)
     }
+
+    private var aboutPanel: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("About").font(.headline)
+            LabeledContent("Version", value: AppIdentity.version)
+            LabeledContent("Platforms", value: "iOS 27 · macOS 27")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trendsPanel(accent: .cyan)
+    }
+
 }

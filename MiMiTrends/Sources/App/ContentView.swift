@@ -2,31 +2,33 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(RadarSession.self) private var radarSession
-    @State private var selectedTab: AppTab = .radar
-    @State private var radarSymbol = "AAPL"
+    @AppStorage("selected.tab.v1") private var selectedTab = "radar"
+    @AppStorage("selected.symbol.v1") private var radarSymbol = "ORCL"
+    @AppStorage("appearance.theme.v1") private var theme = "light"
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            Tab("Radar", systemImage: "waveform.path.ecg", value: .radar) {
+            Tab("Radar", systemImage: "waveform.path.ecg", value: "radar") {
                 RadarView(symbol: $radarSymbol)
             }
 
-            Tab("Watchlist", systemImage: "star", value: .watchlist) {
+            Tab("Watchlist", systemImage: "star", value: "watchlist") {
                 WatchlistView { symbol in
                     radarSession.stop()
                     radarSymbol = symbol
-                    selectedTab = .radar
+                    selectedTab = "radar"
                 }
             }
 
-            Tab("Chart", systemImage: "chart.xyaxis.line", value: .chart) {
+            Tab("Chart", systemImage: "chart.xyaxis.line", value: "chart") {
                 MarketChartView()
             }
 
-            Tab("Settings", systemImage: "gearshape", value: .settings) {
+            Tab("Settings", systemImage: "gearshape", value: "settings") {
                 SettingsView()
             }
         }
+        .preferredColorScheme(theme == "dark" ? .dark : theme == "light" ? .light : nil)
         .toolbar {
             #if os(macOS)
             ToolbarItem(placement: .navigation) {
@@ -36,8 +38,4 @@ struct ContentView: View {
             #endif
         }
     }
-}
-
-private enum AppTab: Hashable {
-    case radar, watchlist, chart, settings
 }
