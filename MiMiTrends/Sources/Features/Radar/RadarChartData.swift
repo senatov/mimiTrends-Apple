@@ -41,12 +41,15 @@ struct RadarChartData {
     let fastEMA: [RadarChartPoint]
     let slowEMA: [RadarChartPoint]
 
-    init(allBars: [MinuteBar], range: RadarChartRange, nowEpochSeconds: Int64) {
+    init(
+        allBars: [MinuteBar], range: RadarChartRange,
+        nowEpochSeconds: Int64, latestLimit: Int = 60
+    ) {
         let selected: [MinuteBar]
         if let seconds = range.seconds {
             selected = allBars.filter { $0.minuteEpochSeconds >= nowEpochSeconds - seconds }
         } else {
-            selected = Array(allBars.suffix(60))
+            selected = Array(allBars.suffix(latestLimit))
         }
         bars = selected
         fastEMA = Self.ema(allBars, visibleFrom: selected.first?.minuteEpochSeconds, period: 9)

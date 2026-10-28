@@ -29,7 +29,7 @@ struct RadarChartPlot: View {
                     LineMark(
                         x: .value("Minute", point.date),
                         y: .value("EMA 9", point.value),
-                        series: .value("EMA 9 segment", point.segment)
+                        series: .value("Overlay segment", "EMA 9-\(point.segment)")
                     )
                     .foregroundStyle(.blue)
                     .lineStyle(StrokeStyle(lineWidth: 1.5))
@@ -38,7 +38,7 @@ struct RadarChartPlot: View {
                     LineMark(
                         x: .value("Minute", point.date),
                         y: .value("EMA 21", point.value),
-                        series: .value("EMA 21 segment", point.segment)
+                        series: .value("Overlay segment", "EMA 21-\(point.segment)")
                     )
                     .foregroundStyle(.orange)
                     .lineStyle(StrokeStyle(lineWidth: 1.5))

@@ -25,6 +25,12 @@ final class RadarChartDataTests: XCTestCase {
         XCTAssertEqual(data.bars.first?.minuteEpochSeconds, 21 * 60)
         XCTAssertEqual(data.fastEMA.first?.minuteEpochSeconds, 21 * 60)
         XCTAssertGreaterThan(data.fastEMA.first?.value ?? 0, 1)
+
+        let fullChart = RadarChartData(
+            allBars: bars, range: .latest,
+            nowEpochSeconds: 10_000, latestLimit: 360
+        )
+        XCTAssertEqual(fullChart.bars.count, 80)
     }
 
     func testRecentRangeAndGapSegments() {
