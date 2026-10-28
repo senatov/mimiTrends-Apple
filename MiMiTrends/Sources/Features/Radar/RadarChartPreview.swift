@@ -1,4 +1,3 @@
-import Charts
 import SwiftUI
 
 struct RadarChartPreview: View {
@@ -6,9 +5,17 @@ struct RadarChartPreview: View {
     let signal: ScanResult?
     let refreshID: Int
 
-    @State private var bars: [MinuteBar] = []
+    @State private var allBars: [MinuteBar] = []
+    @State private var range: RadarChartRange = .latest
     @State private var errorMessage: String?
     @State private var isLoading = false
+
+    private var chartData: RadarChartData {
+        RadarChartData(
+            allBars: allBars, range: range,
+            nowEpochSeconds: Int64(Date().timeIntervalSince1970)
+        )
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -22,6 +29,17 @@ struct RadarChartPreview: View {
                 }
             }
             Divider()
+            HStack {
+                Picker("Range", selection: $range) {
+                    ForEach(RadarChartRange.allCases) { option in
+                        Text(option.title).tag(option)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                .frame(maxWidth: 350)
+                Spacer(minLength: 0)
+            }
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(symbol.isEmpty ? "No symbol selected" : symbol)
                     .font(.title3.weight(.semibold))
@@ -31,7 +49,7 @@ struct RadarChartPreview: View {
                     Text("\(signal.windowChangePercent.formatted(.number.precision(.fractionLength(2))))%")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(signal.windowChangePercent < 0 ? .red : .green)
-                } else if let last = bars.last {
+                } else if let last = chartData.bars.last {
                     Text(last.close.formatted())
                         .font(.title3.monospacedDigit())
                     Text("latest saved close")
@@ -45,20 +63,17 @@ struct RadarChartPreview: View {
             } else if let errorMessage {
                 Text(errorMessage).foregroundStyle(.red)
                     .frame(maxWidth: .infinity, minHeight: 180)
-            } else if bars.isEmpty {
+            } else if chartData.bars.isEmpty {
                 ContentUnavailableView(
-                    "No saved bars for \(symbol.isEmpty ? "this symbol" : symbol)",
+                    "No saved bars in \(range.title)",
                     systemImage: "chart.xyaxis.line",
-                    description: Text("Start a live feed or import a desktop bar snapshot in Chart.")
+                    description: Text("Start a live feed, import a desktop snapshot in Chart, or choose Latest for older saved bars.")
                 )
                 .frame(maxWidth: .infinity, minHeight: 180)
             } else {
-                candleChart
-                if bars.contains(where: { $0.volumeStatus.isReliable }) {
-                    volumeChart
-                }
-                if let last = bars.last {
-                    Text("\(bars.count) saved bars · latest \(Date(timeIntervalSince1970: TimeInterval(last.minuteEpochSeconds)).formatted(.dateTime.month().day().hour().minute())) · source currency · gaps are not filled")
+                RadarChartPlot(data: chartData, symbol: symbol)
+                if let last = chartData.bars.last {
+                    Text("\(chartData.bars.count) saved bars · latest \(Date(timeIntervalSince1970: TimeInterval(last.minuteEpochSeconds)).formatted(.dateTime.month().day().hour().minute())) · source currency · gaps are not filled")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -69,45 +84,10 @@ struct RadarChartPreview: View {
         .task(id: "\(symbol)|\(refreshID)") { await loadBars() }
     }
 
-    private var candleChart: some View {
-        Chart(bars, id: \.minuteEpochSeconds) { bar in
-            let time = Date(timeIntervalSince1970: TimeInterval(bar.minuteEpochSeconds))
-            let rising = bar.close >= bar.open
-            RuleMark(
-                x: .value("Minute", time),
-                yStart: .value("Low", bar.low),
-                yEnd: .value("High", bar.high)
-            )
-            .foregroundStyle(rising ? .green : .red)
-            RectangleMark(
-                xStart: .value("Start", time.addingTimeInterval(-20)),
-                xEnd: .value("End", time.addingTimeInterval(20)),
-                yStart: .value("Open", bar.open),
-                yEnd: .value("Close", bar.close)
-            )
-            .foregroundStyle(rising ? .green : .red)
-        }
-        .chartYScale(domain: priceDomain)
-        .frame(height: 235)
-        .accessibilityLabel("Saved minute candle chart for \(symbol)")
-    }
-
-    private var volumeChart: some View {
-        Chart(bars.filter { $0.volumeStatus.isReliable }, id: \.minuteEpochSeconds) { bar in
-            BarMark(
-                x: .value("Minute", Date(timeIntervalSince1970: TimeInterval(bar.minuteEpochSeconds))),
-                y: .value("Reported volume", bar.volume)
-            )
-            .foregroundStyle(bar.close >= bar.open ? .green.opacity(0.55) : .red.opacity(0.55))
-        }
-        .frame(height: 75)
-        .accessibilityLabel("Reported minute volume for \(symbol)")
-    }
-
     private func loadBars() async {
         let requestedSymbol = symbol.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         guard !requestedSymbol.isEmpty else {
-            bars = []
+            allBars = []
             return
         }
         isLoading = true
@@ -119,23 +99,17 @@ struct RadarChartPreview: View {
                     symbol: requestedSymbol,
                     fromEpochSeconds: 0,
                     throughEpochSeconds: Int64(Date().timeIntervalSince1970),
-                    limit: 60
+                    limit: 360
                 )
             }.value
             guard !Task.isCancelled else { return }
-            bars = loaded
+            allBars = loaded
         } catch {
             guard !Task.isCancelled else { return }
-            bars = []
+            allBars = []
             errorMessage = error.localizedDescription
         }
         isLoading = false
     }
 
-    private var priceDomain: ClosedRange<Double> {
-        let low = bars.map(\.low).min() ?? 0
-        let high = bars.map(\.high).max() ?? 1
-        let padding = max((high - low) * 0.08, high * 0.002)
-        return max(0, low - padding)...(high + padding)
-    }
 }
