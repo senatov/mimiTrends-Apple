@@ -36,6 +36,12 @@ struct DiscoveryRefreshStatus: Sendable {
     let nextAttemptAtMillis: Int64
 
     var isAvailable: Bool { snapshot != nil }
+
+    func hasFreshSnapshot(atMillis nowMillis: Int64) -> Bool {
+        guard lastAttemptSucceeded, let snapshot else { return false }
+        let age = nowMillis - snapshot.refreshedAtMillis
+        return age >= 0 && age < 30 * 60_000
+    }
 }
 
 actor DiscoveryRefreshCache {

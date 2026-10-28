@@ -1,7 +1,7 @@
 import Foundation
 
 enum DiscoveryCandidateSelector {
-    static let maximumInputRows = 1_000
+    static let maximumInputRows = 2_000
     static let maximumCandidates = maximumInputRows
 
     static func select(_ input: [DiscoveryCandidate], sourceID: String) throws -> [DiscoveryCandidate] {
@@ -14,10 +14,7 @@ enum DiscoveryCandidateSelector {
 
         let groups = DiscoveryCategory.selectionOrder.map { category in
             input.filter { $0.category == category }
-                .sorted {
-                    if $0.rank != $1.rank { return $0.rank < $1.rank }
-                    return $0.instrumentID < $1.instrumentID
-                }
+                .sorted { sortKey($0) < sortKey($1) }
         }
         var selected: [DiscoveryCandidate] = []
         var seen = Set<String>()
@@ -32,5 +29,11 @@ enum DiscoveryCandidateSelector {
             rank += 1
         }
         return selected
+    }
+
+    private static func sortKey(_ candidate: DiscoveryCandidate) -> (Int, Int, Int, String) {
+        let period = candidate.origin.flatMap { DiscoveryRankingPeriod.allCases.firstIndex(of: $0.period) } ?? 0
+        let page = candidate.origin.flatMap { DiscoveryRankingPage.allCases.firstIndex(of: $0.page) } ?? 0
+        return (candidate.rank, period, page, candidate.instrumentID)
     }
 }

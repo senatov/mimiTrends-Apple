@@ -1,10 +1,10 @@
 import Foundation
 
 enum DiscoveryCategory: String, Codable, CaseIterable, Sendable {
-    case top, flop, mostTraded, gapUp, gapDown, reversalUp, reversalDown, highRange
+    case top, flop, mostTraded, trending, gapUp, gapDown, reversalUp, reversalDown, highRange
 
     static let selectionOrder: [Self] = [
-        .flop, .mostTraded, .top, .gapDown, .gapUp,
+        .flop, .mostTraded, .trending, .top, .gapDown, .gapUp,
         .reversalDown, .reversalUp, .highRange
     ]
 }
@@ -31,6 +31,19 @@ struct DiscoveryCandidate: Codable, Equatable, Sendable {
     let rank: Int
     let observedAtMillis: Int64
     let resolved: ResolvedMarketSymbol?
+    let origin: DiscoveryRankingOrigin?
+
+    init(sourceID: String, instrumentID: String, category: DiscoveryCategory,
+         rank: Int, observedAtMillis: Int64, resolved: ResolvedMarketSymbol?,
+         origin: DiscoveryRankingOrigin? = nil) {
+        self.sourceID = sourceID
+        self.instrumentID = instrumentID
+        self.category = category
+        self.rank = rank
+        self.observedAtMillis = observedAtMillis
+        self.resolved = resolved
+        self.origin = origin
+    }
 
     var identity: String { "\(sourceID):\(instrumentID)" }
     var isScanReady: Bool { resolved != nil }
@@ -43,6 +56,12 @@ struct DiscoveryCandidate: Codable, Equatable, Sendable {
             throw DiscoveryDataError.invalidCandidate
         }
         try resolved?.validate()
+        if let origin {
+            guard origin.page.category == category, origin.period.isValid(for: origin.page),
+                  rank <= DiscoveryRankingBatch.maximumRows else {
+                throw DiscoveryDataError.invalidCandidate
+            }
+        }
     }
 }
 

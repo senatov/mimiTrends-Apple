@@ -35,4 +35,14 @@ final class DiscoverySnapshotStoreTests: XCTestCase {
             // The caller can keep its previous in-memory snapshot.
         }
     }
+
+    func testLegacyCandidateWithoutRankingOriginStillDecodes() throws {
+        let json = """
+        {"sourceID":"fixture","instrumentID":"saved","category":"top",\
+        "rank":1,"observedAtMillis":1000,"resolved":null}
+        """
+        let candidate = try JSONDecoder().decode(DiscoveryCandidate.self, from: Data(json.utf8))
+        XCTAssertNil(candidate.origin)
+        XCTAssertNoThrow(try candidate.validate())
+    }
 }

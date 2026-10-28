@@ -11,6 +11,7 @@ final class DiscoveryRefreshCacheTests: XCTestCase {
         let first = await cache.refreshIfNeeded()
         XCTAssertEqual(first.snapshot?.candidates.first?.instrumentID, "first")
         XCTAssertTrue(first.lastAttemptSucceeded)
+        XCTAssertTrue(first.hasFreshSnapshot(atMillis: clock.now()))
         clock.advance(30 * 60_000 - 1)
         _ = await cache.refreshIfNeeded()
         let beforeBoundary = await source.loadCount
@@ -35,6 +36,7 @@ final class DiscoveryRefreshCacheTests: XCTestCase {
         let failed = await cache.refreshIfNeeded()
         XCTAssertEqual(failed.snapshot?.candidates.first?.instrumentID, "first")
         XCTAssertFalse(failed.lastAttemptSucceeded)
+        XCTAssertFalse(failed.hasFreshSnapshot(atMillis: clock.now()))
         XCTAssertEqual(failed.nextAttemptAtMillis, clock.now() + 5 * 60_000)
         clock.advance(5 * 60_000 - 1)
         _ = await cache.refreshIfNeeded()
@@ -84,6 +86,17 @@ final class DiscoveryRefreshCacheTests: XCTestCase {
         let status = await cache.refreshIfNeeded()
         XCTAssertEqual(status.snapshot, saved)
         XCTAssertFalse(status.lastAttemptSucceeded)
+        XCTAssertFalse(status.hasFreshSnapshot(atMillis: 1_000))
+    }
+
+    func testFreshnessExpiresAtRefreshBoundary() {
+        let snapshot = DiscoverySnapshot(sourceID: "fixture", refreshedAtMillis: 1_000, candidates: [])
+        let status = DiscoveryRefreshStatus(
+            snapshot: snapshot, lastAttemptSucceeded: true, nextAttemptAtMillis: 1_801_000
+        )
+        XCTAssertTrue(status.hasFreshSnapshot(atMillis: 1_800_999))
+        XCTAssertFalse(status.hasFreshSnapshot(atMillis: 1_801_000))
+        XCTAssertFalse(status.hasFreshSnapshot(atMillis: 999))
     }
 }
 

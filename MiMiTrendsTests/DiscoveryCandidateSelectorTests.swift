@@ -18,7 +18,7 @@ final class DiscoveryCandidateSelectorTests: XCTestCase {
         let rows = (1...50).map { candidate("instrument-\($0)", .top, rank: $0) }
         XCTAssertEqual(try DiscoveryCandidateSelector.select(rows, sourceID: "fixture").count, 50)
         XCTAssertThrowsError(try DiscoveryCandidateSelector.select(
-            Array(repeating: rows[0], count: 1_001), sourceID: "fixture"
+            Array(repeating: rows[0], count: 2_001), sourceID: "fixture"
         ))
     }
 
