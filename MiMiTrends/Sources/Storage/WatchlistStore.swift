@@ -1,11 +1,16 @@
 import Foundation
 import SQLite3
 
-struct WatchlistEntry: Identifiable, Equatable, Sendable {
+struct WatchlistEntry: Codable, Identifiable, Equatable, Sendable {
     let symbol: String
     let addedAtMillis: Int64
 
     var id: String { symbol }
+
+    enum CodingKeys: String, CodingKey {
+        case symbol
+        case addedAtMillis = "added_at"
+    }
 }
 
 actor WatchlistStore {
@@ -84,6 +89,28 @@ actor WatchlistStore {
         try bind(normalized, to: 1, in: statement)
         guard sqlite3_step(statement) == SQLITE_DONE else {
             throw WatchlistStoreError.databaseUnavailable
+        }
+    }
+
+    func importEntries(_ entries: [WatchlistEntry]) throws -> Int {
+        guard entries.count <= 500,
+              entries.allSatisfy({
+                  $0.addedAtMillis > 0 && (try? Self.normalize($0.symbol)) == $0.symbol
+              }),
+              Set(entries.map(\.symbol)).count == entries.count else {
+            throw WatchlistStoreError.invalidImport
+        }
+        try Self.execute("BEGIN IMMEDIATE", on: database)
+        do {
+            var inserted = 0
+            for entry in entries {
+                if try add(entry.symbol, atMillis: entry.addedAtMillis) { inserted += 1 }
+            }
+            try Self.execute("COMMIT", on: database)
+            return inserted
+        } catch {
+            try? Self.execute("ROLLBACK", on: database)
+            throw error
         }
     }
 
@@ -170,6 +197,7 @@ enum WatchlistStoreError: LocalizedError {
     case invalidSymbol
     case unsupportedSchema
     case integrityCheckFailed
+    case invalidImport
 
     var errorDescription: String? {
         switch self {
@@ -177,6 +205,7 @@ enum WatchlistStoreError: LocalizedError {
         case .invalidSymbol: "Enter a symbol using letters, numbers, dots, dashes, underscores, or colons."
         case .unsupportedSchema: "This watchlist database was created by a newer app version."
         case .integrityCheckFailed: "Watchlist database integrity check failed."
+        case .invalidImport: "The watchlist snapshot contains invalid entries."
         }
     }
 }
