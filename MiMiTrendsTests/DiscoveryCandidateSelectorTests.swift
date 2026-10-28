@@ -14,12 +14,20 @@ final class DiscoveryCandidateSelectorTests: XCTestCase {
         XCTAssertEqual(selected.map(\.instrumentID), ["flop-1", "volume-1", "top-1", "top-2"])
     }
 
-    func testBoundsSelectionAtFortyAndRejectsOversizedInput() throws {
-        let rows = (1...55).map { candidate("instrument-\($0)", .top, rank: $0) }
-        XCTAssertEqual(try DiscoveryCandidateSelector.select(rows, sourceID: "fixture").count, 40)
+    func testKeepsAllFiftyRowsAndRejectsOversizedInput() throws {
+        let rows = (1...50).map { candidate("instrument-\($0)", .top, rank: $0) }
+        XCTAssertEqual(try DiscoveryCandidateSelector.select(rows, sourceID: "fixture").count, 50)
         XCTAssertThrowsError(try DiscoveryCandidateSelector.select(
             Array(repeating: rows[0], count: 1_001), sourceID: "fixture"
         ))
+    }
+
+    func testDoesNotCapMergedRankingsAtFortyOrFifty() throws {
+        let periods = ["1d", "7d", "30d", "1y"]
+        let rows = periods.flatMap { period in
+            (1...50).map { candidate("\(period)-\($0)", .top, rank: $0) }
+        }
+        XCTAssertEqual(try DiscoveryCandidateSelector.select(rows, sourceID: "fixture").count, 200)
     }
 
     func testUnresolvedNameIsNotScanReady() throws {
