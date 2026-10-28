@@ -15,6 +15,7 @@ struct SecretEntryField: View {
                 }
             }
             .textFieldStyle(.roundedBorder)
+            .lineLimit(1)
             .autocorrectionDisabled()
             .accessibilityLabel(title)
 
