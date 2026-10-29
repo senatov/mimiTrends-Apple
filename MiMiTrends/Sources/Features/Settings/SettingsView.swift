@@ -21,7 +21,7 @@ struct SettingsView: View {
                     }
                 }
             }
-            .navigationTitle(AppIdentity.windowTitle)
+            .navigationTitle("Settings")
             .listStyle(.sidebar)
             .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 300)
         } detail: {

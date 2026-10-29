@@ -28,7 +28,7 @@ struct SettingsPage<Content: View>: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(title).font(.title2.weight(.semibold))
+                        Text(title).font(.title2.weight(.regular))
                         Text(subtitle).font(.subheadline).foregroundStyle(.secondary)
                     }
                     content(geometry.size.width)
@@ -39,7 +39,7 @@ struct SettingsPage<Content: View>: View {
             }
         }
         .background(SettingsColors.background)
-        .navigationTitle(AppIdentity.windowTitle)
+        .navigationTitle(title)
     }
 }
 
@@ -49,7 +49,7 @@ struct SettingsGroup<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text(title).font(.headline)
+            Text(title).font(.headline.weight(.regular))
             content()
         }
         .frame(maxWidth: .infinity, alignment: .leading)

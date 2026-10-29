@@ -14,7 +14,7 @@ struct CredentialEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(title).font(.headline)
+            Text(title).font(.headline.weight(.regular))
             Text(detail).font(.footnote).foregroundStyle(.secondary)
             SecretEntryField(title: title, value: $draft)
             HStack(spacing: 8) {

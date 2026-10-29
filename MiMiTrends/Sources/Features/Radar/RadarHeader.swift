@@ -1,6 +1,10 @@
 import SwiftUI
 
 struct RadarHeader: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
     @Binding var symbol: String
     @Binding var scanWatchlist: Bool
     let session: RadarSession
@@ -10,21 +14,11 @@ struct RadarHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: 10) {
-                    feedControls
-                    statusLabel
-                    Spacer(minLength: 8)
-                    metricStrip
-                }
-                VStack(alignment: .leading, spacing: 7) {
-                    HStack(spacing: 10) { feedControls }
-                    HStack(spacing: 8) {
-                        statusLabel
-                        Spacer(minLength: 4)
-                        metricStrip
-                    }
-                }
+            headerLayout {
+                HStack(spacing: 10) { feedControls }
+                statusLabel
+                if !isCompactLayout { Spacer(minLength: 8) }
+                metricStrip
             }
             scopePicker
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -33,6 +27,21 @@ struct RadarHeader: View {
             }
         }
         .trendsPanel()
+    }
+
+    private var isCompactLayout: Bool {
+        #if os(iOS)
+        dynamicTypeSize.isAccessibilitySize || horizontalSizeClass == .compact
+        #else
+        dynamicTypeSize.isAccessibilitySize
+        #endif
+    }
+
+    private func headerLayout<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        let layout = isCompactLayout
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 7))
+            : AnyLayout(HStackLayout(spacing: 10))
+        return layout { content() }
     }
 
     @ViewBuilder
@@ -63,15 +72,15 @@ struct RadarHeader: View {
     }
 
     private var statusText: String {
-        if session.isSubscribed { return "Connected" }
+        if session.isSubscribed { return session.tradeCount > 0 ? "Receiving trades" : "Waiting for trades" }
         if session.isScanning { return "Connecting" }
         return "Stopped"
     }
 
     private var statusLabel: some View {
-        Label("Finnhub · \(statusText)", systemImage: session.isSubscribed ? "checkmark.circle.fill" : "circle.fill")
+        Label("Finnhub · \(statusText)", systemImage: session.tradeCount > 0 ? "checkmark.circle.fill" : "circle.fill")
             .font(.caption.weight(.medium))
-            .foregroundStyle(session.isSubscribed ? .green : .secondary)
+            .foregroundStyle(session.tradeCount > 0 ? .green : .secondary)
             .padding(.horizontal, 9)
             .padding(.vertical, 6)
             .background(.thinMaterial, in: Capsule())

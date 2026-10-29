@@ -100,6 +100,7 @@ actor DiscoveryRefreshCache {
     }
 
     private func performRefresh() async {
+        AppDiagnostics.shared.record(.info, "Discovery", "refresh-start", "source=\(source.sourceID)")
         do {
             let loaded = try await source.loadCandidates()
             try Task.checkCancellation()
@@ -111,10 +112,13 @@ actor DiscoveryRefreshCache {
             )
             lastAttemptSucceeded = true
             nextAttemptAtMillis = refreshedAt + 30 * 60_000
+            AppDiagnostics.shared.record(.info, "Discovery", "refresh-success", "source=\(source.sourceID) received=\(loaded.count) selected=\(selected.count)")
         } catch {
             if Task.isCancelled || error is CancellationError { return }
             lastAttemptSucceeded = false
             nextAttemptAtMillis = nowMillis() + 5 * 60_000
+            let failure = error as NSError
+            AppDiagnostics.shared.record(.error, "Discovery", "refresh-failed", "source=\(source.sourceID) domain=\(failure.domain) code=\(failure.code)")
         }
     }
 

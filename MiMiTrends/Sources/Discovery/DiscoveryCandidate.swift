@@ -24,6 +24,31 @@ struct ResolvedMarketSymbol: Codable, Equatable, Sendable {
     }
 }
 
+struct DiscoveryMarketMetrics: Codable, Equatable, Sendable {
+    let price: Double
+    let change1dPercent: Double
+    let change7dPercent: Double
+    let change30dPercent: Double
+    let change1yPercent: Double
+
+    func changePercent(for period: DiscoveryRankingPeriod?) -> Double {
+        switch period {
+        case .day, .activity, nil: change1dPercent
+        case .week: change7dPercent
+        case .month: change30dPercent
+        case .year: change1yPercent
+        }
+    }
+
+    func validate() throws {
+        guard price.isFinite, price > 0,
+              change1dPercent.isFinite, change7dPercent.isFinite,
+              change30dPercent.isFinite, change1yPercent.isFinite else {
+            throw DiscoveryDataError.invalidCandidate
+        }
+    }
+}
+
 struct DiscoveryCandidate: Codable, Equatable, Sendable {
     let sourceID: String
     let instrumentID: String
@@ -33,10 +58,12 @@ struct DiscoveryCandidate: Codable, Equatable, Sendable {
     let observedAtMillis: Int64
     let resolved: ResolvedMarketSymbol?
     let origin: DiscoveryRankingOrigin?
+    let marketMetrics: DiscoveryMarketMetrics?
 
     init(sourceID: String, instrumentID: String, category: DiscoveryCategory,
          rank: Int, observedAtMillis: Int64, resolved: ResolvedMarketSymbol?,
-         origin: DiscoveryRankingOrigin? = nil, displayName: String? = nil) {
+         origin: DiscoveryRankingOrigin? = nil, displayName: String? = nil,
+         marketMetrics: DiscoveryMarketMetrics? = nil) {
         self.sourceID = sourceID
         self.instrumentID = instrumentID
         self.displayName = displayName
@@ -45,6 +72,7 @@ struct DiscoveryCandidate: Codable, Equatable, Sendable {
         self.observedAtMillis = observedAtMillis
         self.resolved = resolved
         self.origin = origin
+        self.marketMetrics = marketMetrics
     }
 
     var identity: String { "\(sourceID):\(instrumentID)" }
@@ -59,6 +87,7 @@ struct DiscoveryCandidate: Codable, Equatable, Sendable {
             throw DiscoveryDataError.invalidCandidate
         }
         try resolved?.validate()
+        try marketMetrics?.validate()
         if let origin {
             guard origin.page.category == category, origin.period.isValid(for: origin.page),
                   rank <= DiscoveryRankingBatch.maximumRows else {

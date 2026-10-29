@@ -67,11 +67,11 @@ struct HeaderResourceBadges: View {
         HStack(spacing: 7) {
             VStack(alignment: .leading, spacing: 1) {
                 Text(title)
-                    .font(.system(size: 8, weight: .semibold, design: .rounded))
+                    .font(.system(size: 8, weight: .regular, design: .rounded))
                     .tracking(0.6)
                     .foregroundStyle(.secondary)
                 Text(value)
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 10, weight: .regular, design: .monospaced))
                     .monospacedDigit()
                     .foregroundStyle(color)
             }

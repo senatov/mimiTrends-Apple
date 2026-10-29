@@ -7,7 +7,7 @@ struct DiscoveryCandidateList: View {
     var body: some View {
         List {
             Section {
-                Text("These rankings identify companies, but do not supply verified Finnhub symbols. Ranking candidates are not scanned yet.")
+                Text("Published prices use source units. These rankings do not supply verified Finnhub symbols and are not scanner signals.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                 Text("Last fetch: \(Date(timeIntervalSince1970: TimeInterval(snapshot.refreshedAtMillis) / 1_000), style: .relative)")
@@ -34,8 +34,20 @@ struct DiscoveryCandidateList: View {
 
     private func candidateRow(_ candidate: DiscoveryCandidate) -> some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(candidate.displayName ?? candidate.instrumentID)
-                .font(.body.weight(.medium))
+            HStack(spacing: 8) {
+                Text(candidate.displayName ?? candidate.instrumentID)
+                    .font(.body.weight(.regular))
+                    .lineLimit(1)
+                Spacer(minLength: 4)
+                if let metrics = candidate.marketMetrics {
+                    Text(metrics.price.formatted(.number.precision(.fractionLength(2))))
+                        .monospacedDigit()
+                    let change = metrics.changePercent(for: candidate.origin?.period)
+                    Text(String(format: "%+.2f%%", change))
+                        .monospacedDigit()
+                        .foregroundStyle(change < 0 ? .red : .green)
+                }
+            }
             HStack(spacing: 8) {
                 Text("#\(candidate.rank) · \(periodLabel(candidate.origin?.period))")
                 Text(candidate.instrumentID)

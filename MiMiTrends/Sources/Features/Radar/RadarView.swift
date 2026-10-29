@@ -45,7 +45,7 @@ struct RadarView: View {
             }
             .padding(8)
             .background(TrendsColors.canvas)
-            .navigationTitle(AppIdentity.windowTitle)
+            .navigationTitle("Radar")
             .task(id: "\(maxResults)|\(maxAgeHours)") { await refreshSignals() }
             .task(id: scenePhase) { await refreshDiscoveryWhileActive() }
             .onChange(of: session.lastSignal) { _, latest in
@@ -78,6 +78,13 @@ struct RadarView: View {
             if discoveryRefreshID == refreshID { discoveryRefreshID = nil }
             guard !Task.isCancelled else { return }
             discoveryStatus = status
+            if isDue {
+                AppDiagnostics.shared.record(
+                    status.lastAttemptSucceeded ? .info : .warning,
+                    "Discovery", "refresh-finished",
+                    "candidates=\(status.snapshot?.candidates.count ?? 0) success=\(status.lastAttemptSucceeded) nextAttemptMillis=\(status.nextAttemptAtMillis)"
+                )
+            }
             firstRefresh = false
             do { try await Task.sleep(for: .seconds(60)) }
             catch { return }
@@ -99,6 +106,7 @@ struct RadarView: View {
         RadarSignalList(
             signals: recentSignals,
             selected: selectedSignal,
+            discoverySnapshot: discoveryStatus?.snapshot,
             compact: compact,
             errorMessage: historyError,
             onSelect: { signal in
@@ -119,6 +127,7 @@ struct RadarView: View {
                 return try await store.loadRecent(limit: limit, sinceEpochMillis: cutoff)
             }.value
             recentSignals = loaded
+            AppDiagnostics.shared.record(.info, "Radar", "history-loaded", "signals=\(loaded.count)")
             historyError = nil
             if let selectedSignal, !loaded.contains(where: {
                 $0.symbol == selectedSignal.symbol &&
@@ -136,12 +145,14 @@ struct RadarView: View {
             }
         } catch {
             historyError = error.localizedDescription
+            AppDiagnostics.shared.record(.error, "Radar", "history-failed", "error=\(String(describing: type(of: error)))")
         }
     }
 
     private func startFeed() {
         guard !isPreparingFeed else { return }
         isPreparingFeed = true
+        AppDiagnostics.shared.record(.info, "Radar", "feed-preparing")
         Task { await prepareFeed() }
     }
 
@@ -169,6 +180,7 @@ struct RadarView: View {
             )
             guard let key = try FinnhubCredentialStore.load() else {
                 setupMessage = FinnhubStreamError.missingKey.localizedDescription
+                AppDiagnostics.shared.record(.warning, "Radar", "feed-not-started", "reason=missing-api-key")
                 return
             }
             guard scenePhase == .active else { return }
@@ -204,6 +216,7 @@ struct RadarView: View {
             }
         } catch {
             setupMessage = error.localizedDescription
+            AppDiagnostics.shared.record(.error, "Radar", "feed-setup-failed", "error=\(String(describing: type(of: error)))")
         }
     }
 }

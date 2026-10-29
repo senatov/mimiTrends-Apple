@@ -21,6 +21,11 @@ final class MiminaviInfo1DecoderTests: XCTestCase {
         XCTAssertEqual(candidates.first?.origin?.page, .allIndices)
         XCTAssertEqual(candidates.first?.origin?.period, .day)
         XCTAssertEqual(candidates.first?.displayName, "shared")
+        XCTAssertEqual(candidates.first?.marketMetrics?.price, 25.5)
+        XCTAssertEqual(candidates.first?.marketMetrics?.change1dPercent, 1.2)
+        XCTAssertEqual(candidates.first?.marketMetrics?.change1yPercent, 4.5)
+        XCTAssertEqual(candidates.first?.marketMetrics?.changePercent(for: .day), 1.2)
+        XCTAssertEqual(candidates.last?.marketMetrics?.changePercent(for: .week), 2.3)
         XCTAssertTrue(candidates.allSatisfy { !$0.isScanReady })
     }
 

@@ -3,6 +3,9 @@ import UniformTypeIdentifiers
 
 struct MarketChartView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
     @AppStorage("selected.symbol.v1") private var symbol = "ORCL"
     @AppStorage("chart.range.v1") private var rangeRaw = RadarChartRange.oneDay.rawValue
     @State private var loadedRange: RadarChartRange = .oneDay
@@ -35,7 +38,7 @@ struct MarketChartView: View {
                 .frame(maxWidth: .infinity)
             }
             .background(TrendsColors.canvas)
-            .navigationTitle(AppIdentity.windowTitle)
+            .navigationTitle("Charts")
             .task { await loadChart() }
             .onChange(of: rangeRaw) { _, _ in Task { await loadChart() } }
             .fileImporter(
@@ -53,15 +56,8 @@ struct MarketChartView: View {
 
     private var controls: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Saved market data").font(.headline)
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: 10) { actionControls }
-            } else {
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: 10) { actionControls }
-                    VStack(alignment: .leading, spacing: 10) { actionControls }
-                }
-            }
+            Text("Saved market data").font(.headline.weight(.regular))
+            actionLayout { actionControls }
             Picker("Range", selection: rangeSelection) {
                 ForEach(RadarChartRange.allCases) { range in
                     Text(range.title).tag(range)
@@ -77,6 +73,21 @@ struct MarketChartView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .trendsPanel()
+    }
+
+    private var isCompactActions: Bool {
+        #if os(iOS)
+        dynamicTypeSize.isAccessibilitySize || horizontalSizeClass == .compact
+        #else
+        dynamicTypeSize.isAccessibilitySize
+        #endif
+    }
+
+    private func actionLayout<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        let layout = isCompactActions
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 10))
+            : AnyLayout(HStackLayout(spacing: 10))
+        return layout { content() }
     }
 
     @ViewBuilder
@@ -100,7 +111,7 @@ struct MarketChartView: View {
 
     private var chartPanel: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Completed minute chart").font(.headline)
+            Text("Completed minute chart").font(.headline.weight(.regular))
             Divider()
             if isLoading {
                 ProgressView("Loading saved bars")
@@ -126,9 +137,9 @@ struct MarketChartView: View {
     private var chartContent: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(loadedSymbol).font(.title3.weight(.semibold))
+                Text(loadedSymbol).font(.title3.weight(.regular))
                 if let last = bars.last {
-                    Text(last.close.formatted())
+                    Text(last.close.formatted(.number.precision(.fractionLength(2))))
                         .font(.title3.monospacedDigit())
                     Text("latest saved close")
                         .font(.caption).foregroundStyle(.secondary)
@@ -155,6 +166,7 @@ struct MarketChartView: View {
         loadRequestID += 1
         let requestID = loadRequestID
         let requestedRange = selectedRange
+        AppDiagnostics.shared.record(.info, "Charts", "load-start", "symbol=\(requestedSymbol) range=\(requestedRange.rawValue)")
         isLoading = true
         errorMessage = nil
         let seconds = requestedRange.seconds
@@ -172,15 +184,18 @@ struct MarketChartView: View {
             bars = loaded
             loadedSymbol = requestedSymbol
             loadedRange = requestedRange
+            AppDiagnostics.shared.record(.info, "Charts", "load-complete", "symbol=\(requestedSymbol) range=\(requestedRange.rawValue) bars=\(loaded.count)")
         } catch {
             guard !Task.isCancelled, requestID == loadRequestID else { return }
             bars = []
             errorMessage = error.localizedDescription
+            AppDiagnostics.shared.record(.error, "Charts", "load-failed", "symbol=\(requestedSymbol) error=\(String(describing: type(of: error)))")
         }
         isLoading = false
     }
 
     private func importSnapshot(at url: URL) async {
+        AppDiagnostics.shared.record(.info, "Charts", "import-start", "file=\(url.lastPathComponent)")
         isImporting = true
         importMessage = nil
         do {
@@ -190,9 +205,11 @@ struct MarketChartView: View {
             symbol = summary.symbol
             rangeRaw = RadarChartRange.latest.rawValue
             importMessage = "Imported \(summary.barCount) bars for \(summary.symbol); \(summary.changedCount) saved or updated."
+            AppDiagnostics.shared.record(.info, "Charts", "import-complete", "symbol=\(summary.symbol) bars=\(summary.barCount) changed=\(summary.changedCount)")
             await loadChart()
         } catch {
             importMessage = error.localizedDescription
+            AppDiagnostics.shared.record(.error, "Charts", "import-failed", "error=\(String(describing: type(of: error)))")
         }
         isImporting = false
     }

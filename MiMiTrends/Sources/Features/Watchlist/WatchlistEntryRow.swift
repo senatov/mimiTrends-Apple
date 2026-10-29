@@ -13,13 +13,13 @@ struct WatchlistEntryRow: View {
                     Image(systemName: "waveform.path.ecg")
                         .foregroundStyle(.blue)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(entry.symbol).font(.headline)
+                        Text(entry.symbol).font(.headline.weight(.regular))
                         Text("Added \(addedAt.formatted(.dateTime.month().day().year()))")
                             .font(.caption).foregroundStyle(.secondary)
                     }
                     Spacer(minLength: 0)
                     Image(systemName: "chevron.right")
-                        .font(.caption.weight(.semibold))
+                        .font(.caption.weight(.regular))
                         .foregroundStyle(.tertiary)
                 }
                 .contentShape(Rectangle())

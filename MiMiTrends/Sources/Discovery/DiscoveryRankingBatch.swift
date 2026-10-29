@@ -5,12 +5,15 @@ struct DiscoveryRankingRow: Equatable, Sendable {
     let rank: Int
     let resolved: ResolvedMarketSymbol?
     let displayName: String?
+    let marketMetrics: DiscoveryMarketMetrics?
 
-    init(instrumentID: String, rank: Int, resolved: ResolvedMarketSymbol?, displayName: String? = nil) {
+    init(instrumentID: String, rank: Int, resolved: ResolvedMarketSymbol?, displayName: String? = nil,
+         marketMetrics: DiscoveryMarketMetrics? = nil) {
         self.instrumentID = instrumentID
         self.rank = rank
         self.resolved = resolved
         self.displayName = displayName
+        self.marketMetrics = marketMetrics
     }
 }
 
@@ -33,7 +36,8 @@ struct DiscoveryRankingBatch: Sendable {
                 sourceID: sourceID, instrumentID: row.instrumentID,
                 category: origin.page.category, rank: row.rank,
                 observedAtMillis: observedAtMillis, resolved: row.resolved,
-                origin: origin, displayName: row.displayName
+                origin: origin, displayName: row.displayName,
+                marketMetrics: row.marketMetrics
             )
             try candidate.validate()
             return candidate

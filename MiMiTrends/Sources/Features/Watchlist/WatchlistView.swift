@@ -4,7 +4,10 @@ import UniformTypeIdentifiers
 struct WatchlistView: View {
     let onSelect: (String) -> Void
 
-
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
     @State private var store: WatchlistStore?
     @State private var entries: [WatchlistEntry] = []
     @State private var newSymbol = ""
@@ -15,61 +18,35 @@ struct WatchlistView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Watchlist").font(.title2.weight(.semibold))
-                        Text("\(entries.count) saved symbols on this device")
-                            .font(.caption).foregroundStyle(.secondary)
-                        ViewThatFits(in: .horizontal) {
-                            HStack(spacing: 10) { addControls }
-                            VStack(alignment: .leading, spacing: 10) { addControls }
-                        }
-                        Text("Selecting a symbol opens Radar. The feed starts only when you tap Start there.")
-                            .font(.footnote).foregroundStyle(.secondary)
-                        TrendsActionButton(
-                            title: "Import desktop watchlist",
-                            systemImage: "square.and.arrow.down",
-                            tint: .teal
-                        ) { showingImporter = true }
-                        .disabled(isWorking || store == nil)
-                        if let importMessage {
-                            Text(importMessage).font(.footnote).foregroundStyle(.secondary)
-                        }
-                        if let errorMessage {
-                            Text(errorMessage).font(.footnote).foregroundStyle(.red)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .trendsPanel()
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                }
-
-                Section("Saved symbols") {
-                    if store == nil && errorMessage == nil {
-                        ProgressView("Loading watchlist")
-                    } else if entries.isEmpty {
-                        ContentUnavailableView("Watchlist is empty", systemImage: "star")
-                    } else {
-                        ForEach(entries) { entry in
-                            WatchlistEntryRow(entry: entry, isWorking: isWorking) {
-                                onSelect(entry.symbol)
-                            } onRemove: {
-                                Task { await remove([entry.symbol]) }
+            VStack(spacing: 0) {
+                controls
+                    .padding(14)
+                List {
+                    Section("Saved symbols") {
+                        if store == nil && errorMessage == nil {
+                            ProgressView("Loading watchlist")
+                        } else if entries.isEmpty {
+                            ContentUnavailableView("Watchlist is empty", systemImage: "star")
+                        } else {
+                            ForEach(entries) { entry in
+                                WatchlistEntryRow(entry: entry, isWorking: isWorking) {
+                                    onSelect(entry.symbol)
+                                } onRemove: {
+                                    Task { await remove([entry.symbol]) }
+                                }
+                            }
+                            .onDelete { offsets in
+                                let symbols = offsets.map { entries[$0].symbol }
+                                Task { await remove(symbols) }
                             }
                         }
-                        .onDelete { offsets in
-                            let symbols = offsets.map { entries[$0].symbol }
-                            Task { await remove(symbols) }
-                        }
                     }
                 }
+                .listStyle(.inset)
+                .scrollContentBackground(.hidden)
             }
-            .listStyle(.inset)
-            .scrollContentBackground(.hidden)
             .background(TrendsColors.canvas)
-            .navigationTitle(AppIdentity.windowTitle)
+            .navigationTitle("Watchlist")
             .task { await load() }
             .fileImporter(isPresented: $showingImporter, allowedContentTypes: [.json]) { result in
                 if case .success(let url) = result {
@@ -79,6 +56,46 @@ struct WatchlistView: View {
                 }
             }
         }
+    }
+
+    private var controls: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Watchlist").font(.title2.weight(.regular))
+            Text("\(entries.count) saved symbols on this device")
+                .font(.caption).foregroundStyle(.secondary)
+            controlLayout { addControls }
+            Text("Selecting a symbol opens Radar. The feed starts only when you tap Start there.")
+                .font(.footnote).foregroundStyle(.secondary)
+            TrendsActionButton(
+                title: "Import desktop watchlist",
+                systemImage: "square.and.arrow.down",
+                tint: .teal
+            ) { showingImporter = true }
+            .disabled(isWorking || store == nil)
+            if let importMessage {
+                Text(importMessage).font(.footnote).foregroundStyle(.secondary)
+            }
+            if let errorMessage {
+                Text(errorMessage).font(.footnote).foregroundStyle(.red)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .trendsPanel()
+    }
+
+    private var isCompactControls: Bool {
+        #if os(iOS)
+        dynamicTypeSize.isAccessibilitySize || horizontalSizeClass == .compact
+        #else
+        dynamicTypeSize.isAccessibilitySize
+        #endif
+    }
+
+    private func controlLayout<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        let layout = isCompactControls
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 10))
+            : AnyLayout(HStackLayout(spacing: 10))
+        return layout { content() }
     }
 
     @ViewBuilder

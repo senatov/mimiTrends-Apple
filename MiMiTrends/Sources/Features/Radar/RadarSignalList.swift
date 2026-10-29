@@ -3,6 +3,7 @@ import SwiftUI
 struct RadarSignalList: View {
     let signals: [ScanResult]
     let selected: ScanResult?
+    let discoverySnapshot: DiscoverySnapshot?
     let compact: Bool
     let errorMessage: String?
     let onSelect: (ScanResult) -> Void
@@ -12,7 +13,7 @@ struct RadarSignalList: View {
         VStack(alignment: .leading, spacing: 7) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Live radar").font(.headline)
+                    Text("Live radar").font(.headline.weight(.regular))
                     Text("Recent saved detections")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -28,16 +29,22 @@ struct RadarSignalList: View {
                 Text(errorMessage).font(.footnote).foregroundStyle(.red)
             }
             if signals.isEmpty {
-                VStack(spacing: 5) {
-                    Label("No saved signals", systemImage: "waveform.path.ecg")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.blue)
-                    Text("Confirmed moves appear after a foreground scan.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Label("No confirmed scanner signals yet", systemImage: "waveform.path.ecg")
+                            .font(.subheadline.weight(.regular))
+                            .foregroundStyle(.secondary)
+                        if let discoverySnapshot {
+                            Divider()
+                            RadarRankingPreview(snapshot: discoverySnapshot)
+                        } else {
+                            Text("Market rankings appear here after the first refresh.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 if !compact {
                     HStack(spacing: 8) {
@@ -47,7 +54,7 @@ struct RadarSignalList: View {
                         Text("Price").frame(width: 70, alignment: .trailing)
                         Text("Age").frame(width: 95, alignment: .trailing)
                     }
-                    .font(.caption.weight(.semibold))
+                    .font(.caption.weight(.regular))
                     .foregroundStyle(.secondary)
                 }
                 ScrollView {

@@ -31,7 +31,7 @@ struct RadarSignalRow: View {
     private var compactContent: some View {
         VStack(alignment: .leading, spacing: 7) {
             HStack {
-                Text(signal.symbol).fontWeight(.semibold)
+                Text(signal.symbol).fontWeight(.regular)
                 Spacer()
                 Text(signal.price.formatted()).monospacedDigit()
             }
@@ -49,7 +49,7 @@ struct RadarSignalRow: View {
     private var wideContent: some View {
         HStack(spacing: 8) {
             Text(signal.symbol)
-                .fontWeight(.semibold)
+                .fontWeight(.regular)
                 .frame(width: 80, alignment: .leading)
             eventBadge
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -67,7 +67,7 @@ struct RadarSignalRow: View {
 
     private var eventBadge: some View {
         Text(eventLabel)
-            .font(.caption.weight(.semibold))
+            .font(.caption.weight(.regular))
             .foregroundStyle(eventColor)
             .lineLimit(1)
             .padding(.horizontal, 7)

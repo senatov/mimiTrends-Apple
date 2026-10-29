@@ -36,7 +36,7 @@ struct RadarActivityBanner: View {
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 Text(activity.title)
-                    .font(.subheadline.weight(.semibold))
+                    .font(.subheadline.weight(.regular))
                 Text(activity.detail)
                     .font(.caption)
                     .foregroundStyle(.secondary)

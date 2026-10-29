@@ -45,6 +45,7 @@
 		52ECF4E400CFE650649AD8BB /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43016F584E13231D8B6D972 /* AppearanceSettingsView.swift */; };
 		5A8F07D27D8707A29BA3ADB2 /* DesktopBarSnapshotImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B648E753D1C0367B983BB3 /* DesktopBarSnapshotImporter.swift */; };
 		5D450505D6D7625389567466 /* FinnhubTradeStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80B2E9DCDE37394950FD413 /* FinnhubTradeStream.swift */; };
+		647061B7F3233DABB3B153F3 /* AppDiagnosticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB60A6508A4B278B3FE1905 /* AppDiagnosticsTests.swift */; };
 		66214CBD1C84ADDD412F699B /* TrendsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F4937B6B24F966C3B88898 /* TrendsPanel.swift */; };
 		68E7C876F306558E9C2EFD34 /* RadarSignalRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0641D88BFDA84CA15FDF0772 /* RadarSignalRow.swift */; };
 		6A580E7214EACB7224EF26EB /* MarketBarStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BA9EF663371153E075CCA3 /* MarketBarStore.swift */; };
@@ -57,6 +58,7 @@
 		81E90818F50CBAF7A44E469F /* MiminaviInfo1Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7416B574904B447322ABC4C5 /* MiminaviInfo1Decoder.swift */; };
 		8446D29D4211BEE41824BDD3 /* CredentialEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E50A443FA1C1379C2394D87 /* CredentialEditor.swift */; };
 		84A0091D780B3C0C0EBB13CF /* FinnhubWatchlistSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926E7B5100D9ECAD2EACFF6B /* FinnhubWatchlistSelectionTests.swift */; };
+		84A1B5190501BEC7A1524C7C /* AppDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9667B20187C693B6A88265FB /* AppDiagnostics.swift */; };
 		860B373FEC5304548C68B511 /* DiscoverySnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB1C9B19F9396B5ADD18797 /* DiscoverySnapshotStore.swift */; };
 		886E88920162B6DA3199D90A /* FinnhubRadarPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE947CFF4E30D853A5BBFE0 /* FinnhubRadarPipeline.swift */; };
 		8A32C3D5EE9D0C6051E8A84E /* RapidCrashDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738D3015D67A0FEB94F7C80 /* RapidCrashDetector.swift */; };
@@ -107,6 +109,7 @@
 		F940CE41E5FA0912F05BE82A /* ProviderInstrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABD71D692C066C6F70FD7DA /* ProviderInstrument.swift */; };
 		FBFF440E689DD475C4AEFC0B /* RadarChartDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B215D2A814E439DF586FFF1 /* RadarChartDataTests.swift */; };
 		FCE5F1EA038869178B36AD7D /* WatchlistStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C8249EED74773A7514750 /* WatchlistStoreTests.swift */; };
+		FDDEE4BE2C903A07DD473A01 /* RadarRankingPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821F3802722B3BDBE88B896D /* RadarRankingPreview.swift */; };
 		FEF8C8CD52FF04FF8EBDAAEC /* RapidRiseDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC05AF8E7074B665B4AFD42 /* RapidRiseDetector.swift */; };
 /* End PBXBuildFile section */
 
@@ -170,12 +173,14 @@
 		7A1562AE82C112C8F46CFD3F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7AC0207E808D3B3D6DB152DB /* SustainedMoveDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SustainedMoveDetectorTests.swift; sourceTree = "<group>"; };
 		7EE5E447F15502D8BB7E6BED /* TradableCorridorDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradableCorridorDetector.swift; sourceTree = "<group>"; };
+		821F3802722B3BDBE88B896D /* RadarRankingPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarRankingPreview.swift; sourceTree = "<group>"; };
 		84EDAF5928C89ADE1C954B20 /* ProviderQuoteSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderQuoteSnapshot.swift; sourceTree = "<group>"; };
 		8B215D2A814E439DF586FFF1 /* RadarChartDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarChartDataTests.swift; sourceTree = "<group>"; };
 		91FE4781F402BBF9EB8C0DFB /* TrendsActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsActionButton.swift; sourceTree = "<group>"; };
 		923F1C69FB01B960C90E4AF7 /* RadarChartData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarChartData.swift; sourceTree = "<group>"; };
 		926E7B5100D9ECAD2EACFF6B /* FinnhubWatchlistSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubWatchlistSelectionTests.swift; sourceTree = "<group>"; };
 		930FFF72DAC8261D47DAF60E /* finnhub-trades.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "finnhub-trades.json"; sourceTree = "<group>"; };
+		9667B20187C693B6A88265FB /* AppDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDiagnostics.swift; sourceTree = "<group>"; };
 		9875C0F9708CB9BE887178A3 /* RadarSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSession.swift; sourceTree = "<group>"; };
 		999950D6664725733B79DD22 /* FinnhubMinuteAggregator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubMinuteAggregator.swift; sourceTree = "<group>"; };
 		9C0D16568F846C09610A2496 /* RadarWorkspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarWorkspace.swift; sourceTree = "<group>"; };
@@ -223,6 +228,7 @@
 		F738D3015D67A0FEB94F7C80 /* RapidCrashDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RapidCrashDetector.swift; sourceTree = "<group>"; };
 		F80B2E9DCDE37394950FD413 /* FinnhubTradeStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinnhubTradeStream.swift; sourceTree = "<group>"; };
 		F8488D42F93C6B865936B709 /* RadarSplitHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSplitHandle.swift; sourceTree = "<group>"; };
+		FAB60A6508A4B278B3FE1905 /* AppDiagnosticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDiagnosticsTests.swift; sourceTree = "<group>"; };
 		FD98FD247F51083747D19146 /* MarketSignalFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketSignalFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -295,6 +301,7 @@
 		755847FAE20A3E615FA9722B /* App */ = {
 			isa = PBXGroup;
 			children = (
+				9667B20187C693B6A88265FB /* AppDiagnostics.swift */,
 				70D236DEB2F4AC4BC8BE11A2 /* AppIdentity.swift */,
 				1EA765CB226C1925F760A165 /* ContentView.swift */,
 				35C2E8B4DD20C94DB4457374 /* HeaderBadgeSurface.swift */,
@@ -336,6 +343,7 @@
 		9D6DAFCE55EFB8BFB7927AB6 /* MiMiTrendsTests */ = {
 			isa = PBXGroup;
 			children = (
+				FAB60A6508A4B278B3FE1905 /* AppDiagnosticsTests.swift */,
 				2CC4DCC031EFA8805E3945E6 /* DesktopBarSnapshotImporterTests.swift */,
 				494EEEB736EEBC8F1ECDB1A3 /* DesktopWatchlistImporterTests.swift */,
 				39E5AF93F5D263904111D4BA /* DiscoveryCandidateSelectorTests.swift */,
@@ -449,6 +457,7 @@
 				517EEB88A6A2636A58C09DFB /* RadarChartPreview.swift */,
 				6552EA3319AF0CE227CE19C9 /* RadarHeader.swift */,
 				A2258B49416B5E6F51BFC08C /* RadarPaneLayout.swift */,
+				821F3802722B3BDBE88B896D /* RadarRankingPreview.swift */,
 				9875C0F9708CB9BE887178A3 /* RadarSession.swift */,
 				D7546F11E9F21290A5D8DD5F /* RadarSignalList.swift */,
 				0641D88BFDA84CA15FDF0772 /* RadarSignalRow.swift */,
@@ -610,6 +619,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84A1B5190501BEC7A1524C7C /* AppDiagnostics.swift in Sources */,
 				E55CD1974C966F6CEC9BB616 /* AppIdentity.swift in Sources */,
 				52ECF4E400CFE650649AD8BB /* AppearanceSettingsView.swift in Sources */,
 				3F123A0039415D91512F590D /* ContentView.swift in Sources */,
@@ -653,6 +663,7 @@
 				B9DEC7CD282978431B054494 /* RadarChartPreview.swift in Sources */,
 				F5CFA707D78337A1E1F43E3F /* RadarHeader.swift in Sources */,
 				301333BB18B7BB3B4FF15D6D /* RadarPaneLayout.swift in Sources */,
+				FDDEE4BE2C903A07DD473A01 /* RadarRankingPreview.swift in Sources */,
 				CC4BE967CF32F798C131DEF4 /* RadarScanPreferences.swift in Sources */,
 				43EF6E380CF958D857D0AB4D /* RadarScanPreferencesStore.swift in Sources */,
 				EA3B3403D3312F96C0C6A169 /* RadarScanSettingsView.swift in Sources */,
@@ -688,6 +699,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				647061B7F3233DABB3B153F3 /* AppDiagnosticsTests.swift in Sources */,
 				04281B4F531D627501117EF5 /* DesktopBarSnapshotImporterTests.swift in Sources */,
 				B45B22E48AFE43602936C12A /* DesktopWatchlistImporterTests.swift in Sources */,
 				385A74AA84EAF8AED62E7138 /* DiscoveryCandidateSelectorTests.swift in Sources */,
@@ -798,7 +810,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = MiMiTrends/Configuration/MacAppStore.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = MiMiTrends/Configuration/MacDebug.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_KEY_CFBundleDisplayName = "mimiTrends-iOS";

@@ -38,11 +38,11 @@ struct RadarChartPreview: View {
     private func chartContent(availableHeight: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Selected alert chart").font(.headline)
+                Text("Selected alert chart").font(.headline.weight(.regular))
                 Spacer()
                 if let signal {
                     Text(signal.signalSource.replacingOccurrences(of: "_", with: " "))
-                        .font(.caption.weight(.semibold))
+                        .font(.caption.weight(.regular))
                         .foregroundStyle(signal.windowChangePercent < 0 ? .red : .green)
                 }
             }
@@ -60,7 +60,7 @@ struct RadarChartPreview: View {
             }
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(symbol.isEmpty ? "No symbol selected" : symbol)
-                    .font(.title3.weight(.semibold))
+                    .font(.title3.weight(.regular))
                 if let signal {
                     Text(signal.price.formatted())
                         .font(.title3.monospacedDigit())
@@ -68,7 +68,7 @@ struct RadarChartPreview: View {
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(signal.windowChangePercent < 0 ? .red : .green)
                 } else if let last = chartData.bars.last {
-                    Text(last.close.formatted())
+                    Text(last.close.formatted(.number.precision(.fractionLength(2))))
                         .font(.title3.monospacedDigit())
                     Text("latest saved close")
                         .font(.caption)
@@ -85,7 +85,7 @@ struct RadarChartPreview: View {
                 ContentUnavailableView(
                     "No saved bars in \(range.title)",
                     systemImage: "chart.xyaxis.line",
-                    description: Text("Start a live feed, import a desktop snapshot in Chart, or choose Latest for older saved bars.")
+                    description: Text("Start a live feed, import a desktop snapshot in Charts, or choose Latest for older saved bars.")
                 )
                 .frame(maxWidth: .infinity, minHeight: 180)
             } else {

@@ -7,7 +7,7 @@ struct RadarSourcePanel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {
             HStack {
-                Text("Source telemetry").font(.headline)
+                Text("Source telemetry").font(.headline.weight(.regular))
                 Spacer(minLength: 8)
                 Text("Current session")
                     .font(.caption)
@@ -19,10 +19,10 @@ struct RadarSourcePanel: View {
                     .fill(statusColor)
                     .frame(width: 8, height: 8)
                     .accessibilityHidden(true)
-                Text("Finnhub").font(.subheadline.weight(.semibold))
+                Text("Finnhub").font(.subheadline.weight(.regular))
                 Spacer(minLength: 4)
                 Text(statusText.uppercased())
-                    .font(.caption2.weight(.semibold))
+                    .font(.caption2.weight(.regular))
                     .foregroundStyle(statusColor)
             }
             HStack(spacing: 0) {
@@ -50,7 +50,7 @@ struct RadarSourcePanel: View {
                     .frame(width: 8, height: 8)
                     .accessibilityHidden(true)
                 Text("miminavi.tech · info1")
-                    .font(.subheadline.weight(.semibold))
+                    .font(.subheadline.weight(.regular))
                 Spacer(minLength: 4)
                 if let snapshot = discoveryStatus?.snapshot {
                     NavigationLink {
@@ -63,7 +63,7 @@ struct RadarSourcePanel: View {
                     .help("View ranking candidates")
                 }
                 Text(discoveryLabel)
-                    .font(.caption2.weight(.semibold))
+                    .font(.caption2.weight(.regular))
                     .foregroundStyle(.secondary)
             }
             Text(discoveryDetail)
@@ -91,10 +91,10 @@ struct RadarSourcePanel: View {
     private func metric(_ title: String, value: Int) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
-                .font(.system(size: 9, weight: .semibold))
+                .font(.system(size: 9, weight: .regular))
                 .foregroundStyle(.secondary)
             Text(value.formatted())
-                .font(.subheadline.weight(.semibold))
+                .font(.subheadline.weight(.regular))
                 .monospacedDigit()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -102,14 +102,14 @@ struct RadarSourcePanel: View {
     }
 
     private var statusText: String {
-        if session.isSubscribed { return "Online" }
+        if session.isSubscribed { return session.tradeCount > 0 ? "Receiving" : "Waiting" }
         if session.isScanning { return "Connecting" }
         if session.errorMessage != nil { return "Attention" }
         return "Stopped"
     }
 
     private var statusColor: Color {
-        if session.isSubscribed { return .green }
+        if session.isSubscribed { return session.tradeCount > 0 ? .green : .secondary }
         if session.errorMessage != nil { return .orange }
         return .secondary
     }

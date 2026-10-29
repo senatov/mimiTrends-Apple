@@ -44,7 +44,14 @@ enum MiminaviInfo1Decoder {
                     }
                     return DiscoveryRankingRow(
                         instrumentID: url.path, rank: row.rank, resolved: nil,
-                        displayName: row.name.trimmingCharacters(in: .whitespacesAndNewlines)
+                        displayName: row.name.trimmingCharacters(in: .whitespacesAndNewlines),
+                        marketMetrics: DiscoveryMarketMetrics(
+                            price: row.price,
+                            change1dPercent: row.performance1dPercent,
+                            change7dPercent: row.performance7dPercent,
+                            change30dPercent: row.performance30dPercent,
+                            change1yPercent: row.performance1yPercent
+                        )
                     )
                 }
             )

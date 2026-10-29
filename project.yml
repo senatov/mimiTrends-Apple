@@ -44,6 +44,9 @@ targets:
         TARGETED_DEVICE_FAMILY: "1,2"
         CODE_SIGN_STYLE: Automatic
         "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": MiMiTrends/Configuration/MacAppStore.entitlements
+      configs:
+        Debug:
+          "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": MiMiTrends/Configuration/MacDebug.entitlements
   mimiTrends-iOSTests:
     type: bundle.unit-test
     supportedDestinations: [iOS, macOS]

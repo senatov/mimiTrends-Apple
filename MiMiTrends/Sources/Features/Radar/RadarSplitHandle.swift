@@ -24,7 +24,7 @@ struct RadarSplitHandle: View {
                     height: axis == .columns ? 48 : 3
                 )
             Image(systemName: axis == .columns ? "arrow.left.and.right" : "arrow.up.and.down")
-                .font(.system(size: 10, weight: .bold))
+                .font(.system(size: 10, weight: .regular))
                 .foregroundStyle(.blue)
                 .padding(5)
                 .background(
