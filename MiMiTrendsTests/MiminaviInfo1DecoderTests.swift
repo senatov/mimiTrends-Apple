@@ -67,6 +67,16 @@ final class MiminaviInfo1DecoderTests: XCTestCase {
         XCTAssertEqual(candidates.first?.instrumentID, "/aktien/853888-l-oreal-aktie-1")
     }
 
+    func testAcceptsStockDetailPathWithoutAktieSuffix() throws {
+        var airbus = row("airbus", rank: 1)
+        airbus["url"] = "https://www.wallstreet-online.de/aktien/airbus"
+        let candidates = try MiminaviInfo1Decoder.decode(
+            payload(periods: ["1d": [airbus], "7d": [], "30d": [], "1y": []]),
+            sourceID: "miminavi_info1", nowMillis: nowMillis
+        )
+        XCTAssertEqual(candidates.first?.instrumentID, "/aktien/airbus")
+    }
+
     private func row(_ slug: String, rank: Int) -> [String: Any] {
         [
             "rank": rank, "name": slug, "url": "https://www.wallstreet-online.de/aktien/\(slug)-aktie",

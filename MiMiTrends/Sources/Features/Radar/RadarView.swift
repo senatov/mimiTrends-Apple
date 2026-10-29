@@ -15,6 +15,7 @@ struct RadarView: View {
     @State private var isPreparingFeed = false
     @State private var discoveryController = DiscoveryPoolController()
     @State private var discoveryStatus: DiscoveryRefreshStatus?
+    @State private var discoveryRefreshID: UUID?
 
     var body: some View {
         NavigationStack {
@@ -25,6 +26,9 @@ struct RadarView: View {
                     isPreparingFeed: isPreparingFeed
                 ) {
                     if session.isScanning { session.stop() } else { startFeed() }
+                }
+                if let activity = currentActivity {
+                    RadarActivityBanner(activity: activity)
                 }
                 RadarWorkspace(
                     signals: { compact in signalList(compact: compact) },
@@ -60,16 +64,35 @@ struct RadarView: View {
 
     private func refreshDiscoveryWhileActive() async {
         guard scenePhase == .active else {
+            discoveryRefreshID = nil
             await discoveryController.stop()
             return
         }
+        var firstRefresh = true
         while !Task.isCancelled {
+            let nowMillis = Int64(Date().timeIntervalSince1970 * 1_000)
+            let isDue = firstRefresh || discoveryStatus.map { nowMillis >= $0.nextAttemptAtMillis } ?? true
+            let refreshID = isDue ? UUID() : nil
+            discoveryRefreshID = refreshID
             let status = await discoveryController.refresh()
+            if discoveryRefreshID == refreshID { discoveryRefreshID = nil }
             guard !Task.isCancelled else { return }
             discoveryStatus = status
+            firstRefresh = false
             do { try await Task.sleep(for: .seconds(60)) }
             catch { return }
         }
+    }
+
+    private var currentActivity: RadarActivity? {
+        if isPreparingFeed { return .preparingFeed }
+        if session.isScanning && !session.isSubscribed {
+            return .connectingFeed(symbolCount: session.targetSymbols.count)
+        }
+        if discoveryRefreshID != nil {
+            return .loadingRankings(previousCount: discoveryStatus?.snapshot?.candidates.count)
+        }
+        return nil
     }
 
     private func signalList(compact: Bool) -> some View {

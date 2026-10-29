@@ -39,7 +39,7 @@ enum MiminaviInfo1Decoder {
                           url.scheme == "https", url.host == "www.wallstreet-online.de",
                           url.user == nil, url.password == nil,
                           url.port == nil, url.query == nil, url.fragment == nil,
-                          url.path.range(of: "^/aktien/[a-z0-9-]+-aktie(-[0-9]+)?$", options: .regularExpression) != nil else {
+                          url.path.range(of: "^/aktien/[a-z0-9]+(-[a-z0-9]+)*$", options: .regularExpression) != nil else {
                         throw DiscoveryDataError.invalidCandidate
                     }
                     return DiscoveryRankingRow(
