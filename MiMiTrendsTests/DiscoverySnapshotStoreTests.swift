@@ -18,7 +18,8 @@ final class DiscoverySnapshotStoreTests: XCTestCase {
         let snapshot = DiscoverySnapshot(sourceID: "fixture", refreshedAtMillis: 1_000, candidates: [
             DiscoveryCandidate(
                 sourceID: "fixture", instrumentID: "issuer-1", category: .flop,
-                rank: 1, observedAtMillis: 1_000, resolved: nil
+                rank: 1, observedAtMillis: 1_000, resolved: nil,
+                displayName: "Issuer One"
             )
         ])
         let store = DiscoverySnapshotStore(url: url)
@@ -43,6 +44,7 @@ final class DiscoverySnapshotStoreTests: XCTestCase {
         """
         let candidate = try JSONDecoder().decode(DiscoveryCandidate.self, from: Data(json.utf8))
         XCTAssertNil(candidate.origin)
+        XCTAssertNil(candidate.displayName)
         XCTAssertNoThrow(try candidate.validate())
     }
 }

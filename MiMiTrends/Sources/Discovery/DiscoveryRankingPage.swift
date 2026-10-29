@@ -1,6 +1,7 @@
 import Foundation
 
 enum DiscoveryRankingPage: String, Codable, CaseIterable, Sendable {
+    case allIndices = "top-aktien-performance"
     case dax = "top-dax-aktien-performance"
     case cdax = "top-cdax-aktien-performance"
     case mdax = "top-mdax-aktien-performance"

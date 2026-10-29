@@ -13,6 +13,8 @@ struct RadarView: View {
     @State private var historyError: String?
     @State private var chartRefreshID = 0
     @State private var isPreparingFeed = false
+    @State private var discoveryController = DiscoveryPoolController()
+    @State private var discoveryStatus: DiscoveryRefreshStatus?
 
     var body: some View {
         NavigationStack {
@@ -26,7 +28,7 @@ struct RadarView: View {
                 }
                 RadarWorkspace(
                     signals: { compact in signalList(compact: compact) },
-                    sources: { RadarSourcePanel(session: session) },
+                    sources: { RadarSourcePanel(session: session, discoveryStatus: discoveryStatus) },
                     plot: {
                         RadarChartPreview(
                             symbol: selectedSignal?.symbol ?? symbol,
@@ -41,6 +43,7 @@ struct RadarView: View {
             .background(TrendsColors.canvas)
             .navigationTitle(AppIdentity.windowTitle)
             .task(id: "\(maxResults)|\(maxAgeHours)") { await refreshSignals() }
+            .task(id: scenePhase) { await refreshDiscoveryWhileActive() }
             .onChange(of: session.lastSignal) { _, latest in
                 if latest != nil { Task { await refreshSignals(selectNewest: true) } }
             }
@@ -52,6 +55,20 @@ struct RadarView: View {
                     selectedSignal = nil
                 }
             }
+        }
+    }
+
+    private func refreshDiscoveryWhileActive() async {
+        guard scenePhase == .active else {
+            await discoveryController.stop()
+            return
+        }
+        while !Task.isCancelled {
+            let status = await discoveryController.refresh()
+            guard !Task.isCancelled else { return }
+            discoveryStatus = status
+            do { try await Task.sleep(for: .seconds(60)) }
+            catch { return }
         }
     }
 

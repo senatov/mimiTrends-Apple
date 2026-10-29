@@ -27,6 +27,7 @@ struct ResolvedMarketSymbol: Codable, Equatable, Sendable {
 struct DiscoveryCandidate: Codable, Equatable, Sendable {
     let sourceID: String
     let instrumentID: String
+    let displayName: String?
     let category: DiscoveryCategory
     let rank: Int
     let observedAtMillis: Int64
@@ -35,9 +36,10 @@ struct DiscoveryCandidate: Codable, Equatable, Sendable {
 
     init(sourceID: String, instrumentID: String, category: DiscoveryCategory,
          rank: Int, observedAtMillis: Int64, resolved: ResolvedMarketSymbol?,
-         origin: DiscoveryRankingOrigin? = nil) {
+         origin: DiscoveryRankingOrigin? = nil, displayName: String? = nil) {
         self.sourceID = sourceID
         self.instrumentID = instrumentID
+        self.displayName = displayName
         self.category = category
         self.rank = rank
         self.observedAtMillis = observedAtMillis
@@ -51,6 +53,7 @@ struct DiscoveryCandidate: Codable, Equatable, Sendable {
     func validate() throws {
         guard sourceID.range(of: "^[A-Za-z0-9_-]{1,64}$", options: .regularExpression) != nil,
               !instrumentID.isEmpty, instrumentID.utf8.count <= 256,
+              displayName.map({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && $0.utf8.count <= 200 }) ?? true,
               rank > 0, rank <= 1_000,
               observedAtMillis > 0 else {
             throw DiscoveryDataError.invalidCandidate

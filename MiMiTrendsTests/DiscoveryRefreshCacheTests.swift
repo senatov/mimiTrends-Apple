@@ -98,6 +98,43 @@ final class DiscoveryRefreshCacheTests: XCTestCase {
         XCTAssertFalse(status.hasFreshSnapshot(atMillis: 1_801_000))
         XCTAssertFalse(status.hasFreshSnapshot(atMillis: 999))
     }
+
+    func testFreshnessUsesSourceObservationTime() {
+        let candidate = DiscoveryCandidate(
+            sourceID: "fixture", instrumentID: "first", category: .top,
+            rank: 1, observedAtMillis: 1_000, resolved: nil
+        )
+        let status = DiscoveryRefreshStatus(
+            snapshot: DiscoverySnapshot(
+                sourceID: "fixture", refreshedAtMillis: 20 * 60_000,
+                candidates: [candidate]
+            ),
+            lastAttemptSucceeded: true, nextAttemptAtMillis: 50 * 60_000
+        )
+        XCTAssertTrue(status.hasFreshSnapshot(atMillis: 30 * 60_000))
+        XCTAssertFalse(status.hasFreshSnapshot(atMillis: 30 * 60_000 + 1_000))
+    }
+
+    func testCancellationStopsInFlightRefreshAndAllowsRetry() async throws {
+        let source = DiscoveryFixtureSource()
+        await source.setDelay(.seconds(1))
+        await source.setCancellationAsURLError(true)
+        let cache = DiscoveryRefreshCache(source: source)
+        let pending = Task { await cache.refreshIfNeeded() }
+        for _ in 0..<100 {
+            if await source.loadCount > 0 { break }
+            try await Task.sleep(for: .milliseconds(2))
+        }
+        await cache.cancel()
+        let cancelled = await pending.value
+        XCTAssertNil(cancelled.snapshot)
+        XCTAssertEqual(cancelled.nextAttemptAtMillis, 0)
+
+        await source.setDelay(.zero)
+        let retried = await cache.refreshIfNeeded()
+        XCTAssertTrue(retried.lastAttemptSucceeded)
+        XCTAssertEqual(retried.snapshot?.candidates.first?.instrumentID, "first")
+    }
 }
 
 private final class DiscoveryTestClock: @unchecked Sendable {
@@ -124,15 +161,23 @@ private actor DiscoveryFixtureSource: DiscoveryCandidateSource {
     private(set) var loadCount = 0
     private var id = "first"
     private var shouldFail = false
+    private var cancellationAsURLError = false
     private var delay: Duration?
 
     func setID(_ value: String) { id = value }
     func setFailure(_ value: Bool) { shouldFail = value }
+    func setCancellationAsURLError(_ value: Bool) { cancellationAsURLError = value }
     func setDelay(_ value: Duration) { delay = value }
 
     func loadCandidates() async throws -> [DiscoveryCandidate] {
         loadCount += 1
-        if let delay { try await Task.sleep(for: delay) }
+        if let delay {
+            do { try await Task.sleep(for: delay) }
+            catch {
+                if cancellationAsURLError { throw URLError(.cancelled) }
+                throw error
+            }
+        }
         if shouldFail { throw DiscoveryDataError.invalidCandidate }
         return [DiscoveryCandidate(
             sourceID: sourceID, instrumentID: id, category: .top,

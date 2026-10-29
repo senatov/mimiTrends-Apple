@@ -4,6 +4,7 @@ import XCTest
 final class DiscoveryRankingBatchTests: XCTestCase {
     func testCatalogMatchesRequestedPages() {
         XCTAssertEqual(DiscoveryRankingPage.allCases.map(\.path), [
+            "/statistik/top-aktien-performance",
             "/statistik/top-dax-aktien-performance",
             "/statistik/top-cdax-aktien-performance",
             "/statistik/top-mdax-aktien-performance",
@@ -40,14 +41,14 @@ final class DiscoveryRankingBatchTests: XCTestCase {
         XCTAssertTrue(result.emptyRankings.contains(DiscoveryRankingKey(page: .dax, period: .day)))
     }
 
-    func testAllRequestedPagesCanContributeFiftyRows() throws {
+    func testCatalogPagesCanEachContributeFiftyRows() throws {
         let batches = DiscoveryRankingPage.allCases.map { page in
             batch(page, page.isIndexRanking ? .day : .activity,
                   ids: (1...50).map { "\(page.rawValue)-\($0)" })
         }
         let result = try DiscoveryRankingAssembler.assemble(batches, sourceID: "fixture")
-        XCTAssertEqual(result.availableRankings.count, 10)
-        XCTAssertEqual(result.candidates.count, 500)
+        XCTAssertEqual(result.availableRankings.count, 11)
+        XCTAssertEqual(result.candidates.count, 550)
     }
 
     func testRejectsOversizedDuplicateAndMismatchedRankings() {

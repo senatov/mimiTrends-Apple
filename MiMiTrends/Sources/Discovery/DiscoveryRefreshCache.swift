@@ -40,7 +40,11 @@ struct DiscoveryRefreshStatus: Sendable {
     func hasFreshSnapshot(atMillis nowMillis: Int64) -> Bool {
         guard lastAttemptSucceeded, let snapshot else { return false }
         let age = nowMillis - snapshot.refreshedAtMillis
-        return age >= 0 && age < 30 * 60_000
+        return age >= 0 && age < 30 * 60_000 &&
+            snapshot.candidates.allSatisfy { candidate in
+                let sourceAge = nowMillis - candidate.observedAtMillis
+                return sourceAge >= 0 && sourceAge < 30 * 60_000
+            }
     }
 }
 
@@ -51,6 +55,7 @@ actor DiscoveryRefreshCache {
     private var lastAttemptSucceeded = false
     private var nextAttemptAtMillis: Int64 = 0
     private var inFlight: Task<Void, Never>?
+    private var inFlightID: UUID?
 
     init(source: any DiscoveryCandidateSource,
          nowMillis: @escaping @Sendable () -> Int64 = {
@@ -68,16 +73,28 @@ actor DiscoveryRefreshCache {
         nextAttemptAtMillis = 0
     }
 
+    func cancel() {
+        inFlight?.cancel()
+        inFlight = nil
+        inFlightID = nil
+        nextAttemptAtMillis = 0
+    }
+
     func refreshIfNeeded() async -> DiscoveryRefreshStatus {
         if let inFlight {
             await inFlight.value
             return status()
         }
         if nowMillis() >= nextAttemptAtMillis {
+            let id = UUID()
             let task = Task { await performRefresh() }
             inFlight = task
+            inFlightID = id
             await task.value
-            inFlight = nil
+            if inFlightID == id {
+                inFlight = nil
+                inFlightID = nil
+            }
         }
         return status()
     }
@@ -85,6 +102,7 @@ actor DiscoveryRefreshCache {
     private func performRefresh() async {
         do {
             let loaded = try await source.loadCandidates()
+            try Task.checkCancellation()
             let selected = try DiscoveryCandidateSelector.select(loaded, sourceID: source.sourceID)
             guard !selected.isEmpty else { throw DiscoveryDataError.invalidCandidate }
             let refreshedAt = nowMillis()
@@ -94,6 +112,7 @@ actor DiscoveryRefreshCache {
             lastAttemptSucceeded = true
             nextAttemptAtMillis = refreshedAt + 30 * 60_000
         } catch {
+            if Task.isCancelled || error is CancellationError { return }
             lastAttemptSucceeded = false
             nextAttemptAtMillis = nowMillis() + 5 * 60_000
         }
