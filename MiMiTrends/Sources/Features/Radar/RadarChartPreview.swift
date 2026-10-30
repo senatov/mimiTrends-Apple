@@ -62,7 +62,7 @@ struct RadarChartPreview: View {
                 Text(symbol.isEmpty ? "No symbol selected" : symbol)
                     .font(.title3.weight(.regular))
                 if let signal {
-                    Text(signal.price.formatted())
+                    Text(signal.price.formatted(.number.precision(.fractionLength(0...2))))
                         .font(.title3.monospacedDigit())
                     Text("\(signal.windowChangePercent.formatted(.number.precision(.fractionLength(2))))%")
                         .font(.subheadline.weight(.medium))
@@ -71,8 +71,8 @@ struct RadarChartPreview: View {
                     Text(last.close.formatted(.number.precision(.fractionLength(2))))
                         .font(.title3.monospacedDigit())
                     Text("latest saved close")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.subheadline.weight(.light))
+                        .foregroundStyle(TrendsColors.supportingInk)
                 }
             }
             if isLoading {
@@ -96,8 +96,8 @@ struct RadarChartPreview: View {
                 )
                 if let last = chartData.bars.last {
                     Text("\(chartData.bars.count) saved bars · latest \(Date(timeIntervalSince1970: TimeInterval(last.minuteEpochSeconds)).formatted(.dateTime.month().day().hour().minute())) · source currency · gaps are not filled")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.subheadline.weight(.light))
+                        .foregroundStyle(TrendsColors.supportingInk)
                 }
             }
         }

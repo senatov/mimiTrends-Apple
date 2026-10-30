@@ -5,12 +5,12 @@ struct HeaderBuildBadge: View {
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: "chart.xyaxis.line")
-                .font(.system(size: 13, weight: .regular))
+                .font(.body)
                 .foregroundStyle(.blue)
             Text(AppIdentity.name)
-                .font(.system(size: 14, weight: .regular))
+                .font(.body.weight(.light))
             Text("v. \(AppIdentity.version)")
-                .font(.system(size: 11, weight: .regular, design: .monospaced))
+                .font(.subheadline.weight(.light).monospaced())
                 .foregroundStyle(.indigo)
         }
         .padding(.horizontal, 12)

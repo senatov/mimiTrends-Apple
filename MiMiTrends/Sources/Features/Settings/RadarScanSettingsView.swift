@@ -66,8 +66,8 @@ struct RadarScanSettingsView: View {
             doubleRow("Minimum price", value: $draft.minimumPrice, range: 0...10_000, step: 0.5, unit: "")
             amountRow("30-minute turnover", value: $draft.minimumTurnover)
             Text("Turnover uses the instrument's source currency. Changes stop an active feed; start it again to scan with the saved thresholds.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+                .font(.body.weight(.light))
+                .foregroundStyle(TrendsColors.supportingInk)
             HStack {
                 TrendsActionButton(title: "Save thresholds", systemImage: "checkmark") { save() }
                     .disabled(draft == saved)
@@ -76,7 +76,7 @@ struct RadarScanSettingsView: View {
                 }
             }
             if let message {
-                Text(message).font(.footnote).foregroundStyle(.secondary)
+                Text(message).font(.body.weight(.light)).foregroundStyle(TrendsColors.supportingInk)
             }
         }
     }
@@ -109,7 +109,7 @@ struct RadarScanSettingsView: View {
                 Spacer()
                 Text("\(value.wrappedValue.formatted(.number.precision(.fractionLength(step < 1 ? 2 : 0)))) \(unit)")
                     .monospacedDigit()
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(TrendsColors.supportingInk)
             }
         }
         .accessibilityLabel(title)
@@ -124,7 +124,7 @@ struct RadarScanSettingsView: View {
                 Spacer()
                 Text("\(value.wrappedValue) \(unit)")
                     .monospacedDigit()
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(TrendsColors.supportingInk)
             }
         }
         .accessibilityLabel(title)

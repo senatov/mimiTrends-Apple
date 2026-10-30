@@ -1,6 +1,9 @@
 import SwiftUI
 
 enum TrendsColors {
+    static let ink = Color("Ink")
+    static let supportingInk = Color("SupportingInk")
+
     static var canvas: Color {
         #if os(macOS)
         Color(nsColor: .windowBackgroundColor)

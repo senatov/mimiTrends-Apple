@@ -65,9 +65,10 @@ struct FinnhubTradeStream: Sendable {
     static func streamURL(apiKey: String) throws -> URL {
         let key = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !key.isEmpty else { throw FinnhubStreamError.missingKey }
-        var components = URLComponents()
-        components.scheme = "wss"
-        components.host = "ws.finnhub.io"
+        guard var components = URLComponents(url: ProviderEndpointStore.url(for: .finnhubTrades),
+                                             resolvingAgainstBaseURL: false) else {
+            throw FinnhubStreamError.missingKey
+        }
         components.queryItems = [URLQueryItem(name: "token", value: key)]
         guard let url = components.url else { throw FinnhubStreamError.missingKey }
         return url

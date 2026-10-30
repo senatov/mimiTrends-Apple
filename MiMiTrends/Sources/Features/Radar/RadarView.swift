@@ -14,8 +14,12 @@ struct RadarView: View {
     @State private var chartRefreshID = 0
     @State private var isPreparingFeed = false
     @State private var discoveryController = DiscoveryPoolController()
+    @State private var marketScanner = MarketRadarScanner()
+    @State private var marketCycle: MarketRadarCycle?
     @State private var discoveryStatus: DiscoveryRefreshStatus?
     @State private var discoveryRefreshID: UUID?
+    @State private var discoveryRequests = 0
+    @State private var discoveryErrors = 0
 
     var body: some View {
         NavigationStack {
@@ -32,7 +36,13 @@ struct RadarView: View {
                 }
                 RadarWorkspace(
                     signals: { compact in signalList(compact: compact) },
-                    sources: { RadarSourcePanel(session: session, discoveryStatus: discoveryStatus) },
+                    sources: {
+                        RadarSourcePanel(
+                            session: session, discoveryStatus: discoveryStatus,
+                            discoveryRequests: discoveryRequests, discoveryErrors: discoveryErrors,
+                            marketCycle: marketCycle
+                        )
+                    },
                     plot: {
                         RadarChartPreview(
                             symbol: selectedSignal?.symbol ?? symbol,
@@ -48,6 +58,7 @@ struct RadarView: View {
             .navigationTitle("Radar")
             .task(id: "\(maxResults)|\(maxAgeHours)") { await refreshSignals() }
             .task(id: scenePhase) { await refreshDiscoveryWhileActive() }
+            .task(id: scenePhase) { await scanMarketWhileActive() }
             .onChange(of: session.lastSignal) { _, latest in
                 if latest != nil { Task { await refreshSignals(selectNewest: true) } }
             }
@@ -79,6 +90,8 @@ struct RadarView: View {
             guard !Task.isCancelled else { return }
             discoveryStatus = status
             if isDue {
+                discoveryRequests += 1
+                if !status.lastAttemptSucceeded { discoveryErrors += 1 }
                 AppDiagnostics.shared.record(
                     status.lastAttemptSucceeded ? .info : .warning,
                     "Discovery", "refresh-finished",
@@ -86,6 +99,31 @@ struct RadarView: View {
                 )
             }
             firstRefresh = false
+            do { try await Task.sleep(for: .seconds(60)) }
+            catch { return }
+        }
+    }
+
+    private func scanMarketWhileActive() async {
+        guard scenePhase == .active else { return }
+        while !Task.isCancelled {
+            do {
+                let cycle = try await marketScanner.scan(settings: RadarScanPreferencesStore.load())
+                guard !Task.isCancelled else { return }
+                marketCycle = cycle
+                if cycle.storedSignals > 0 { await refreshSignals() }
+                AppDiagnostics.shared.record(
+                    .info, "Radar", "market-scan-finished",
+                    "symbols=\(cycle.scannedSymbols) signals=\(cycle.storedSignals) yahooErrors=\(cycle.yahoo.errors) traderFoxErrors=\(cycle.traderFox.errors)"
+                )
+            } catch is CancellationError {
+                return
+            } catch {
+                AppDiagnostics.shared.record(
+                    .error, "Radar", "market-scan-failed",
+                    "error=\(String(describing: type(of: error)))"
+                )
+            }
             do { try await Task.sleep(for: .seconds(60)) }
             catch { return }
         }
@@ -105,8 +143,8 @@ struct RadarView: View {
     private func signalList(compact: Bool) -> some View {
         RadarSignalList(
             signals: recentSignals,
+            companyNames: marketCycle?.companyNames ?? [:],
             selected: selectedSignal,
-            discoverySnapshot: discoveryStatus?.snapshot,
             compact: compact,
             errorMessage: historyError,
             onSelect: { signal in
@@ -124,7 +162,10 @@ struct RadarView: View {
             let cutoff = Int64(Date().timeIntervalSince1970 * 1_000) - Int64(ageHours) * 3_600_000
             let loaded = try await Task.detached(priority: .userInitiated) {
                 let store = try MarketSignalStore(url: MarketSignalStore.defaultURL())
-                return try await store.loadRecent(limit: limit, sinceEpochMillis: cutoff)
+                let history = try await store.loadRecent(
+                    limit: min(limit * 10, 500), sinceEpochMillis: cutoff
+                )
+                return RadarSignalSelection.latestPerSymbol(history, limit: limit)
             }.value
             recentSignals = loaded
             AppDiagnostics.shared.record(.info, "Radar", "history-loaded", "signals=\(loaded.count)")

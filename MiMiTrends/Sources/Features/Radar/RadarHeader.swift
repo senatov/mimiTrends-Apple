@@ -16,12 +16,9 @@ struct RadarHeader: View {
         VStack(alignment: .leading, spacing: 7) {
             headerLayout {
                 HStack(spacing: 10) { feedControls }
-                statusLabel
                 if !isCompactLayout { Spacer(minLength: 8) }
-                metricStrip
+                scopePicker
             }
-            scopePicker
-                .frame(maxWidth: .infinity, alignment: .leading)
             if let message = setupMessage ?? session.errorMessage {
                 Text(message).font(.footnote).foregroundStyle(.red)
             }
@@ -69,33 +66,5 @@ struct RadarHeader: View {
         .frame(maxWidth: 310)
         .disabled(session.isScanning || isPreparingFeed)
         .help("Selected + Watchlist requests at most five symbols per feed.")
-    }
-
-    private var statusText: String {
-        if session.isSubscribed { return session.tradeCount > 0 ? "Receiving trades" : "Waiting for trades" }
-        if session.isScanning { return "Connecting" }
-        return "Stopped"
-    }
-
-    private var statusLabel: some View {
-        Label("Finnhub · \(statusText)", systemImage: session.tradeCount > 0 ? "checkmark.circle.fill" : "circle.fill")
-            .font(.caption.weight(.medium))
-            .foregroundStyle(session.tradeCount > 0 ? .green : .secondary)
-            .padding(.horizontal, 9)
-            .padding(.vertical, 6)
-            .background(.thinMaterial, in: Capsule())
-            .accessibilityLabel("Finnhub: \(statusText)")
-    }
-
-    private var metricStrip: some View {
-        HStack(spacing: 10) {
-            Label("\(session.tradeCount) trades", systemImage: "chart.line.uptrend.xyaxis")
-            Label("\(session.completedBarsStored) bars", systemImage: "chart.bar")
-            Text("\(session.isScanning ? session.targetSymbols.count : 1) requested · foreground only")
-        }
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .monospacedDigit()
-        .lineLimit(1)
     }
 }

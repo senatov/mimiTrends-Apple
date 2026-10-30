@@ -2,8 +2,8 @@ import SwiftUI
 
 struct RadarSignalList: View {
     let signals: [ScanResult]
+    let companyNames: [String: String]
     let selected: ScanResult?
-    let discoverySnapshot: DiscoverySnapshot?
     let compact: Bool
     let errorMessage: String?
     let onSelect: (ScanResult) -> Void
@@ -12,12 +12,10 @@ struct RadarSignalList: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Live radar").font(.headline.weight(.regular))
-                    Text("Recent saved detections")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                Text("Live radar").font(.title3.weight(.light))
+                Text("\(signals.count) signals")
+                    .font(.subheadline)
+                    .foregroundStyle(TrendsColors.supportingInk)
                 Spacer()
                 Button("Refresh", systemImage: "arrow.clockwise", action: onRefresh)
                     .labelStyle(.iconOnly)
@@ -29,52 +27,47 @@ struct RadarSignalList: View {
                 Text(errorMessage).font(.footnote).foregroundStyle(.red)
             }
             if signals.isEmpty {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label("No confirmed scanner signals yet", systemImage: "waveform.path.ecg")
-                            .font(.subheadline.weight(.regular))
-                            .foregroundStyle(.secondary)
-                        if let discoverySnapshot {
-                            Divider()
-                            RadarRankingPreview(snapshot: discoverySnapshot)
-                        } else {
-                            Text("Market rankings appear here after the first refresh.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .topLeading)
+                VStack {
+                    Spacer(minLength: 16)
+                    Text("Waiting for a confirmed rise or drop in minute candles")
+                        .font(.title2.weight(.light))
+                        .foregroundStyle(TrendsColors.ink)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                    Spacer(minLength: 16)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 if !compact {
                     HStack(spacing: 8) {
-                        Text("Symbol").frame(width: 80, alignment: .leading)
-                        Text("Event").frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Company").frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Event").frame(width: 285, alignment: .leading)
                         Text("Movement").frame(width: 115, alignment: .trailing)
                         Text("Price").frame(width: 70, alignment: .trailing)
-                        Text("Age").frame(width: 95, alignment: .trailing)
+                        Text("Age").frame(width: 50, alignment: .trailing)
                     }
-                    .font(.caption.weight(.regular))
-                    .foregroundStyle(.secondary)
+                    .font(.subheadline.weight(.light))
+                    .foregroundStyle(TrendsColors.supportingInk)
                 }
                 ScrollView {
-                    LazyVStack(spacing: 4) {
+                    LazyVStack(spacing: 0) {
                         ForEach(signals.map(RadarSignalItem.init)) { item in
-                            Button { onSelect(item.signal) } label: {
-                                RadarSignalRow(
-                                    signal: item.signal,
-                                    compact: compact,
-                                    isSelected: isSelected(item.signal)
-                                )
-                            }
-                            .buttonStyle(.plain)
+                            RadarSignalRow(
+                                signal: item.signal,
+                                companyName: companyNames[item.signal.symbol] ?? item.signal.symbol,
+                                compact: compact,
+                                isSelected: isSelected(item.signal),
+                                onSelect: { onSelect(item.signal) }
+                            )
                             .accessibilityAddTraits(isSelected(item.signal) ? [.isSelected] : [])
+                            Divider()
                         }
                     }
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .foregroundStyle(TrendsColors.ink)
         .trendsPanel()
     }
 

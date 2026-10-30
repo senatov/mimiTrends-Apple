@@ -38,8 +38,8 @@ struct RadarActivityBanner: View {
                 Text(activity.title)
                     .font(.subheadline.weight(.regular))
                 Text(activity.detail)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.subheadline.weight(.light))
+                    .foregroundStyle(TrendsColors.supportingInk)
             }
             Spacer(minLength: 0)
         }

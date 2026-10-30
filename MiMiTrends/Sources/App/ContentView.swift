@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(RadarSession.self) private var radarSession
-    @State private var selectedTab = "charts"
+    @State private var selectedTab = "radar"
     @AppStorage("selected.symbol.v1") private var radarSymbol = "ORCL"
     @AppStorage("appearance.theme.v1") private var theme = "light"
 

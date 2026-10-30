@@ -9,10 +9,10 @@ struct DiscoveryCandidateList: View {
             Section {
                 Text("Published prices use source units. These rankings do not supply verified Finnhub symbols and are not scanner signals.")
                     .font(.callout)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(TrendsColors.supportingInk)
                 Text("Last fetch: \(Date(timeIntervalSince1970: TimeInterval(snapshot.refreshedAtMillis) / 1_000), style: .relative)")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(TrendsColors.supportingInk)
             }
             Section("\(filteredCandidates.count) candidates") {
                 ForEach(filteredCandidates, id: \.identity) { candidate in
@@ -55,7 +55,7 @@ struct DiscoveryCandidateList: View {
                     .truncationMode(.middle)
             }
             .font(.caption)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(TrendsColors.supportingInk)
         }
         .accessibilityElement(children: .combine)
     }

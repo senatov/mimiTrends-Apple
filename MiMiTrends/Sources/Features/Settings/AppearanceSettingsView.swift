@@ -30,12 +30,12 @@ struct AppearanceSettingsView: View {
 
     private var typographyGroup: some View {
         SettingsGroup(title: "Typography and layout") {
-            LabeledContent("Font", value: "System")
-            LabeledContent("Text size", value: "Follows device settings")
-            LabeledContent("Panels", value: "Resizable; positions saved")
-            Text("The native app follows Dynamic Type and system contrast. Desktop table colour and font overrides are not used in this SwiftUI layout.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+            SettingsValueRow(title: "Font", value: "System")
+            SettingsValueRow(title: "Text size", value: "Follows device settings")
+            SettingsValueRow(title: "Panels", value: "Resizable; positions saved")
+            Text("Text follows the system size. Radar and Settings use the prototype's high-contrast text colours.")
+                .font(.body.weight(.light))
+                .foregroundStyle(TrendsColors.supportingInk)
         }
     }
 }

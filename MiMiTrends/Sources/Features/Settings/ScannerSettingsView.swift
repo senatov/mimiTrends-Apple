@@ -22,27 +22,27 @@ struct ScannerSettingsView: View {
     private var resultPanel: some View {
         SettingsGroup(title: "Saved signal display") {
             Stepper(value: $maxResults, in: 5...100, step: 5) {
-                LabeledContent("Maximum results", value: maxResults.formatted())
+                SettingsValueRow(title: "Maximum results", value: maxResults.formatted())
             }
             .accessibilityLabel("Maximum results")
             Stepper(value: $maxAgeHours, in: 1...72) {
-                LabeledContent("Maximum signal age", value: "\(maxAgeHours) h")
+                SettingsValueRow(title: "Maximum signal age", value: "\(maxAgeHours) h")
             }
             .accessibilityLabel("Maximum signal age")
             Text("These limits filter the saved Radar list on this device. They do not delete signals from the database.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+                .font(.body.weight(.light))
+                .foregroundStyle(TrendsColors.supportingInk)
         }
     }
 
     private var scopePanel: some View {
         SettingsGroup(title: "Current scan scope") {
-            LabeledContent("Source", value: "Finnhub live trades")
-            LabeledContent("Symbols", value: scanWatchlist ? "Selected + Watchlist, up to 5" : "Selected symbol")
-            LabeledContent("Activity", value: "Foreground only")
-            Text("Desktop market universes, statistical anomaly filters, scan intervals, and currency conversion require their native scanner and source adapters before they can be configured here.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+            SettingsValueRow(title: "Sources", value: "Yahoo candles, Yahoo and TraderFox discovery; optional Finnhub trades")
+            SettingsValueRow(title: "Symbols", value: scanWatchlist ? "Selected + Watchlist, up to 5" : "Selected symbol")
+            SettingsValueRow(title: "Activity", value: "Foreground only")
+            Text("The market scan runs in the foreground. Other desktop quote providers still require native adapters.")
+                .font(.body.weight(.light))
+                .foregroundStyle(TrendsColors.supportingInk)
         }
     }
 }

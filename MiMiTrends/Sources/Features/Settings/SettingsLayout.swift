@@ -28,14 +28,16 @@ struct SettingsPage<Content: View>: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(title).font(.title2.weight(.regular))
-                        Text(subtitle).font(.subheadline).foregroundStyle(.secondary)
+                        Text(title).font(.title2.weight(.light))
+                        Text(subtitle).font(.body.weight(.light))
+                            .foregroundStyle(TrendsColors.supportingInk)
                     }
                     content(geometry.size.width)
                 }
                 .frame(maxWidth: 1600, alignment: .leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(24)
+                .foregroundStyle(TrendsColors.ink)
             }
         }
         .background(SettingsColors.background)
@@ -49,7 +51,7 @@ struct SettingsGroup<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text(title).font(.headline.weight(.regular))
+            Text(title).font(.title3.weight(.light))
             content()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -59,5 +61,21 @@ struct SettingsGroup<Content: View>: View {
             RoundedRectangle(cornerRadius: 12)
                 .strokeBorder(.primary.opacity(0.09), lineWidth: 1)
         }
+    }
+}
+
+struct SettingsValueRow: View {
+    let title: String
+    let value: String
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
+            Text(title)
+            Spacer(minLength: 8)
+            Text(value)
+                .multilineTextAlignment(.trailing)
+                .foregroundStyle(TrendsColors.ink)
+        }
+        .font(.body.weight(.light))
     }
 }

@@ -23,13 +23,13 @@ struct RadarRankingPreview: View {
             }
             Text("miminavi.tech · updated \(Date(timeIntervalSince1970: TimeInterval(snapshot.refreshedAtMillis) / 1_000), style: .relative) · ranking data, not scanner signals")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(TrendsColors.supportingInk)
             ForEach(leaders, id: \.identity) { candidate in
                 if let metrics = candidate.marketMetrics {
                     HStack(spacing: 8) {
                         Text("#\(candidate.rank)")
                             .frame(width: 30, alignment: .leading)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(TrendsColors.supportingInk)
                         Text(candidate.displayName ?? candidate.instrumentID)
                             .lineLimit(1)
                             .frame(maxWidth: .infinity, alignment: .leading)

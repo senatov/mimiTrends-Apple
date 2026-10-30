@@ -44,7 +44,7 @@ private struct TrendsActionButtonBody: View {
 
     var body: some View {
         configuration.label
-            .font(.callout)
+            .font(.body.weight(.light))
             .padding(.horizontal, compact ? 10 : 13)
             .frame(minHeight: minimumHeight)
             .background {

@@ -1,0 +1,137 @@
+import Foundation
+
+struct RadarSourceTotals: Sendable {
+    var received = 0
+    var valid = 0
+    var operations = 0
+    var errors = 0
+}
+
+struct MarketRadarCycle: Sendable {
+    let yahoo: RadarSourceTotals
+    let traderFox: RadarSourceTotals
+    let scannedSymbols: Int
+    let storedSignals: Int
+    let companyNames: [String: String]
+}
+
+actor MarketRadarScanner {
+    private let yahoo = YahooRadarSource()
+    private let traderFox = TraderFoxRadarSource()
+    private var yahooCandidates: [RadarCompanyCandidate] = []
+    private var traderFoxCandidates: [RadarCompanyCandidate] = []
+    private var nextDiscoveryAt: Date = .distantPast
+    private var yahooTotals = RadarSourceTotals()
+    private var traderFoxTotals = RadarSourceTotals()
+
+    func scan(settings: RadarScanPreferences) async throws -> MarketRadarCycle {
+        try Task.checkCancellation()
+        if Date() >= nextDiscoveryAt {
+            await refreshSources()
+        }
+        let symbols = Self.interleave(yahooCandidates.map(\.symbol), traderFoxCandidates.map(\.symbol), limit: 16)
+        let names = Dictionary(
+            (yahooCandidates + traderFoxCandidates).map { ($0.symbol, $0.name) },
+            uniquingKeysWith: { first, _ in first }
+        )
+        guard !symbols.isEmpty else {
+            return MarketRadarCycle(yahoo: yahooTotals, traderFox: traderFoxTotals,
+                                    scannedSymbols: 0, storedSignals: 0, companyNames: names)
+        }
+        let barStore = try MarketBarStore(url: MarketBarStore.defaultURL())
+        let signalStore = try MarketSignalStore(url: MarketSignalStore.defaultURL())
+        let nowSeconds = Int64(Date().timeIntervalSince1970)
+        var storedSignals = 0
+        for batch in stride(from: 0, to: symbols.count, by: 4) {
+            try Task.checkCancellation()
+            let group = Array(symbols[batch..<min(batch + 4, symbols.count)])
+            await withTaskGroup(of: SymbolOutcome.self) { tasks in
+                for symbol in group {
+                    tasks.addTask { [yahoo] in
+                        do {
+                            let bars = try await yahoo.minuteBars(symbol: symbol)
+                            try Task.checkCancellation()
+                            guard let last = bars.last,
+                                  last.minuteEpochSeconds >= nowSeconds - 600 else {
+                                return SymbolOutcome(received: bars.count, signalStored: false, failed: false)
+                            }
+                            for bar in bars { _ = try await barStore.upsert(bar) }
+                            let recent = try await barStore.loadMinuteBars(
+                                symbol: symbol, fromEpochSeconds: nowSeconds - 21_600
+                            )
+                            let signal = RapidCrashDetector.detect(
+                                symbol: symbol, bars: recent, nowEpochSeconds: nowSeconds,
+                                settings: settings.rapidCrash
+                            ) ?? RapidRiseDetector.detect(
+                                symbol: symbol, bars: recent, nowEpochSeconds: nowSeconds,
+                                settings: settings.rapidRise
+                            ) ?? SustainedMoveDetector.detect(
+                                symbol: symbol, bars: recent, nowEpochSeconds: nowSeconds,
+                                settings: settings.sustainedMove
+                            )
+                            let saved: Bool
+                            if let signal {
+                                saved = try await signalStore.record(signal)
+                            } else {
+                                saved = false
+                            }
+                            return SymbolOutcome(received: bars.count, signalStored: saved, failed: false)
+                        } catch {
+                            return SymbolOutcome(received: 0, signalStored: false, failed: true)
+                        }
+                    }
+                }
+                for await outcome in tasks {
+                    yahooTotals.received += outcome.received
+                    yahooTotals.valid += outcome.received
+                    yahooTotals.operations += 1
+                    if outcome.failed { yahooTotals.errors += 1 }
+                    if outcome.signalStored { storedSignals += 1 }
+                }
+            }
+        }
+        return MarketRadarCycle(
+            yahoo: yahooTotals, traderFox: traderFoxTotals,
+            scannedSymbols: symbols.count, storedSignals: storedSignals, companyNames: names
+        )
+    }
+
+    private func refreshSources() async {
+        nextDiscoveryAt = Date().addingTimeInterval(30 * 60)
+        do {
+            let symbols = try await yahoo.mostActiveCandidates()
+            yahooTotals.operations += 1
+            if !symbols.isEmpty { yahooCandidates = symbols }
+        } catch {
+            yahooTotals.operations += 1
+            yahooTotals.errors += 1
+        }
+        do {
+            let symbols = try await traderFox.activeCandidates()
+            traderFoxTotals.operations += 1
+            traderFoxTotals.received += symbols.count
+            traderFoxTotals.valid += symbols.count
+            if !symbols.isEmpty { traderFoxCandidates = symbols }
+        } catch {
+            traderFoxTotals.operations += 1
+            traderFoxTotals.errors += 1
+        }
+    }
+
+    static func interleave(_ first: [String], _ second: [String], limit: Int) -> [String] {
+        var result: [String] = []
+        var seen = Set<String>()
+        for index in 0..<max(first.count, second.count) {
+            if index < first.count, seen.insert(first[index]).inserted { result.append(first[index]) }
+            if index < second.count, seen.insert(second[index]).inserted { result.append(second[index]) }
+            if result.count >= limit { break }
+        }
+        return Array(result.prefix(max(0, limit)))
+    }
+}
+
+private struct SymbolOutcome: Sendable {
+    let received: Int
+    let signalStored: Bool
+    let failed: Bool
+}

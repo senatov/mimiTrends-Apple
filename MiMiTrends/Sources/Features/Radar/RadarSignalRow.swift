@@ -2,8 +2,10 @@ import SwiftUI
 
 struct RadarSignalRow: View {
     let signal: ScanResult
+    let companyName: String
     let compact: Bool
     let isSelected: Bool
+    let onSelect: () -> Void
 
     var body: some View {
         Group {
@@ -14,60 +16,59 @@ struct RadarSignalRow: View {
             }
         }
         .padding(.horizontal, 8)
-        .padding(.vertical, 9)
+        .padding(.vertical, 7)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(backgroundColor)
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .strokeBorder(isSelected ? Color.accentColor : Color.primary.opacity(0.08), lineWidth: 1)
-        }
-        .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .background(backgroundColor)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onSelect)
         .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAction(.default) { onSelect() }
     }
 
     private var compactContent: some View {
         VStack(alignment: .leading, spacing: 7) {
             HStack {
-                Text(signal.symbol).fontWeight(.regular)
+                Text(companyName).font(.body.weight(.light)).lineLimit(1)
                 Spacer()
-                Text(signal.price.formatted()).monospacedDigit()
+                Text(formattedPrice).monospacedDigit()
             }
             HStack(spacing: 8) {
                 eventBadge
                 Spacer(minLength: 4)
                 movement
             }
-            Text(savedAt, style: .relative)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+            ageText
         }
     }
 
     private var wideContent: some View {
         HStack(spacing: 8) {
-            Text(signal.symbol)
-                .fontWeight(.regular)
-                .frame(width: 80, alignment: .leading)
-            eventBadge
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(spacing: 5) {
+                Text(companyName).lineLimit(1)
+                Text("🇺🇸").accessibilityLabel("United States")
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(spacing: 6) {
+                eventBadge
+                Link("Rumors", destination: rumorsURL)
+                    .font(.subheadline.weight(.light))
+                    .buttonStyle(TrendsActionButtonStyle(compact: true))
+            }
+            .frame(width: 285, alignment: .leading)
             movement
                 .frame(width: 115, alignment: .trailing)
-            Text(signal.price.formatted())
+            Text(formattedPrice)
                 .monospacedDigit()
                 .frame(width: 70, alignment: .trailing)
-            Text(savedAt, style: .relative)
-                .lineLimit(1)
-                .frame(width: 95, alignment: .trailing)
+            ageText.frame(width: 50, alignment: .trailing)
         }
-        .font(.subheadline)
+        .font(.body.weight(.light))
     }
 
     private var eventBadge: some View {
         Text(eventLabel)
-            .font(.caption.weight(.regular))
+            .font(.subheadline.weight(.light))
             .foregroundStyle(eventColor)
             .lineLimit(1)
             .padding(.horizontal, 7)
@@ -77,7 +78,7 @@ struct RadarSignalRow: View {
 
     private var movement: some View {
         Text("\(signal.windowChangePercent.formatted(.number.sign(strategy: .always()).precision(.fractionLength(2))))% / \(signal.signalWindowLabel)")
-            .font(.subheadline.monospacedDigit())
+            .font(.body.weight(.light).monospacedDigit())
             .foregroundStyle(signal.windowChangePercent < 0 ? .red : .green)
             .lineLimit(1)
     }
@@ -101,11 +102,29 @@ struct RadarSignalRow: View {
     }
 
     private var backgroundColor: Color {
-        if signal.signalSource.lowercased() == "rapid crash" { return .yellow.opacity(0.20) }
-        return isSelected ? Color.accentColor.opacity(0.10) : Color.primary.opacity(0.025)
+        if signal.signalSource.lowercased() == "rapid crash" { return .yellow.opacity(0.17) }
+        return isSelected ? Color.accentColor.opacity(0.10) : Color.clear
     }
 
     private var savedAt: Date {
         Date(timeIntervalSince1970: TimeInterval(signal.signalEpochMillis) / 1_000)
+    }
+
+    private var ageText: some View {
+        TimelineView(.periodic(from: .now, by: 1)) { context in
+            let seconds = max(0, Int(context.date.timeIntervalSince(savedAt)))
+            Text(String(format: "%02d:%02d", seconds / 60, seconds % 60))
+                .font(.subheadline.weight(.light).monospacedDigit())
+                .foregroundStyle(TrendsColors.supportingInk)
+        }
+    }
+
+    private var rumorsURL: URL {
+        let symbol = signal.symbol.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? signal.symbol
+        return URL(string: "https://finance.yahoo.com/quote/\(symbol)/news")!
+    }
+
+    private var formattedPrice: String {
+        signal.price.formatted(.number.precision(.fractionLength(0...2)))
     }
 }

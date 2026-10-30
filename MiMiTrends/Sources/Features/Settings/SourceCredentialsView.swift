@@ -10,35 +10,26 @@ struct SourceCredentialsView: View {
     private let webhookAccount = "Finnhub webhook secret"
 
     var body: some View {
-        SettingsPage(title: "Market data providers", subtitle: "Connected source and locally stored credentials") { width in
-            if width >= 900 {
-                HStack(alignment: .top, spacing: 18) {
-                    connectionPanel
-                    additionalSourcesPanel
-                }
-            } else {
-                connectionPanel
-                additionalSourcesPanel
-            }
-            if width >= 900 {
-                HStack(alignment: .top, spacing: 18) {
-                    finnhubKeyEditor
+        SettingsPage(title: "Market data providers", subtitle: "Provider addresses, connection checks and credentials") { _ in
+            ProviderSettingsPanel()
+            finnhubKeyEditor
+            DisclosureGroup("Other stored credentials") {
+                VStack(spacing: 18) {
                     webhookEditor
+                    additionalSourcesPanel
+                    ForEach(accounts.filter { $0 != webhookAccount }, id: \.self) { account in
+                        CredentialEditor(
+                            title: account,
+                            detail: "Stored locally for a future provider adapter; not used by the current feed.",
+                            load: { try ProviderCredentialStore.load(account) },
+                            save: { try ProviderCredentialStore.save($0, for: account) },
+                            remove: { try ProviderCredentialStore.delete(account) },
+                            onRemove: refreshAccounts
+                        )
+                    }
                 }
-            } else {
-                finnhubKeyEditor
-                webhookEditor
             }
-            ForEach(accounts.filter { $0 != webhookAccount }, id: \.self) { account in
-                CredentialEditor(
-                    title: account,
-                    detail: "Stored locally for a future provider adapter; not used by the current feed.",
-                    load: { try ProviderCredentialStore.load(account) },
-                    save: { try ProviderCredentialStore.save($0, for: account) },
-                    remove: { try ProviderCredentialStore.delete(account) },
-                    onRemove: refreshAccounts
-                )
-            }
+            .font(.body.weight(.light))
         }
         .onAppear { refreshAccounts() }
         .onDisappear {
@@ -70,21 +61,11 @@ struct SourceCredentialsView: View {
         )
     }
 
-    private var connectionPanel: some View {
-        SettingsGroup(title: "Finnhub") {
-            LabeledContent("Live trades", value: "ws.finnhub.io")
-            LabeledContent("US bid/ask", value: "api.finnhub.io")
-            Text("These endpoints belong to the current adapter. Tradegate, Euronext, Yahoo Finance, Lang & Schwarz, and external chart URLs from the desktop app are not connected here yet.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        }
-    }
-
     private var additionalSourcesPanel: some View {
         SettingsGroup(title: "Additional source credential") {
             Text("Keep an API key or token for a planned source. Saving it does not enable a provider or send it to a server.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+                .font(.body.weight(.light))
+                .foregroundStyle(TrendsColors.supportingInk)
             TextField("Source name", text: $newSource)
                 .textFieldStyle(.roundedBorder)
             SecretEntryField(title: "API key or token", value: $newSecret)
@@ -94,7 +75,7 @@ struct SourceCredentialsView: View {
             .disabled(newSource.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
                       newSecret.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             if let message {
-                Text(message).font(.footnote).foregroundStyle(.secondary)
+                Text(message).font(.body.weight(.light)).foregroundStyle(TrendsColors.supportingInk)
             }
         }
     }

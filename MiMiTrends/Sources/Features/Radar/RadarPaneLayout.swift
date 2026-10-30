@@ -13,13 +13,13 @@ enum RadarPaneLayout {
 
     static func wideTopHeight(totalHeight: CGFloat, ratio: Double) -> CGFloat {
         let available = max(0, totalHeight - handleSize)
-        return clamp(available * safeRatio(ratio, fallback: 0.23),
-                     minimum: 145, maximum: available - 280)
+        return clamp(available * safeRatio(ratio, fallback: 0.72),
+                     minimum: 280, maximum: available - 180)
     }
 
     static func stackedSignalHeight(totalHeight: CGFloat, ratio: Double) -> CGFloat {
         let available = max(0, totalHeight - 2 * handleSize)
-        return clamp(available * safeRatio(ratio, fallback: 0.22),
+        return clamp(available * safeRatio(ratio, fallback: 0.48),
                      minimum: 140, maximum: available - 120 - 260)
     }
 
@@ -27,7 +27,7 @@ enum RadarPaneLayout {
         totalHeight: CGFloat, signalHeight: CGFloat, ratio: Double
     ) -> CGFloat {
         let available = max(0, totalHeight - 2 * handleSize)
-        return clamp(available * safeRatio(ratio, fallback: 0.18),
+        return clamp(available * safeRatio(ratio, fallback: 0.25),
                      minimum: 120, maximum: available - signalHeight - 260)
     }
 

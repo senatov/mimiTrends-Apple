@@ -13,12 +13,19 @@ struct SettingsView: View {
     var body: some View {
         NavigationSplitView {
             List(selection: sectionSelection) {
-                Section("Preferences") {
+                Section {
                     ForEach(SettingsSection.allCases) { section in
                         NavigationLink(value: section.rawValue) {
                             Label(section.title, systemImage: section.symbol)
+                                .font(.body.weight(.light))
+                                .foregroundStyle(selectedSection == section.rawValue ? .white : TrendsColors.ink)
                         }
+                        .listRowBackground(selectedSection == section.rawValue ? Color.blue : Color.clear)
                     }
+                } header: {
+                    Text("Preferences")
+                        .font(.subheadline.weight(.light))
+                        .foregroundStyle(TrendsColors.supportingInk)
                 }
             }
             .navigationTitle("Settings")

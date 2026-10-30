@@ -7,9 +7,9 @@ struct RadarWorkspace<Signals: View, Sources: View, Plot: View>: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage("radar.wideColumnRatio.v1") private var savedColumnRatio = 0.68
-    @AppStorage("radar.wideTopRatio.v1") private var savedTopRatio = 0.23
-    @AppStorage("radar.stackedSignalRatio.v1") private var savedSignalRatio = 0.22
-    @AppStorage("radar.stackedSourceRatio.v1") private var savedSourceRatio = 0.18
+    @AppStorage("radar.wideTopRatio.v2") private var savedTopRatio = 0.72
+    @AppStorage("radar.stackedSignalRatio.v2") private var savedSignalRatio = 0.48
+    @AppStorage("radar.stackedSourceRatio.v2") private var savedSourceRatio = 0.25
     @State private var columnDrag: Double?
     @State private var topDrag: Double?
     @State private var signalDrag: Double?
